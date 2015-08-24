@@ -22,5 +22,9 @@ func (p *WAVPlayer) Play(source string) {
 		fmt.Print(".")
 		p.progress += 10
 	}
+
+	fmt.Println("finished")
+
 	fmt.Println()
+
 }

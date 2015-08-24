@@ -14,7 +14,6 @@ func (p *MP3Player) Play(source string) {
 	fmt.Println("Playing MP3 music", source)
 	p.process = 0
 	for p.process < 100 {
-		time.Sleep(100 * time.Microsecond)
 		fmt.Println(".")
 		p.process += 10
 	}
