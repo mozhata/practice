@@ -7,6 +7,20 @@ type Player interface {
 }
 
 func Play(source, mtype string) {
+
+	var P Player
+
+	switch mtype {
+	case "MP3":
+		P = &MP3Player{}
+	case "WAV":
+		P = &WAVPlayer{}
+	default:
+		fmt.Println("Unsupported music type", mtype)
+	}
+
+	P.Play(source)
+
 	var p Player
 	switch mtype {
 	case "MP3":
@@ -18,4 +32,5 @@ func Play(source, mtype string) {
 		return
 	}
 	p.Play(source)
+
 }
