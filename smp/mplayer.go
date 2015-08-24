@@ -31,8 +31,12 @@ func handleLibCommands(tokens []string) {
 		}
 	case "remove":
 		if len(tokens) == 3 {
+
 			name, _ := strconv.Atoi(tokens[2])
 			lib.Remove(name)
+
+			lib.Remove(tokens[2])
+
 		} else {
 			fmt.Println("USAGE: lib remove<id>")
 		}
@@ -52,7 +56,11 @@ func handlePlayCommand(tokens []string) {
 	}
 	mp.Play(e.Source, e.Type)
 }
+
 func main() {
+
+func mian() {
+
 	fmt.Println(`
 		Enter following commands to control the player:
 		lib list -- View the existing musicx lib
@@ -61,9 +69,16 @@ func main() {
 		play <name> -- Play the specified music
 		`)
 
+
 	lib = mlib.NewMusicManager()
 	r := bufio.NewReader(os.Stdin)
 
+	for {
+		fmt.Println("Enter command -> ")
+
+
+	lib = mlib.NewMusicManager()
+	r := bufio.NewReader(os.Stdin)
 	for {
 		fmt.Println("Enter command -> ")
 
@@ -82,3 +97,18 @@ func main() {
 		}
 	}
 }
+
+
+
+// type ReadWriter interface {
+// 	Read(buf []byte) (n int, err error)
+// 	Write(buf []byte) (n int, err error)
+// }
+// type Deleter interface {
+// 	Delete(soucre string) (err, error)
+// }
+// type Booker interface {
+// 	ReadWriter
+// 	Deleter
+// }
+
