@@ -25,6 +25,7 @@ func main() {
 	}
 	values, err := readValues(*infile)
 	if err == nil {
+		// 返回当前时间 eg: 2015-08-15 20:54:41.970192591 +0800 CST
 		t1 := time.Now()
 		switch *algorithm {
 		case "qsort":
