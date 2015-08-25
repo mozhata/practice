@@ -18,7 +18,7 @@ for f in files:
 	if os.path.isfile(os.path.join(paths, f)):
 		filess.append(f)
 
-# print(filess)
+print(filess)
 
 # os.makedirs('d:/assist/set')
 # os.path.exists('d:/assist/set')
@@ -27,7 +27,7 @@ for f in files:
 def move_files():
 	for f in filess:
 		folder = os.path.join(paths, f.split(".")[0])
-		print(folder)
+		# print(folder)
 		if not os.path.exists(folder):
 			os.makedirs(folder)
 		shutil.move(os.path.join(paths, f), folder)
