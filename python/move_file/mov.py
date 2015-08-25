@@ -1,19 +1,11 @@
 # move file to folder with the same name
 import os
 import shutil
-# for filename in os.listdir(r'c:\windows'):
-#     print filename
+
 paths = "/home/kang/test"
 
-# for f in os.listdir(path):
-# 	print("test")
-# 	if os.path.isfile(f):
-# 		print(f)
 files = os.listdir(paths)
 print("all files: ", files)
-# for fi in files:
-# 	print(os.path.isdir(os.path.join(paths, fi)), os.path.isfile(os.path.join(paths, fi)))
-	# print(os.path.isdir(fi), os.path.isfile(fi))
 
 folders = []
 for f in files:
@@ -28,19 +20,6 @@ for f in files:
 
 # print(filess)
 
-# for f in filess:
-# 	print(f.split(".")[0])
-
-# print("a" in folders)
-# for f in filess:
-# 	if f.split(".")[0] in folders:
-# 		folder = os.path.join(paths, f.split(".")[0])
-# 		current_file = os.path.join(paths, f)
-# 		dist_file = folder + current_file
-# 		print(folder, current_file, os.path.isdir(folder), os.path.isfile(current_file))
-# 		shutil.copy(current_file, dist_file)
-# 		os.remove(current_file)
-# print(os.listdir(paths))
 # os.makedirs('d:/assist/set')
 # os.path.exists('d:/assist/set')
 # shutil.move("myfile1.txt", "../")
