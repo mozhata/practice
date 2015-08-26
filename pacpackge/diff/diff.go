@@ -13,9 +13,11 @@ func main() {
 	diffs()
 }
 func diffs() {
-	// func Diff(A, B string) string
+	// func Diff(old, new string) string
 	// 行级比较,同"git diff"
-	// 拿A跟B做比较,若A有,而B没有,则前置"-",若A没有而B有,则前置"+"
+	// new 跟 old 比较,
+	// -old
+	// +new
 	constitution := strings.TrimSpace(`
 We the People of the United States, in Order to form a more perfect Union,
 establish Justice, insure domestic Tranquility, provide for the common defence,
@@ -33,4 +35,10 @@ and our Posterity, do ordain and establish this Constitution for the United
 States of America.
 `)
 	P(diff.Diff(got, constitution))
+
+	P(diff.Diff("old", "new"))
+
+	// 输出:
+	// [ `run` | done: 12.178977ms ]
+
 }
