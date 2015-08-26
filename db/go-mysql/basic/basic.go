@@ -17,11 +17,12 @@ type User struct {
 }
 
 func main() {
+	// func Open(driverName, dataSourceName string) (*DB, error)
+	// 用户名:root,密码:dx123! 数据库:test
 	db, e := sql.Open("mysql", "root:dx123!/test")
-	if e != nil {
-		panic(e)
-	}
+	checkErr(e)
 	defer db.Close()
+
 
 }
 func checkErr(e error) {
