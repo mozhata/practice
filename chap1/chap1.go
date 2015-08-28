@@ -13,7 +13,9 @@ var P func(...interface{}) (int, error) = fmt.Println
 
 func main() {
 	// TrySimpleJson()
-	BBase64()
+	var a []string
+	P(a == nil)
+	// BBase64()
 	// tryBuffer()
 	// Or("")
 	// r := bufio.NewReader(os.Stdin)
@@ -44,7 +46,7 @@ func TrySimpleJson() {
 	// }
 	qa_activity := json.Get("conversations").JSONArray()[0].Get("data", "qa_activity")
 	qa_activity1, _ := qa_activity.MarshalJSON()
-	P(string(qa_activity1))
+	P("stringed qa_activity", string(qa_activity1))
 	P("action: ", qa_activity.Get("action").String())
 	P("num_unread: ", qa_activity.Get("num_unread").Int())
 	P("thread_id: ", qa_activity.Get("thread_id").String())

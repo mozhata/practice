@@ -24,6 +24,7 @@ print(filess)
 # os.path.exists('d:/assist/set')
 # shutil.move("myfile1.txt", "../")
 
+
 def move_files():
 	for f in filess:
 		folder = os.path.join(paths, f.split(".")[0])
@@ -31,7 +32,6 @@ def move_files():
 		if not os.path.exists(folder):
 			os.makedirs(folder)
 		shutil.move(os.path.join(paths, f), folder)
-
 
 
 # def copyfile(dist, f):

@@ -9,7 +9,10 @@ var P func(...interface{}) (int, error) = fmt.Println
 
 func main() {
 	// basic()
-	format()
+	// format()
+	// duration()
+	// tick()
+	ticker()
 }
 func basic() {
 	now := time.Now()
@@ -64,4 +67,40 @@ func format() {
 		time.RFC3339,
 		"2012-11-01T22:08:41+00:00")
 	P(t1)
+}
+func duration() {
+	second := time.Second
+	P(int64(second / time.Microsecond))
+
+	seconds := 10
+	P(time.Duration(seconds) * time.Second)
+
+	t0 := time.Now()
+	time.Sleep(1 * time.Second)
+	t1 := time.Now()
+	P("sleep took times: ", t1.Sub(t0))
+}
+
+// 每隔 time.Tick秒,做点什么
+// 循环执行,不停止
+func tick() {
+	c := time.Tick(1 * time.Second)
+	for now := range c {
+		P(now, "do sth..")
+	}
+}
+
+// type Ticker
+// 	func NewTicker(d Duration) *Ticker
+// 	func (t *Ticker) Stop()
+func ticker() {
+	ticker := time.NewTicker(time.Millisecond * 500)
+	go func() {
+		for t := range ticker.C {
+			P("tick at: ", t)
+		}
+	}()
+	time.Sleep(time.Millisecond * 1500)
+	ticker.Stop()
+	P("ticker stopped")
 }

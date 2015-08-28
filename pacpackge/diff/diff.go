@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/kylelemons/godebug/diff"
 )
@@ -18,23 +17,23 @@ func diffs() {
 	// new 跟 old 比较,
 	// -old
 	// +new
-	constitution := strings.TrimSpace(`
-We the People of the United States, in Order to form a more perfect Union,
-establish Justice, insure domestic Tranquility, provide for the common defence,
-promote the general Welfare, and secure the Blessings of Liberty to ourselves
-and our Posterity, do ordain and establish this Constitution for the United
-States of America.
-`)
+	// 	constitution := strings.TrimSpace(`
+	// We the People of the United States, in Order to form a more perfect Union,
+	// establish Justice, insure domestic Tranquility, provide for the common defence,
+	// promote the general Welfare, and secure the Blessings of Liberty to ourselves
+	// and our Posterity, do ordain and establish this Constitution for the United
+	// States of America.
+	// `)
 
-	got := strings.TrimSpace(`
-:wq
-We the People of the United States, in Order to form a more perfect Union,
-establish Justice, insure domestic Tranquility, provide for the common defence,
-and secure the Blessings of Liberty to ourselves
-and our Posterity, do ordain and establish this Constitution for the United
-States of America.
-`)
-	P(diff.Diff(got, constitution))
+	// 	got := strings.TrimSpace(`
+	// :wq
+	// We the People of the United States, in Order to form a more perfect Union,
+	// establish Justice, insure domestic Tranquility, provide for the common defence,
+	// and secure the Blessings of Liberty to ourselves
+	// and our Posterity, do ordain and establish this Constitution for the United
+	// States of America.
+	// `)
+	// 	P(diff.Diff(got, constitution))
 
 	P(diff.Diff("old", "new"))
 
