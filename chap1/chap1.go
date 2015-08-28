@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/AlexRaylight/go-simplejson"
+	"github.com/golang/glog"
 )
 
 var P func(...interface{}) (int, error) = fmt.Println
@@ -144,4 +145,25 @@ func BBase64() {
 	str := "eyJxYV9hY3Rpdml0eSI6eyJhY3Rpb24iOiJuZXdfdGFnX3RocmVhZCIsIm51bV91bnJlYWQiOjIsInRocmVhZF9pZCI6InRhZ2EiLCJ0aHJlYWRfdGl0bGUiOiJ0YWdhIn19"
 	data, _ := base64.StdEncoding.DecodeString(str)
 	P(string(data))
+}
+
+// 通过一个string调用对应的函数的方法:
+func runFunction(function string) error {
+	glog.Infof("Running func: %v", function)
+	defer glog.Infof("Finished func: %v", function)
+
+	funcMap := map[string]func() error{
+		"news":      funcA, // func funcA() error
+		"professor": funcB, // func funcB() error
+		"program": func() error {
+			funcC(nil, true) // func serveProgram(r *mux.Router, runOnce bool)
+			return nil
+		},
+	}
+
+	f, ok := funcMap[function]
+	if !ok {
+		return fmt.Errorf("Unknown func name: %s", function)
+	}
+	return f()
 }
