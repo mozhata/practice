@@ -3,19 +3,24 @@ package main
 import (
 	"bytes"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"os"
 
 	"github.com/AlexRaylight/go-simplejson"
-	"github.com/golang/glog"
 )
 
 var P func(...interface{}) (int, error) = fmt.Println
 
 func main() {
+
 	// TrySimpleJson()
-	var a []string
-	P(a == nil)
+	tryComma()
+	// var a []string
+	// P(a == nil)
+
+	// josnRawMessage()
+	// tryMap()
 	// BBase64()
 	// tryBuffer()
 	// Or("")
@@ -27,6 +32,17 @@ func main() {
 	// 	fmt.Println(string(line))
 	// }
 
+}
+func tryComma() {
+	var bt interface{}
+	bt = []byte("a b c")
+	// 被判断的类型必须是interface{}
+	// s 先被声明为对应的变量(string),
+	// 若ok为true,再给s赋bt的值值,(若为false,则s为零值)
+	s, ok := bt.(string)
+	b, ok := bt.([]byte)
+	P(s, ok, s == "")
+	P(b, ok)
 }
 
 func TrySimpleJson() {
@@ -147,23 +163,63 @@ func BBase64() {
 	P(string(data))
 }
 
-// 通过一个string调用对应的函数的方法:
-func runFunction(function string) error {
-	glog.Infof("Running func: %v", function)
-	defer glog.Infof("Finished func: %v", function)
-
-	funcMap := map[string]func() error{
-		"news":      funcA, // func funcA() error
-		"professor": funcB, // func funcB() error
-		"program": func() error {
-			funcC(nil, true) // func serveProgram(r *mux.Router, runOnce bool)
-			return nil
-		},
+func josnRawMessage() {
+	type Color struct {
+		Space string
+		Point json.RawMessage // delay parsing until we know the color space
+	}
+	type RGB struct {
+		R uint8
+		G uint8
+		B uint8
+	}
+	type YCbCr struct {
+		Y  uint8
+		Cb int8
+		Cr int8
 	}
 
-	f, ok := funcMap[function]
-	if !ok {
-		return fmt.Errorf("Unknown func name: %s", function)
+	var j = []byte(`[
+    {"Space": "YCbCr", "Point": {"Y": 255, "Cb": 0, "Cr": -10}},
+    {"Space": "RGB",   "Point": {"R": 98, "G": 218, "B": 255}}
+  ]`)
+	var colors []Color
+	err := json.Unmarshal(j, &colors)
+	CheckErr(err)
+
+	for _, c := range colors {
+		var dst interface{}
+		switch c.Space {
+		case "RGB":
+			dst = new(RGB)
+		case "YCbCr":
+			dst = new(YCbCr)
+		}
+		err := json.Unmarshal(c.Point, dst)
+		CheckErr(err)
+
+		P(c.Space, dst)
 	}
-	return f()
+}
+func trySetPath() {
+
+}
+
+// map遍历 可以只遍历key
+func tryMap() {
+	dic := map[string]interface{}{"a": 1, "key1": 2, "slice": []string{"abs", "dada~"}}
+	P(dic)
+	keys := []string{}
+
+	// 可以只遍历key
+	for key := range dic {
+		keys = append(keys, key)
+	}
+
+	P(keys)
+}
+func CheckErr(err error) {
+	if err != nil {
+		panic(err)
+	}
 }
