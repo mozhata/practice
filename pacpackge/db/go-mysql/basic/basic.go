@@ -16,6 +16,8 @@ type User struct {
 	Number   int
 }
 
+var d Mysql
+
 func main() {
 	// sql.Open(“mysql”, “user:password@/dbname”)
 	db, e := sql.Open("mysql", "root:dx123!@/test")
@@ -25,20 +27,30 @@ func main() {
 	// 查看connection to database 是否仍然alive,若无,则重建链接
 	e = db.Ping()
 	checkErr(e)
-
-	stmIns, e := db.Prepare("insert into user(`username`,`password`,`number`) values(?,?,?)")
-	checkErr(e)
-
-	result, e := stmIns.Exec("user1", "password1", 1)
-	checkErr(e)
-
-	m, e := result.LastInsertId()
-	n, e := result.RowsAffected()
-	P("last inser id: ", m, "rows affected: ", n)
+	// db.insert("name", "123", 123)
+	d.DB = db
+	d.insert("name", "pwd", 123)
 
 }
 func checkErr(e error) {
 	if e != nil {
 		panic(e)
 	}
+}
+
+type Mysql struct {
+	DB *sql.DB
+}
+
+func (db *Mysql.DB) insert(name, pwd string, num int) {
+	stmIns, e := db.Prepare("insert into user(`username`,`password`,`number`) values(?,?,?)")
+	checkErr(e)
+	defer stmIns.Close()
+
+	result, e := stmIns.Exec(name, pwd, num)
+	checkErr(e)
+
+	m, e := result.LastInsertId()
+	n, e := result.RowsAffected()
+	P("last inser id: ", m, "rows affected: ", n)
 }
