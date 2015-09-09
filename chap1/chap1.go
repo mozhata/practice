@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/AlexRaylight/go-simplejson"
 )
@@ -15,7 +16,8 @@ var P func(...interface{}) (int, error) = fmt.Println
 func main() {
 
 	// TrySimpleJson()
-	tryComma()
+	// tryComma()
+	tryFilePath()
 	// var a []string
 	// P(a == nil)
 
@@ -222,4 +224,8 @@ func CheckErr(err error) {
 	if err != nil {
 		panic(err)
 	}
+}
+func tryFilePath() {
+	path := "/home/zyk/test/sublime_imfix.c"
+	P(filepath.Ext(path)) // 	.c
 }
