@@ -7,8 +7,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-
-	"github.com/AlexRaylight/go-simplejson"
 )
 
 var P func(...interface{}) (int, error) = fmt.Println
@@ -17,9 +15,10 @@ func main() {
 
 	// TrySimpleJson()
 	// tryComma()
-	tryFilePath()
+	// tryFilePath()
 	// var a []string
 	// P(a == nil)
+	tryRange()
 
 	// josnRawMessage()
 	// tryMap()
@@ -35,6 +34,15 @@ func main() {
 	// }
 
 }
+func tryRange() {
+	slice := []string{"a", "12", "33"}
+	for i, v := range slice {
+		P(i, v)
+	}
+	for s := range slice {
+		P(s)
+	}
+}
 func tryComma() {
 	var bt interface{}
 	bt = []byte("a b c")
@@ -47,31 +55,31 @@ func tryComma() {
 	P(b, ok)
 }
 
-func TrySimpleJson() {
-	body := []byte(jsonString)
-	json, _ := simplejson.NewJSON(body)
-	P(json.Get("data", "content", "body").String())
-	content := json.Get("data", "content")
-	P("content on *json-type: ", content)
-	byte_data, _ := json.Get("data", "content").MarshalJSON()
-	P("content MarshalJsoned: ", string(byte_data))
-	// not follow at archture:
-	P("not follow archery: ", json.Get("title"))
+// func TrySimpleJson() {
+// 	body := []byte(jsonString)
+// 	json, _ := simplejson.NewJSON(body)
+// 	P(json.Get("data", "content", "body").String())
+// 	content := json.Get("data", "content")
+// 	P("content on *json-type: ", content)
+// 	byte_data, _ := json.Get("data", "content").MarshalJSON()
+// 	P("content MarshalJsoned: ", string(byte_data))
+// 	// not follow at archture:
+// 	P("not follow archery: ", json.Get("title"))
 
-	json2_byte := []byte(json2)
-	json, _ = simplejson.NewJSON(json2_byte)
-	// for i, v := range json.Get("conversations").Array() {
-	//  P(i, v)
-	// }
-	qa_activity := json.Get("conversations").JSONArray()[0].Get("data", "qa_activity")
-	qa_activity1, _ := qa_activity.MarshalJSON()
-	P("stringed qa_activity", string(qa_activity1))
-	P("action: ", qa_activity.Get("action").String())
-	P("num_unread: ", qa_activity.Get("num_unread").Int())
-	P("thread_id: ", qa_activity.Get("thread_id").String())
-	data_raw := json.Get("conversations").JSONArray()[0].Get("data_raw").String()
-	P("raw_data_raw: ", data_raw)
-}
+// 	json2_byte := []byte(json2)
+// 	json, _ = simplejson.NewJSON(json2_byte)
+// 	// for i, v := range json.Get("conversations").Array() {
+// 	//  P(i, v)
+// 	// }
+// 	qa_activity := json.Get("conversations").JSONArray()[0].Get("data", "qa_activity")
+// 	qa_activity1, _ := qa_activity.MarshalJSON()
+// 	P("stringed qa_activity", string(qa_activity1))
+// 	P("action: ", qa_activity.Get("action").String())
+// 	P("num_unread: ", qa_activity.Get("num_unread").Int())
+// 	P("thread_id: ", qa_activity.Get("thread_id").String())
+// 	data_raw := json.Get("conversations").JSONArray()[0].Get("data_raw").String()
+// 	P("raw_data_raw: ", data_raw)
+// }
 
 var jsonString string = `{
    "data": {
