@@ -50,6 +50,12 @@ func main() {
 	// defer rows.Close()
 	P("columns: ", columns, len(columns))
 
+	values := make([]sql.RawBytes, len(columns))
+	for rows.Next() {
+		for i, col := range values {
+			P(columns[i], string(col))
+		}
+	}
 	// values := make([]sql.RawBytes, len(columns))
 	// scanArgs := make([]interface{}, len(columns))
 	// for i := range values {
