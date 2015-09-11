@@ -1,8 +1,10 @@
 | user  | CREATE TABLE `user` (
   `username` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
   `password` varchar(20) CHARACTER SET latin1 DEFAULT NULL,
-  `number` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 |
+  `number` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 | |
 
 
 | liuyan | CREATE TABLE `liuyan` (

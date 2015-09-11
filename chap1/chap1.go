@@ -35,12 +35,31 @@ func main() {
 
 }
 func tryRange() {
+	// 若range能写成for index, val := range slice{...}
+	// 的形式,若写成for index := range slice {...} 则只遍历索引
+	// Map 则只遍历key
 	slice := []string{"a", "12", "33"}
 	for i, v := range slice {
 		P(i, v)
 	}
 	for s := range slice {
 		P(s)
+	}
+
+	sliceB := []byte{'a', 'b', 'c'}
+	for i, v := range sliceB {
+		P(i, v)
+	}
+	for s := range sliceB {
+		P(s)
+	}
+
+	dic := map[string]interface{}{"a": 1, "key1": 2, "slice": []string{"abs", "dada~"}}
+	for key, val := range dic {
+		P(key, val)
+	}
+	for key := range dic {
+		P(key)
 	}
 }
 func tryComma() {
