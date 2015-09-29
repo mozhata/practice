@@ -37,7 +37,8 @@ func diffs() {
 
 	P(diff.Diff("old", "new"))
 
-	// 输出:
-	// [ `run` | done: 12.178977ms ]
+	// [ `run` | done: 2.495417ms ]
+	// -old
+	// +new
 
 }

@@ -12,7 +12,8 @@ func main() {
 	// format()
 	// duration()
 	// tick()
-	ticker()
+	// ticker()
+	Ttimer()
 }
 func basic() {
 	now := time.Now()
@@ -91,6 +92,8 @@ func tick() {
 }
 
 // type Ticker
+// do something repeatedly at regular intervals
+
 // 	func NewTicker(d Duration) *Ticker
 // 	func (t *Ticker) Stop()
 func ticker() {
@@ -103,4 +106,34 @@ func ticker() {
 	time.Sleep(time.Millisecond * 1500)
 	ticker.Stop()
 	P("ticker stopped")
+}
+
+func Ttimer() {
+	done := make(chan bool, 2)
+
+	// 代表在将来发生的单一事件,需要设定等待时间
+	// <The <-timer1.C blocks on the timer’s channel C
+	// until it sends a value indicating that the timer expired.
+	timer1 := time.NewTimer(time.Second * 4)
+
+	go func() {
+		<-timer1.C
+		P("timer1 expired")
+		done <- true
+	}()
+	timer2 := time.NewTimer(time.Second)
+	go func() {
+		<-timer2.C
+		P("timer2 expired")
+		done <- true
+	}()
+
+	//you can cancel the timer before it expires.
+	if stop2 := timer2.Stop(); stop2 {
+		P("timer2 stopped")
+	}
+
+	// for i := 0; i < 2; i++ {
+	<-done
+	// }
 }

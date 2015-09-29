@@ -7,6 +7,9 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
+
+	"github.com/AlexRaylight/go-simplejson"
 )
 
 var P func(...interface{}) (int, error) = fmt.Println
@@ -16,9 +19,10 @@ func main() {
 	// TrySimpleJson()
 	// tryComma()
 	// tryFilePath()
+	// TryRegex()
 	// var a []string
 	// P(a == nil)
-	tryRange()
+	// tryRange()
 
 	// josnRawMessage()
 	// tryMap()
@@ -74,31 +78,32 @@ func tryComma() {
 	P(b, ok)
 }
 
-// func TrySimpleJson() {
-// 	body := []byte(jsonString)
-// 	json, _ := simplejson.NewJSON(body)
-// 	P(json.Get("data", "content", "body").String())
-// 	content := json.Get("data", "content")
-// 	P("content on *json-type: ", content)
-// 	byte_data, _ := json.Get("data", "content").MarshalJSON()
-// 	P("content MarshalJsoned: ", string(byte_data))
-// 	// not follow at archture:
-// 	P("not follow archery: ", json.Get("title"))
+func TrySimpleJson() {
+	body := []byte(jsonString)
+	json, _ := simplejson.NewJSON(body)
+	P(json.Get("data", "content", "body").String())
+	content := json.Get("data", "content")
+	P("content on *json-type: ", content)
+	byte_data, _ := json.Get("data", "content").MarshalJSON()
+	// P("not marshaled, just use string(): ", string(json.Get("data", "content")))		// failed
+	P("content MarshalJsoned: ", string(byte_data))
+	// not follow at archture:
+	P("not follow archery: ", json.Get("title"))
 
-// 	json2_byte := []byte(json2)
-// 	json, _ = simplejson.NewJSON(json2_byte)
-// 	// for i, v := range json.Get("conversations").Array() {
-// 	//  P(i, v)
-// 	// }
-// 	qa_activity := json.Get("conversations").JSONArray()[0].Get("data", "qa_activity")
-// 	qa_activity1, _ := qa_activity.MarshalJSON()
-// 	P("stringed qa_activity", string(qa_activity1))
-// 	P("action: ", qa_activity.Get("action").String())
-// 	P("num_unread: ", qa_activity.Get("num_unread").Int())
-// 	P("thread_id: ", qa_activity.Get("thread_id").String())
-// 	data_raw := json.Get("conversations").JSONArray()[0].Get("data_raw").String()
-// 	P("raw_data_raw: ", data_raw)
-// }
+	json2_byte := []byte(json2)
+	json, _ = simplejson.NewJSON(json2_byte)
+	// for i, v := range json.Get("conversations").Array() {
+	//  P(i, v)
+	// }
+	qa_activity := json.Get("conversations").JSONArray()[0].Get("data", "qa_activity")
+	qa_activity1, _ := qa_activity.MarshalJSON()
+	P("stringed qa_activity", string(qa_activity1))
+	P("action: ", qa_activity.Get("action").String())
+	P("num_unread: ", qa_activity.Get("num_unread").Int())
+	P("thread_id: ", qa_activity.Get("thread_id").String())
+	data_raw := json.Get("conversations").JSONArray()[0].Get("data_raw").String()
+	P("raw_data_raw: ", data_raw)
+}
 
 var jsonString string = `{
    "data": {
@@ -255,4 +260,19 @@ func CheckErr(err error) {
 func tryFilePath() {
 	path := "/home/zyk/test/sublime_imfix.c"
 	P(filepath.Ext(path)) // 	.c
+	path2 := "/home/zyk/test/"
+	path3 := "/home/zyk/test"
+	P(filepath.Base(path), filepath.Base(path2), filepath.Base(path3)) // sublime_imfix.c test test
+}
+func TryRegex() {
+	text := `allText
+	Contact
+	  Alecia Denmark, Director of Undergraduate Admissions
+	  800-548-7638
+	  email the program
+	  visit the website`
+	// match, _ := regexp.MatchString("p([a-z]+)ch", "peach")
+	r, _ := regexp.Compile("[0-9-]{12}")
+
+	fmt.Println(r.FindString(text))
 }

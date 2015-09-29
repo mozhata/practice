@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -10,7 +12,8 @@ var P func(...interface{}) (int, error) = fmt.Println
 func main() {
 	// basic()
 	// Timeout()
-	classicalMod()
+	// classicalMod()
+	classicalMod2()
 }
 func basic() {
 	chs := make([]chan int, 4)
@@ -70,5 +73,56 @@ func classicalMod() {
 	for i := 0; i < len(jobList); i++ {
 		<-done
 	}
+}
 
+func classicalMod2() {
+	// suffiexes, files := handleCommand()
+	suffiexes := []string{"a", "ab", "s"}
+	files := []string{"a.ab", "ba", "a.s", "b.s", "c.ab"}
+
+	P(suffiexes, files)
+
+	sink(filterSuffixes(suffiexes, source(files)))
+}
+func source(files []string) <-chan string {
+	P("begin source..")
+	out := make(chan string, 1000)
+
+	go func() {
+		for _, fileName := range files {
+			out <- fileName
+			P("transfered file: ", fileName)
+		}
+		close(out)
+	}()
+	return out
+}
+func filterSuffixes(suffixes []string, in <-chan string) <-chan string {
+	P("begin filterSuffixes...")
+	out := make(chan string, 1000)
+
+	go func() {
+		for fileName := range in {
+			if len(suffixes) == 0 {
+				out <- fileName
+				continue
+			}
+
+			ext := strings.ToLower(filepath.Ext(fileName))
+			for _, suffix := range suffixes {
+				if ext == suffix {
+					out <- fileName
+					P("deal with filename: ", fileName)
+					break
+				}
+			}
+		}
+		close(out)
+	}()
+	return out
+}
+func sink(in <-chan string) {
+	for fileName := range in {
+		P(fileName)
+	}
 }
