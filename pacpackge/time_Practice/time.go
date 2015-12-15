@@ -9,11 +9,12 @@ var P func(...interface{}) (int, error) = fmt.Println
 
 func main() {
 	// basic()
-	// format()
+	format()
 	// duration()
 	// tick()
 	// ticker()
-	Ttimer()
+	// Ttimer()
+	// getBeforeTime()
 }
 func basic() {
 	now := time.Now()
@@ -60,6 +61,7 @@ func basic() {
 }
 func format() {
 	t := time.Now()
+	P(t, t.UTC())
 	// 按照基本现有格式format
 	// func (t Time) Format(layout string) string
 	P(t.Format(time.RFC3339))
@@ -97,13 +99,14 @@ func tick() {
 // 	func NewTicker(d Duration) *Ticker
 // 	func (t *Ticker) Stop()
 func ticker() {
-	ticker := time.NewTicker(time.Millisecond * 500)
+	P("now: ", time.Now())
+	ticker := time.NewTicker(time.Millisecond * 5000)
 	go func() {
 		for t := range ticker.C {
 			P("tick at: ", t)
 		}
 	}()
-	time.Sleep(time.Millisecond * 1500)
+	time.Sleep(time.Millisecond * 15000)
 	ticker.Stop()
 	P("ticker stopped")
 }
@@ -136,4 +139,12 @@ func Ttimer() {
 	// for i := 0; i < 2; i++ {
 	<-done
 	// }
+}
+func getBeforeTime() {
+	now := time.Now()
+	// Add 参数可为负数
+	before := now.Add(time.Hour * -24)
+	P("now: ", now)
+	P("before: ", before)
+
 }
