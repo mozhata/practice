@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"time"
 
+	"bitbucket.org/applysquare/applysquare-go/pkg/field_of_study"
+
 	// "github.com/robfig/cron"
 	// "github.com/stretchr/testify/assert"
 	// "testing"
@@ -105,12 +107,15 @@ func main() {
 	// P(ff > 0)
 	// P(f > 0)
 	// P(f == 0.0000000000000000000000)
-	var ss = struct {
-		a int
-		b string
-	}{}
-	P(ss)
-	P(&ss == nil)
+	// var ss = struct {
+	// 	a int
+	// 	b string
+	// }{}
+	// P(ss)
+	// P(&ss == nil)
+	l := field_of_study.KeyList
+	P(l)
+	P(len(l))
 
 }
 
