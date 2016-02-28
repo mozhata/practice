@@ -73,6 +73,27 @@ l = [
 	"supply_chain_and_logistics",
 	"urban_planning",
 ]
-print(len(l))
-for fos in l:
-	print('PERMISSION_%s_USER = \'%s_user\'' % (fos, fos))
+# print(len(l))
+# for fos in l:
+# 	print('PERMISSION_%s_USER = \'%s_user\'' % (fos, fos))
+
+
+# def count():
+# 	fs = []
+# 	for i in range(1, 4):
+# 		def f():
+# 			print i*i
+# 		fs.append(f)
+# 	return fs
+
+# f1, f2, f3 = count()
+# f1()
+# f2()
+# f3()
+
+# def count():
+# 	fs = []
+# 	for i in range(1, 4):
+# 		def f(j):
+# 			return j*j
+# 		fs.append(f(i))

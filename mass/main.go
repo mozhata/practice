@@ -7,8 +7,6 @@ import (
 	"strconv"
 	"time"
 
-	"bitbucket.org/applysquare/applysquare-go/pkg/field_of_study"
-
 	// "github.com/robfig/cron"
 	// "github.com/stretchr/testify/assert"
 	// "testing"
@@ -113,9 +111,19 @@ func main() {
 	// }{}
 	// P(ss)
 	// P(&ss == nil)
-	l := field_of_study.KeyList
-	P(l)
-	P(len(l))
+	// l := field_of_study.KeyList
+	// P(l)
+	// P(len(l))
+
+	// dic1 := map[string]string{"a": "aa", "as": "asas", "dd": "dddd"}
+	// P(dic1, &dic1)
+	// dic2 := dic1
+	// dic2["a"] = "cc"
+	// P(dic1, dic2)
+	// P(&dic2)
+
+	var dic map[string]string
+	P(len(dic))
 
 }
 
