@@ -3,8 +3,10 @@ package main
 import (
 	// . "bitbucket.org/applysquare/applysquare-go/pkg/discussion"
 
+	"encoding/json"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	// "github.com/robfig/cron"
@@ -122,9 +124,53 @@ func main() {
 	// P(dic1, dic2)
 	// P(&dic2)
 
-	var dic map[string]string
-	P(len(dic))
+	// var dic map[string]string
+	// P(len(dic))
+	// var s string
+	// ll := strings.Split(s, ",")
+	// P(ll)
+	// P(len(ll))
 
+	// reg := func() *regexp.Regexp {
+	// 	wordList := []string{}
+	// 	for i := range wordList {
+	// 		wordList[i] = regexp.QuoteMeta(wordList[i])
+	// 	}
+	// 	return regexp.MustCompile(strings.Join(wordList, "|"))
+	// }()
+	// P(reg.MatchString("abc"))
+	// P("reg is nil", reg == nil)
+	// P(reg)
+	// P(*reg)
+	// P("string: ", reg.String(), reg.String() == "")
+	// P(MarshalJSONOrDie(reg))
+	// dest := []string{"abc", "dsa"}
+	// fmt.Println(dest)
+	// saveToSlice("source", dest)
+	// fmt.Println(dest)
+	// P(buldCountySlug(""))
+	P((1 == 2) ^ (3 == 4))
+
+}
+func buldCountySlug(slug string) string {
+	countryKey := strings.Split(slug, ".")[0]
+	if countryKey == "" {
+		countryKey = "us"
+	}
+	return fmt.Sprintf("country_%s", countryKey)
+}
+func saveToSlice(source string, dest []string) {
+	dest = append(dest, source)
+}
+func MarshalJSONOrDie(v interface{}) string {
+	b, err := json.Marshal(v)
+	Check(err)
+	return string(b)
+}
+func Check(err error) {
+	if err != nil {
+		panic(err)
+	}
 }
 
 /*
