@@ -3,4 +3,4 @@
 .tags
 .tags_sorted_by_file
 
-./react/node_modules
+react/node_modules/*
