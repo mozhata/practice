@@ -149,7 +149,11 @@ func main() {
 	// saveToSlice("source", dest)
 	// fmt.Println(dest)
 	// P(buldCountySlug(""))
-	P((1 == 2) ^ (3 == 4))
+	// P((1 == 2) ^ (3 == 4))
+	sl := make([]string, 0)
+	P(len(sl))
+	sle := make([]string, 7)
+	P(len(sle))
 
 }
 func buldCountySlug(slug string) string {
