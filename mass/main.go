@@ -8,7 +8,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
 	// "github.com/robfig/cron"
 	// "github.com/stretchr/testify/assert"
 	// "testing"
@@ -154,6 +153,7 @@ func main() {
 	P(len(sl))
 	sle := make([]string, 7)
 	P(len(sle))
+	hello()
 
 }
 func buldCountySlug(slug string) string {
@@ -188,3 +188,6 @@ map-reduce
 // func Tt(s1,s2 string){
 // 	print s1,s2
 // }
+func hello() {
+	fmt.Println("hello world")
+}

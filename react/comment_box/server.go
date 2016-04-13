@@ -40,6 +40,7 @@ var commentMutex = new(sync.Mutex)
 // Handle comments
 func handleComments(w http.ResponseWriter, r *http.Request) {
 	glog.Infoln("begin..")
+	fmt.Println("begin.....")
 	// Since multiple requests could come in at once, ensure we have a lock
 	// around all file operations
 	commentMutex.Lock()
