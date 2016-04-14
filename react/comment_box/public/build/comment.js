@@ -1,3 +1,25 @@
+var Comment = React.createClass({
+  displayName: "Comment",
+
+  rawMarkup: function () {
+    var rawMarkup = marked(this.props.children.toString(), { sanitize: true });
+    return { __html: rawMarkup };
+  },
+
+  render: function () {
+    return React.createElement(
+      "div",
+      { className: "comment" },
+      React.createElement(
+        "h2",
+        { className: "commentAuthor" },
+        this.props.author
+      ),
+      React.createElement("span", { dangerouslySetInnerHTML: this.rawMarkup() })
+    );
+  }
+});
+
 var CommentBox = React.createClass({
   displayName: "CommentBox",
 
@@ -14,24 +36,17 @@ var CommentBox = React.createClass({
       }.bind(this)
     });
   },
-  getInitialState: function () {
-    return { data: [] };
-  },
-  componentDidMount: function () {
-    this.loadCommentsFromServer();
-    setInterval(this.loadCommentsFromServer, this.props.pollInterval);
-  },
   handleCommentSubmit: function (comment) {
     var comments = this.state.data;
     comment.id = Date.now();
-    var newComments = comments.concat([comments]);
+    var newComments = comments.concat([comment]);
     this.setState({ data: newComments });
     $.ajax({
       url: this.props.url,
       dataType: "json",
       type: "POST",
       data: comment,
-      success: function (e) {
+      success: function (data) {
         this.setState({ data: data });
       }.bind(this),
       error: function (xhr, status, err) {
@@ -39,6 +54,13 @@ var CommentBox = React.createClass({
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
+  },
+  getInitialState: function () {
+    return { data: [] };
+  },
+  componentDidMount: function () {
+    this.loadCommentsFromServer();
+    setInterval(this.loadCommentsFromServer, this.props.pollInterval);
   },
   render: function () {
     return React.createElement(
@@ -49,6 +71,7 @@ var CommentBox = React.createClass({
         null,
         "Comments"
       ),
+      React.createElement(CommentList, { data: this.state.data }),
       React.createElement(CommentForm, { onCommentSubmit: this.handleCommentSubmit })
     );
   }
@@ -102,28 +125,6 @@ var CommentForm = React.createClass({
       React.createElement("input", { type: "text", placeholder: "Your name", value: this.state.author, onChange: this.handleAuthorChange }),
       React.createElement("input", { type: "text", placeholder: "Say something...", value: this.state.text, onChange: this.handleTextChange }),
       React.createElement("input", { type: "submit", value: "Post" })
-    );
-  }
-});
-
-var Comment = React.createClass({
-  displayName: "Comment",
-
-  rawMarkup: function () {
-    var rawMarkup = marked(this.props.children.toString(), { sanitize: true });
-    return { __html: rawMarkup };
-  },
-
-  render: function () {
-    return React.createElement(
-      "div",
-      { className: "comment" },
-      React.createElement(
-        "h2",
-        { className: "commentAthor" },
-        this.props.author
-      ),
-      React.createElement("span", { dangerouslySetInnerHTML: this.rawMarkup() })
     );
   }
 });
