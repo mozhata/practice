@@ -5,10 +5,16 @@ import (
 
 	"encoding/json"
 	"fmt"
+	"net/url"
+	"os"
+	"path"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
-	// "github.com/robfig/cron"
+
+	"github.com/PuerkitoBio/goquery"
+	// "time"
 	// "github.com/stretchr/testify/assert"
 	// "testing"
 )
@@ -149,13 +155,66 @@ func main() {
 	// fmt.Println(dest)
 	// P(buldCountySlug(""))
 	// P((1 == 2) ^ (3 == 4))
-	sl := make([]string, 0)
-	P(len(sl))
-	sle := make([]string, 7)
-	P(len(sle))
-	hello()
+	// sl := make([]string, 0)
+	// P(len(sl))
+	// sle := make([]string, 7)
+	// P(len(sle))
+	// hello()
+
+	// osPath()
+	// urlParse()
+	// loopMap()
+	// sorttt()
+	crawl()
 
 }
+
+func crawl() {
+	P("begin...")
+	url := "http://www.applysquare.com/cn/"
+	doc, err := goquery.NewDocument(url)
+	P(doc, err)
+}
+
+func sorttt() {
+	slice := []string{"a", "c", "b"}
+	slice2 := []string{"a", "c", "b", "d"}
+
+	sort.Strings(slice)
+	sort.Strings(slice2)
+	P(slice)
+	P(slice2)
+}
+
+func loopMap() {
+	dict := map[string]string{
+		"key1": "val1",
+		"key2": "val2",
+		"key3": "val3",
+	}
+	for key, val := range dict {
+		P(key, val)
+	}
+}
+
+func urlParse() {
+	backend, err := url.Parse("http://localhost:8888/dir1/dir2/tail?q=123&q2=abc#alt")
+	P(backend, err)
+	P(MarshalJSONOrDie(backend))
+}
+
+func osPath() {
+	d, err := os.Getwd()
+	// 得到运行改命令时所在的目录, 比如在上一级目录运行该命令, 得到的目录就是上一级的
+	P(d, err)
+	dir1 := "/Users/mozhata/work/src/practice"
+	dir2 := "/Users/mozhata/work/src/practice/"
+	// /Users/mozhata/work/src
+	P(path.Dir(dir1))
+	// /Users/mozhata/work/src/practice
+	P(path.Dir(dir2))
+}
+
 func buldCountySlug(slug string) string {
 	countryKey := strings.Split(slug, ".")[0]
 	if countryKey == "" {
