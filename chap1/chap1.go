@@ -14,7 +14,7 @@ import (
 
 var P func(...interface{}) (int, error) = fmt.Println
 
-func main() {
+func main() { P("a"   )
 
 	// TrySimpleJson()
 	// tryComma()
