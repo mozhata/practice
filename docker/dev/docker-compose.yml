@@ -1,0 +1,11 @@
+mysql:
+  image: mozhata/mysql:utf8
+  container_name: mozhata_mysql
+  working_dir: /code
+  volumes:
+   - /mnt/sda1/practice/data/mysql:/var/lib/mysql
+   - $GOPATH/src/practice/db/mysql:/code
+  ports:
+   - "3333:3306"
+  environment:
+   MYSQL_ROOT_PASSWORD: mysql_access_key

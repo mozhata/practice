@@ -12,8 +12,8 @@ var P func(...interface{}) (int, error) = fmt.Println
 func main() {
 	// basic()
 	// Timeout()
-	// classicalMod()
-	classicalMod2()
+	classicalMod()
+	// classicalMod2()
 }
 func basic() {
 	chs := make([]chan int, 4)
@@ -26,9 +26,10 @@ func basic() {
 		}(chs[i])
 	}
 
-	for _, ch := range chs {
-		<-ch
-	}
+	// for _, ch := range chs {
+	// 	<-ch
+	// }
+	P("finish")
 }
 func Timeout() {
 	timeout := make(chan bool, 1)

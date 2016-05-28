@@ -40,5 +40,10 @@ func diffs() {
 	// [ `run` | done: 2.495417ms ]
 	// -old
 	// +new
+	/*
+
+		Error loading syntax file "Packages/GoSublime/syntax/GoSublime-Go.tmLanguage":
+		 Unable to open Packages/GoSublime/syntax/GoSublime-Go.tmLanguage
+	*/
 
 }
