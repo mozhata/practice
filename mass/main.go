@@ -4,19 +4,21 @@ import (
 	// . "bitbucket.org/applysquare/applysquare-go/pkg/discussion"
 
 	"encoding/json"
+	"flag"
 	"fmt"
+	"net/http"
 	"net/url"
 	"os"
 	"path"
+	"runtime"
 	"sort"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
-	// "time"
-	// "github.com/stretchr/testify/assert"
-	// "testing"
+	"github.com/golang/glog"
 )
 
 var P func(...interface{}) (int, error) = fmt.Println
@@ -41,6 +43,7 @@ const (
 )
 
 func main() {
+	flag.Parse()
 	// s1 := "abcdditui"
 	// // s2 := "1234"
 	// ss := md5.Sum([]byte(s1))
@@ -165,7 +168,191 @@ func main() {
 	// urlParse()
 	// loopMap()
 	// sorttt()
-	crawl()
+	// crawl()
+	// convertInterface()
+
+	// runes()
+	// logFlush()
+	// build()
+	// intLoop()
+	// syncRuntime()
+	// closure()
+	// timeAdd()
+	// tryCall()
+	// getEnv()
+	tesMap()
+}
+
+func tesMap() {
+	var dic = map[string]int{}
+	dic["a"] = 9
+	delete(dic, "b")
+	dic["c"] += 2
+	fmt.Println(dic)
+
+	// for k := range dic {
+	// 	fmt.Println("K: ", k)
+	// }
+	var dic2 map[string]int
+	var dic3 = map[string]int{}
+	fmt.Println(len(dic2), len(dic3))
+	fmt.Println("lookup: ", dic2["bb"], "-", dic3["bb"])
+	delete(dic2, "kk")
+	delete(dic3, "bb")
+	fmt.Println("loop dic2: ")
+	for k := range dic2 {
+		fmt.Println("key in dic2: ", k)
+	}
+	for k := range dic3 {
+		fmt.Println("key in dic3: ", k)
+	}
+	fmt.Println("==nil: ", dic2 == nil, dic3 == nil)
+	// dic2["b"] = 8
+	// fmt.Println(dic2)
+}
+
+func getEnv() {
+	gopath := os.Getenv("ABC")
+	fmt.Println("ABC: ", gopath)
+}
+
+func tryCall() {
+	glog.Infoln("tryCall...")
+	for skip := 0; ; skip++ {
+		pc, file, line, ok := runtime.Caller(skip)
+		if !ok {
+			break
+		}
+		glog.Infof("skip = %v, pc = %v, file = %v, line = %v\n", skip, pc, file, line)
+	}
+}
+
+func timeAdd() {
+	one := time.Now()
+	glog.Infoln("one: ", one)
+	two := one.Add(time.Minute * 10)
+	glog.Infoln("two: ", two)
+	glog.Infoln("one: ", one)
+
+}
+
+func closure() {
+	closure1()
+	closure2()
+}
+
+func closure1() {
+	var wg sync.WaitGroup
+	wg.Add(5)
+	for i := 0; i < 5; i++ {
+		go func() {
+			defer wg.Done()
+			fmt.Println(i) // 555555
+		}()
+	}
+	wg.Wait()
+}
+
+func closure2() {
+	var wg sync.WaitGroup
+	wg.Add(5)
+	for i := 0; i < 5; i++ {
+		go func(j int) {
+			defer wg.Done()
+			fmt.Println(j) // 01234(顺序可能会变)
+		}(i)
+	}
+	wg.Wait()
+}
+
+// go run main.go -logtostderr
+func syncRuntime() {
+	var wg sync.WaitGroup
+	var urls = []string{
+		"http://www.baidu.com/",
+		"http://dict.youdao.com/w/currency/#keyfrom=dict2.top",
+		"https://docs.mongodb.com/manual/mongo/",
+		"http://www.runoob.com/mongodb/mongodb-q,uery.html",
+		"http://studygolang.com/articles/2059",
+	}
+	glog.Infoln("fetching url..")
+	for _, url := range urls {
+		// Increment the WaitGroup counter.
+		wg.Add(1)
+		// Launch a goroutine to fetch the URL.
+		go func(url string) {
+			glog.Infoln("fetch url: ", url)
+			// Decrement the counter when the goroutine completes.
+			defer wg.Done()
+			// Fetch the URL.
+			r, _ := http.Get(url)
+			glog.Infoln("status: %s, code: %d, url is %s", r.Status, r.StatusCode, url)
+		}(url)
+	}
+	// Wait for all HTTP fetches to complete.
+	wg.Wait()
+}
+
+// test loop
+type MyInt int
+
+func (m MyInt) String() string {
+	return fmt.Sprint(int(m))
+}
+
+// panic
+func intLoop() {
+	var m MyInt = 888
+	s := m.String()
+	fmt.Println(s)
+}
+
+func build() {
+	uids := []int{1256, 1457, 2799, 9448, 27078, 27090, 27095, 27104, 27148, 27160, 27988}
+	// AND creator=%d;
+	sql := "SELECT id FROM eventtopic WHERE `delete`=0"
+	for _, uid := range uids {
+		sql = fmt.Sprintf("%s%s", sql, fmt.Sprintf(" OR creator=%d", uid))
+	}
+	fmt.Println("sql: \n", sql+";")
+
+}
+
+func logFlush() {
+	// go run main.go -alsologtostderr -log_dir="./"
+	flag.Parse()
+	glog.Infoln("abc..")
+	glog.Infof("abc..%d", 123)
+	glog.Flush()
+}
+
+func runes() {
+	str := "hello中国"
+	conv := []rune(str)
+	P(str)
+	for _, v := range conv {
+		P(fmt.Sprintf("%d", v))
+		P(string(v))
+	}
+	ss := []rune(str)[0]
+	P(string(ss))
+}
+
+func convertInterface() {
+	foo := Interface()
+	tryOne, ok := foo.(map[string]string)
+	fmt.Println(foo, tryOne, ok)
+	tryTwo, ok := foo.(map[string]interface{})
+	fmt.Println(tryTwo, ok)
+}
+
+func Interface() interface{} {
+	foo := make(map[string]interface{})
+	foo["key"] = "value"
+	return foo
+}
+
+func makeNew() {
 
 }
 
