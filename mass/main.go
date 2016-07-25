@@ -3,9 +3,11 @@ package main
 import (
 	// . "bitbucket.org/applysquare/applysquare-go/pkg/discussion"
 
+	"bufio"
 	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"os"
@@ -16,6 +18,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode"
+	"unicode/utf8"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/golang/glog"
@@ -180,7 +184,89 @@ func main() {
 	// timeAdd()
 	// tryCall()
 	// getEnv()
-	tesMap()
+	// tesMap()
+	// dup1()
+	// charCount()
+	tesFor()
+}
+
+// never found a better parterner for a long time, maybe met but I'am not brelliant to deserve it at that time. I need to focus and try to make me better and find a parterner to encourage and take care of each other
+
+// review this
+func charCount() {
+	counts := make(map[rune]int)    // counts of Unicode characters
+	var utflen [utf8.UTFMax + 1]int // count of lengths of UTF-8 encodings
+	invalid := 0                    // count of invalid UTF-8 characters
+
+	in := bufio.NewReader(os.Stdin)
+	for {
+		r, n, err := in.ReadRune() // returns rune, nbytes, error
+		if err == io.EOF {
+			glog.Infoln("is io.EOF")
+			break
+		}
+		if line, prefix, _ := in.ReadLine(); string(line) == "" || string(line) == "\\n" {
+			glog.Infof("line is %q, input should over, prefix: %t", string(line), prefix)
+			break
+		}
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "charcount: %v\n", err)
+			os.Exit(1)
+		}
+		if r == unicode.ReplacementChar && n == 1 {
+			invalid++
+			continue
+		}
+		counts[r]++
+		utflen[n]++
+	}
+	fmt.Printf("rune\tcount\n")
+	for c, n := range counts {
+		fmt.Printf("%q\t%d\n", c, n)
+	}
+	fmt.Print("\nlen\tcount\n")
+	for i, n := range utflen {
+		if i > 0 {
+			fmt.Printf("%d\t%d\n", i, n)
+		}
+	}
+	if invalid > 0 {
+		fmt.Printf("\n%d invalid UTF-8 characters\n", invalid)
+	}
+}
+
+func tesFor() {
+	slice := []string{"abd", "dsad", "abc", "ddd"}
+	for v := range slice {
+		glog.Infoln(v)
+	}
+	for i, v := range slice {
+		glog.Infoln(i, "\t", v)
+	}
+}
+
+func dup1() {
+	counts := make(map[string]int)
+	input := bufio.NewScanner(os.Stdin)
+
+	for input.Scan() {
+		glog.Infoln("one scan, and the input is : ", input.Text())
+		if input.Text() == "\n" {
+			glog.Infoln("input is `\\n` over")
+			break
+		}
+		if input.Text() == "" {
+			glog.Infoln("the input is \"\", over")
+			break
+		}
+		counts[input.Text()] += 1
+	}
+
+	for key, v := range counts {
+		if v > 1 {
+			fmt.Printf("%s:\t%d\n", key, v)
+		}
+	}
 }
 
 func tesMap() {
