@@ -7,3 +7,5 @@ react/node_modules/*
 
 *.pyc
 .DS_Store
+.swp
+.dump

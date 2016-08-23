@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
+	"html/template"
 	"image"
 	"image/color"
 	"image/gif"
@@ -21,6 +22,12 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	// "go.net/html"
+	"golang.org/x/net/html"
+
+	"github.com/golang/glog"
+	"github.com/zykzhang/handy"
 )
 
 var P func(...interface{}) (int, error) = fmt.Println
@@ -31,6 +38,7 @@ type HomeWork struct {
 }
 
 func main() {
+	flag.Parse()
 	// shareVariable()
 	// useChannel()
 	// timeOut()
@@ -41,11 +49,166 @@ func main() {
 	// chapOne()
 	// chapTwo()
 	// chapThree()
-	chapfour()
+	// chapfour()
+	chapFive()
+}
+
+func chapFive() {
+	findLinks()
+}
+
+func findLinks() {
+	doc, err := html.Parse(os.Stdin)
+	glog.Infoln("begin.., doc: ", doc.Namespace, doc.Data)
+	if err != nil {
+		glog.Fatal(err)
+	}
+	links := make([]string, 0)
+	links = visit(links, doc)
+	glog.Infoln("loop.., links: ", links)
+	for _, link := range links {
+		glog.Infoln(link)
+	}
+}
+
+func visit(links []string, node *html.Node) []string {
+	if node.Type == html.ElementNode && node.Data == "a" {
+		for _, atrr := range node.Attr {
+			if atrr.Key == "href" {
+				links = append(links, atrr.Val)
+			}
+		}
+	}
+	for c := node.FirstChild; c != nil; c = c.NextSibling {
+		links = visit(links, c)
+	}
+	return links
 }
 
 func chapfour() {
-	issues()
+	// issues()
+	// treeSort()
+	// issuesReport()
+	// issuesReportHTML()
+	// autoEscape()
+}
+
+func autoEscape() {
+	const templ = `<p>A: {{.A}}</p><p>B: {{.B}}</p>`
+	t := template.Must(template.New("escape").Parse(templ))
+	var data struct {
+		A string        // untrusted plain text
+		B template.HTML // trusted HTML
+	}
+	data.A = "<b>Hello!</b>"
+	data.B = "<b>Hello!</b>"
+	if err := t.Execute(os.Stdout, data); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func issuesReportHTML() {
+	// go run main.go repo:golang/go commenter:gopherbot json encoder >issues.html
+	var issueList = template.Must(template.New("issuelist").Parse(`
+<h1>{{.TotalCount}} issues</h1>
+<table>
+<tr style='text-align: left'>
+  <th>#</th>
+  <th>State</th>
+  <th>User</th>
+  <th>Title</th>
+</tr>
+{{range .Items}}
+<tr>
+  <td><a href='{{.HTMLURL}}'>{{.Number}}</a></td>
+  <td>{{.State}}</td>
+  <td><a href='{{.User.HTMLURL}}'>{{.User.Login}}</a></td>
+  <td><a href='{{.HTMLURL}}'>{{.Title}}</a></td>
+</tr>
+{{end}}
+</table>
+`))
+	result, err := githublib.SearchIssues(os.Args[1:])
+	glog.Infoln(handy.MarshalJSONOrDie(result))
+	if err != nil {
+		glog.Fatal(err)
+	}
+	if err := issueList.Execute(os.Stdout, result); err != nil {
+		glog.Fatal(err)
+	}
+}
+
+func issuesReport() {
+	const templ = `{{.TotalCount}} issues:
+{{range .Items}}----------------------------------------
+Number: {{.Number}}
+User:   {{.User.Login}}
+Title:  {{.Title | printf "%.64s"}}
+Age:    {{.CreateAt | daysAgo}} days
+{{end}}`
+	daysAgo := func(t time.Time) int {
+		return int(time.Since(t).Hours() / 24)
+	}
+	report, err := template.New("report").
+		Funcs(template.FuncMap{"daysAgo": daysAgo}).
+		Parse(templ)
+	if err != nil {
+		glog.Fatal(err)
+	}
+	result, err := githublib.SearchIssues(os.Args[1:])
+	glog.Infoln(handy.MarshalJSONOrDie(result))
+	if err != nil {
+		glog.Fatal(err)
+	}
+	if err := report.Execute(os.Stderr, result); err != nil {
+		glog.Fatal(err)
+	}
+}
+
+func treeSort() {
+	flag.Parse()
+	sort := func(values []int) {
+		var root *tree
+		for _, v := range values {
+			root = add(root, v)
+		}
+		appendValue(values[:0], root)
+	}
+	numbers := []int{2, 3, 5, 1, 7, 8, 33, 11, 44, 112}
+	glog.Infoln("numbers before sort: ", numbers)
+	sort(numbers)
+	glog.Infoln("numbers after sort: ", numbers)
+	glog.Infoln(numbers[:0])
+}
+
+type tree struct {
+	value int
+	left  *tree
+	right *tree
+}
+
+func add(root *tree, v int) *tree {
+	if root == nil {
+		root = new(tree)
+		root.value = v
+		return root
+	}
+	if v < root.value {
+		root.left = add(root.left, v)
+	}
+	if v > root.value {
+		root.right = add(root.right, v)
+	}
+	return root
+}
+
+func appendValue(values []int, root *tree) []int {
+	if root != nil {
+		values = appendValue(values, root.left)
+		values = append(values, root.value)
+		values = appendValue(values, root.right)
+	}
+	return values
 }
 
 func issues() {
@@ -160,6 +323,7 @@ func chapOne() {
 	// dup2()
 	// dup3()
 	// lissajous(os.Stdout)
+	// fetch()
 	// fetch2()
 	// fetchAll()
 	// tinyServer()
@@ -212,7 +376,8 @@ func tinyServer() {
 	http.HandleFunc("/img", image)
 	http.HandleFunc("/svg", svg)
 	http.HandleFunc("/mandelbrot", mandelbrot)
-	log.Fatal(http.ListenAndServe("localhost:7777", nil))
+	log.Fatal(http.ListenAndServe(":7777", nil))
+	// log.Fatal(http.ListenAndServe("localhost:7777", nil))
 
 }
 

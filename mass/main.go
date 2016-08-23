@@ -1,13 +1,12 @@
 package main
 
 import (
-	// . "bitbucket.org/applysquare/applysquare-go/pkg/discussion"
-
 	"bufio"
 	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
@@ -185,6 +184,45 @@ func main() {
 	// tryCall()
 	// getEnv()
 	// tesMap()
+	// tesSlice()
+	// httpRequest()
+	tesErrorFmt()
+}
+
+func tesErrorFmt() {
+	err := fmt.Errorf("a error is %s", "blabla...")
+	glog.Infof("log the error: %s, use v: %v", err, err)
+}
+
+func httpRequest() {
+	resp, err := http.Get(`http://115.29.34.206:12236/driver/trail?&session_id=testpre&json=[{%22horAcc%22:10,%22t%22:1456733420,%22speed%22:0,%22isGps%22:1,%22order%22:%22%22,%22course%22:-1,%22lng%22:%22116.485900%22,%22lat%22:%2239.908870%22,%22type%22:0},{%22horAcc%22:10,%22t%22:1456733420,%22speed%22:0,%22isGps%22:1,%22order%22:%22%22,%22course%22:-1,%22lng%22:%22116.485900%22,%22lat%22:%2239.908870%22,%22type%22:0}]`)
+	b, err := ioutil.ReadAll(resp.Body)
+
+	fmt.Println(err, string(b))
+
+	resp, err = http.Post(`http://115.29.34.206:12236/driver/trail?&session_id=testpre&json=[{%22horAcc%22:10,%22t%22:1456733420,%22speed%22:0,%22isGps%22:1,%22order%22:%22%22,%22course%22:-1,%22lng%22:%22116.485900%22,%22lat%22:%2239.908870%22,%22type%22:0},{%22horAcc%22:10,%22t%22:1456733420,%22speed%22:0,%22isGps%22:1,%22order%22:%22%22,%22course%22:-1,%22lng%22:%22116.485900%22,%22lat%22:%2239.908870%22,%22type%22:0}]`, "", nil)
+	b, err = ioutil.ReadAll(resp.Body)
+
+	fmt.Println(err, string(b))
+
+	resp, err = http.Get(`http://115.29.34.206:12236/driver/orderTrail?&session_id=testpre&json=[{%22horAcc%22:10,%22t%22:1456733420,%22speed%22:0,%22isGps%22:1,%22order%22:%22%22,%22course%22:-1,%22lng%22:%22116.485900%22,%22lat%22:%2239.908870%22,%22type%22:0},{%22horAcc%22:10,%22t%22:1456733420,%22speed%22:0,%22isGps%22:1,%22order%22:%22%22,%22course%22:-1,%22lng%22:%22116.485900%22,%22lat%22:%2239.908870%22,%22type%22:0}]`)
+	b, err = ioutil.ReadAll(resp.Body)
+
+	fmt.Println(err, string(b))
+
+	resp, err = http.Post(`http://115.29.34.206:12236/driver/orderTrail?&session_id=testpre&json=[{%22horAcc%22:10,%22t%22:1456733420,%22speed%22:0,%22isGps%22:1,%22order%22:%22%22,%22course%22:-1,%22lng%22:%22116.485900%22,%22lat%22:%2239.908870%22,%22type%22:0},{%22horAcc%22:10,%22t%22:1456733420,%22speed%22:0,%22isGps%22:1,%22order%22:%22%22,%22course%22:-1,%22lng%22:%22116.485900%22,%22lat%22:%2239.908870%22,%22type%22:0}]`, "", nil)
+	b, err = ioutil.ReadAll(resp.Body)
+
+	fmt.Println(err, string(b))
+}
+
+func tesSlice() {
+	sl := []string{}
+	asl := append(sl, "one")
+	fmt.Println(asl, sl)
+	sll := make([]string, 1, 4)
+	asll := append(sll, "two")
+	fmt.Println(asll, sll)
 	// dup1()
 	// charCount()
 	tesFor()
@@ -406,9 +444,16 @@ func build() {
 
 func logFlush() {
 	// go run main.go -alsologtostderr -log_dir="./"
-	flag.Parse()
+	logDir := flag.Lookup("log_dir")
+	testFlag := flag.Lookup("log_dir")
+	glog.Infoln("lookup before parse", logDir.Name, logDir.Value, testFlag)
+	err := flag.Set("log_dir", "test_value")
+	glog.Errorln("err: ", err)
 	glog.Infoln("abc..")
 	glog.Infof("abc..%d", 123)
+	logDir = flag.Lookup("log_dir")
+	testFlag = flag.Lookup("log_dir")
+	glog.Infoln("lookup before parse", logDir.Name, logDir.Value, testFlag.Name, testFlag.Value)
 	glog.Flush()
 }
 

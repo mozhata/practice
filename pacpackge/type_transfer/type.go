@@ -18,17 +18,20 @@ func main() {
 
 	// Comma-ok断言的语法是：value, ok := element.(T)。element必须是接口类型的变量，T是普通类型。
 	type Html []interface{}
-	html := make(Html, 4)
+	html := make(Html, 5)
 	html[0] = "div"
 	html[1] = "span"
 	html[2] = []byte("script")
 	html[3] = 33
+	html[4] = true
 
 	for _, element := range html {
 		if value, ok := element.(string); ok {
 			P(value, "is string")
 		} else if value, ok := element.([]byte); ok {
 			P(value, "is []byte")
+		} else if v, ok := element.(int); ok {
+			P(v, "is int")
 		}
 	}
 
@@ -39,6 +42,12 @@ func main() {
 			P(value, "is string")
 		case []byte:
 			P(value, "is []byte")
+		case int:
+			P(value, "is int")
+		case int32:
+			P(value, "is int32")
+		case int64:
+			P(value, "is int64")
 		default:
 			P("Unkown type")
 		}
