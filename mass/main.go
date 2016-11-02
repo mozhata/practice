@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -20,8 +21,11 @@ import (
 	"unicode"
 	"unicode/utf8"
 
+	"golang.org/x/crypto/bcrypt"
+
 	"github.com/PuerkitoBio/goquery"
 	"github.com/golang/glog"
+	"github.com/pborman/uuid"
 )
 
 var P func(...interface{}) (int, error) = fmt.Println
@@ -46,7 +50,6 @@ const (
 )
 
 func main() {
-	flag.Parse()
 	// s1 := "abcdditui"
 	// // s2 := "1234"
 	// ss := md5.Sum([]byte(s1))
@@ -186,7 +189,216 @@ func main() {
 	// tesMap()
 	// tesSlice()
 	// httpRequest()
-	tesErrorFmt()
+	// tesErrorFmt()
+	// tesArrayEqual()
+	// testMapLen()
+	// P(uuid.New())
+	// WirdTest()
+	// P(unsafe.Sizeof("s"))
+	// P(unsafe.Sizeof(1))
+	// P(unsafe.Sizeof(true))
+	// testDefer()
+	// tryBuffer()
+	// tryPrintfV()
+	// tryEmpty()
+	// tryCrypto()
+	// tiny()
+	// tryPrintf()
+	// tryLenStr()
+	tryUpper()
+}
+
+func tryUpper() {
+	str := "61a44429dc5c2b95081c360baf370dcb7fe14ae4241bf9392f3c23f520624a5add5e0ffd3b6e2ecf8b907459455e0c37a91cf1c8f53e969cb96cba67a88a54be19202fca364003a6d2fecdca750ec1964a7683bd418ac772fda08fda8f5c4008b51c926b6568f47581a42d90d5b5b385ba3674544c6c47ef6647e316bb93c9bbe0907751236099baacf71fdb298d8971a9cb0b5c8b842bb037937f683af4ba7b0888e9fcf6bf51455a21e6c8980cb6e5a19177fe1c6047d0f107b08a611295af5a7ccaf1b0f17be4a38761e8c5f7931f5c546c6b641864e7e04232d4feb39dc6c5d2e26779b1131012acb51cda52cfae41373c7c6fe67e9230c1300c96d3022f0ddadb3bd22879cb8ee2afc1792b21493e4f621714aa8b41411be6e53bb06c88743290e2bf7b9eaf6a81df18336b18c1b612f16c92616a0d75f523910ac3eb77b313c05356d8fd3fa39a25dfdd4ce53cbd46ce5b04c0efe778cbc1c33aba068e4dd3000b8d049669d5964e7a66baaec63b12f94b5154e9fa17ca8a68baaec63f3188ac6aded7445a530ddd9ccffad3a1a2c296553d42e217438f35d887425811c93bf715362d5055d6a2f44f515796a41c031bde77399ac57eaaecc2b6da926b0d8d0eca37e4cc0a27566d40b297884f77275407ee27a0fabdca0d173e124e81e5b81ba163faf1a1461cf4c82264c2eb85734df3288992b895eab6434dac216cff2ea0a543c0919ca45cf252f1b39a7d570961a91a2ec30461e5089dcb183cdd3cbd463001d74741c9bc4f67235b17349fbd50553c4ea2ec767ba43ef9cbfc3f"
+	P(strings.ToUpper(str))
+	P(string(0x00), string(0x36), string(0x5c))
+	P(string(byte(0x00)), string(byte(0x36)), string(byte(0x5c)))
+	P(len("中国工商银行股份有限公司北京通州支行新华分理处"))
+}
+
+func tryLenStr() {
+	strA := "abc"
+	strB := "a中国"
+	P("len A and B: ", len(strA), len(strB), len([]byte(strA)), len([]byte(strB)))
+}
+
+type A struct {
+	B string
+	c int
+}
+
+// func (a *A) String() string {
+// return fmt.Sprintf("%#v", a)
+// }
+
+func tryPrintf() {
+	sa := []*A{
+		&A{"", 4},
+		&A{"hello", 3},
+		&A{"af", 0},
+	}
+	sb := []A{
+		A{"adfa", 0},
+	}
+	fmt.Printf("\nvalue: %#v\n", sa[0])
+	fmt.Printf("value+ : %+v, \nvalue# %#v,\nv: %v", sa, sa, sa)
+	fmt.Printf("\n\nvalue+: %+v \nvalue#: %#v", sb, sb)
+}
+
+func tiny() {
+	m := make(map[string]int)
+	m["aa"]++
+	P(m)
+}
+
+func tryCrypto() {
+	pwd := "pwd"
+	hash, err := bcrypt.GenerateFromPassword([]byte(pwd), bcrypt.DefaultCost)
+	if err != nil {
+		P("bcrypt err: ", err)
+	}
+
+	P("first, pwd and hansh: \n", pwd, string(hash), len(string(hash)))
+	hash2, _ := bcrypt.GenerateFromPassword([]byte(pwd), bcrypt.DefaultCost)
+	P("second, pwd and hash: \n", pwd, string(hash2), len(string(hash2)))
+
+	P("check pwd..")
+	P("check hash1: ")
+	err = bcrypt.CompareHashAndPassword(hash, []byte(pwd))
+	P(err == nil)
+	err = bcrypt.CompareHashAndPassword(hash, []byte("pwds"))
+	P(err == nil)
+	P("check has2:")
+	P("hash1 != hash2: ", string(hash) != string(hash2))
+	err = bcrypt.CompareHashAndPassword(hash2, []byte(pwd))
+	P(err == nil)
+	u := uuid.New()
+	P("uuid: ", u, len(u), len(uuid.New()), len(uuid.New()))
+	unix := time.Now().Unix()
+	unixStr := fmt.Sprintf("%d", unix)
+	P("time: ", unix, len(unixStr))
+
+}
+
+func tryEmpty() {
+	type s struct {
+		FieldOne   int    `json:"one,omitempty"`
+		FieldTwo   string `json:"two, omitempty"`
+		FieldThree int    `json:"three"`
+	}
+	s1 := s{FieldTwo: ""}
+	b1, _ := json.Marshal(s1)
+	P("s1: ", string(b1))
+}
+
+func tryPrintfV() {
+	testStruct := struct {
+		field1 string
+		filed2 int
+		Field3 string
+		Field4 bool `json:"filed4"`
+	}{"filed1", 2, "filed3", true}
+	fmt.Printf("testStruct: %v\n", testStruct)
+	fmt.Printf("testStruct-pionter: %v\n", &testStruct)
+}
+
+func tryBuffer() {
+	buf := bytes.NewBufferString("this is a buffer !")
+	dst := make([]byte, 0, 10)
+	dst2 := make([]byte, 10)
+	dst3 := new([]byte)
+	var dst4 []byte
+	P(dst == nil, dst2 == nil, dst3 == nil, *dst3 == nil, dst4 == nil)
+	n, err := buf.Read(dst)
+	n2, err2 := buf.Read(dst2)
+	n3, err3 := buf.Read(*dst3)
+	P("dst: ", string(dst), "len: ", len(dst))
+	P("dst2: ", string(dst2), "len: ", len(dst2))
+	P("dst3: ", string(*dst3), "len: ", len(*dst3))
+	P(n, err)
+	P(n2, err2)
+	P(n3, err3)
+}
+
+func testDefer() {
+	start := time.Now()
+	startCopy := start
+	P("start: ", start)
+	defer func(startCopy time.Time) {
+		P("start at defer: ", start)
+		P("startCopy at defer: ", startCopy)
+	}(startCopy)
+	time.Sleep(time.Second * 1)
+	start = time.Now()
+	startCopy = time.Now()
+}
+
+func WirdTest() {
+	const Enone, Eio, Einval = 5, 2, 1
+
+	a := [...]string{Enone: "no error", Eio: "Eio", Einval: "invalid argument"}
+	s := []string{Enone: "no error", Eio: "Eio", Einval: "invalid argument"}
+	m := map[int]string{Enone: "no error", Eio: "Eio", Einval: "invalid argument"}
+	P("a")
+	for i, v := range a {
+		fmt.Printf("i: %d, v: %q\n", i, v)
+	}
+	P("s")
+	for i, v := range s {
+		fmt.Printf("i: %d, v: %q\n", i, v)
+	}
+	P("m")
+	for i, v := range m {
+		fmt.Printf("i: %d, v: %q\n", i, v)
+	}
+}
+
+func fakeRequest() {
+	flag.Lookup("logtostderr").Value.Set("true")
+	flag.Parse()
+	// test_uid := "45529"
+	host := "0.0.0.0"
+	port := "12231"
+	dirver_trail_json := `[{"lat":"33.33066","lng":"121.284148","t":1472338663}]`
+	driver_trail_form := url.Values{
+		"session_id": []string{"test_uid"},
+		"json":       []string{dirver_trail_json},
+		"city":       []string{"上海"},
+	}
+
+	ticker := time.NewTicker(time.Second * 20)
+	for t := range ticker.C {
+		resp, err := http.PostForm(fmt.Sprintf("http://%s:%s/driver/trail", host, port), driver_trail_form)
+		if err != nil {
+			glog.Errorf("at %s, PostForm-err: %s\n", t, err)
+		}
+		defer resp.Body.Close()
+		resp_body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			glog.Errorf("at %s, ioutil.ReadAll-err: %s\n", t, err)
+		}
+		glog.Infof("at %s, fake post, fadback is %s", t, string(resp_body))
+	}
+}
+
+func testMapLen() {
+	dict := make(map[string]int)
+	P("length of dict: ", len(dict))
+	dictWithCap := make(map[string]int, 3)
+	P("length of dictWithCap: ", len(dictWithCap))
+	P("dict and dictWithCap: ", dict, dictWithCap)
+	dictWithCap["a"] = 3
+	P("length of dictWithCap: ", len(dictWithCap))
+	P("dict and dictWithCap: ", dict, dictWithCap)
+
+}
+
+func tesArrayEqual() {
+	var foo = [3]int{2, 3, 1}
+	var bar = [3]int{2, 3, 4}
+	var fish = [3]int{2, 3, 4}
+	P("foo == bar: ", foo == bar)
+	P("bar == fish: ", bar == fish)
 }
 
 func tesErrorFmt() {

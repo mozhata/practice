@@ -1,0 +1,208 @@
+Log file created at: 2016/09/05 11:51:36
+Running on machine: kang-pc
+Binary: Built with gc go1.6.2 for linux/amd64
+Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+I0905 11:51:36.732346   14484 main.go:22] begin fake..
+I0905 11:51:41.786050   14484 main.go:44] at 2016-09-05 11:51:41.735332859 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:51:46.783036   14484 main.go:44] at 2016-09-05 11:51:46.735379185 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:51:51.756457   14484 main.go:44] at 2016-09-05 11:51:51.735363319 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:51:56.756618   14484 main.go:44] at 2016-09-05 11:51:56.735355114 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:52:01.757921   14484 main.go:44] at 2016-09-05 11:52:01.735392272 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:52:06.758635   14484 main.go:44] at 2016-09-05 11:52:06.73536255 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:52:11.752384   14484 main.go:44] at 2016-09-05 11:52:11.735354086 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:52:16.764059   14484 main.go:44] at 2016-09-05 11:52:16.735374616 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:52:21.749235   14484 main.go:44] at 2016-09-05 11:52:21.735389707 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:52:26.762403   14484 main.go:44] at 2016-09-05 11:52:26.735376455 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:52:31.750809   14484 main.go:44] at 2016-09-05 11:52:31.735354194 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:52:36.775761   14484 main.go:44] at 2016-09-05 11:52:36.735345734 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:52:41.755867   14484 main.go:44] at 2016-09-05 11:52:41.735344363 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:52:46.775292   14484 main.go:44] at 2016-09-05 11:52:46.73539411 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:52:51.763542   14484 main.go:44] at 2016-09-05 11:52:51.735382725 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:52:56.756430   14484 main.go:44] at 2016-09-05 11:52:56.735400508 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:53:01.751655   14484 main.go:44] at 2016-09-05 11:53:01.735416212 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:53:06.751270   14484 main.go:44] at 2016-09-05 11:53:06.735321358 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:53:11.754421   14484 main.go:44] at 2016-09-05 11:53:11.735388962 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:53:16.751264   14484 main.go:44] at 2016-09-05 11:53:16.735500817 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:53:21.751703   14484 main.go:44] at 2016-09-05 11:53:21.735358444 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:53:26.749925   14484 main.go:44] at 2016-09-05 11:53:26.735370572 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:53:31.778714   14484 main.go:44] at 2016-09-05 11:53:31.735355729 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:53:36.757536   14484 main.go:44] at 2016-09-05 11:53:36.735694402 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:53:41.757674   14484 main.go:44] at 2016-09-05 11:53:41.735348108 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:53:46.780371   14484 main.go:44] at 2016-09-05 11:53:46.735361414 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:53:51.757807   14484 main.go:44] at 2016-09-05 11:53:51.735375746 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:53:56.775863   14484 main.go:44] at 2016-09-05 11:53:56.7353687 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}
+I0905 11:54:01.756999   14484 main.go:44] at 2016-09-05 11:54:01.735400087 +0800 CST, fake post, fadback is {
+  "code": 0,
+  "data": {
+    "ret": 0
+  },
+  "msg": "成功"
+}

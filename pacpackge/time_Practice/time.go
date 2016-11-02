@@ -9,10 +9,10 @@ var P func(...interface{}) (int, error) = fmt.Println
 
 func main() {
 	// basic()
-	format()
+	// format()
 	// duration()
 	// tick()
-	// ticker()
+	ticker()
 	// Ttimer()
 	// getBeforeTime()
 }

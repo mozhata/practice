@@ -38,7 +38,6 @@ type HomeWork struct {
 }
 
 func main() {
-	flag.Parse()
 	// shareVariable()
 	// useChannel()
 	// timeOut()
@@ -54,7 +53,35 @@ func main() {
 }
 
 func chapFive() {
-	findLinks()
+	// findLinks()
+	// switchCase()
+}
+
+func switchCase() {
+	var arg = flag.String("foo", "", "...")
+	var bar int
+	flag.Lookup("logtostderr").Value.Set("true")
+	flag.Parse()
+	switch *arg {
+	case "":
+
+	case "+1":
+		bar = bar + 1
+	case "+2":
+		bar = bar + 2
+	default:
+		bar = bar + 3
+	}
+	switch bar {
+	case 0:
+		glog.Infoln("foo is nil, do nothing")
+	case 1:
+		glog.Infoln("foo is +1")
+	case 2:
+		glog.Infoln("foo is +2")
+	case 3:
+		glog.Infoln("foo is other case")
+	}
 }
 
 func findLinks() {

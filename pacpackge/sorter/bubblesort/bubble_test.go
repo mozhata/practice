@@ -1,8 +1,6 @@
 package bubblesort
 
-import (
-	"testing"
-)
+import "testing"
 
 func TestBubbleSort1(t *testing.T) {
 	values := []int{2, 4, 73, 3, 9}
