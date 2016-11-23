@@ -4,10 +4,10 @@ import (
 	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
-	"encoding/base64"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
-	"strings"
+	"lxn_server/utils"
 )
 
 func main() {
@@ -16,16 +16,40 @@ func main() {
 	 *key 用来加密的密钥 密钥长度可以是128bit、192bit、256bit中的任意一个
 	 *16位key对应128bit
 	 */
-	hmacKey := "jj3Q1h0H86FZ7CD46Z5Nr35p67L199WdkgETx85920n128vi2125T9KY2hzv"
-	src := "0.56sdalfasldgjasldgjlasdｔｈｉｓ　ｉｓ asdf z啊啊啊啊撒旦法水电费啦"
+	hmacKey := "okqgompesj3rwqnbjikp36q9z3bpfdtivth2oa8hphutru6q5byuvwd8o1kw"
+	src := "3378B9355F22C791009AEB8E39D23243E0985C90877FA3BD56F3A010DC41AB88AF0EEBB7E4B06F7143EA450B3F0CB20935D8DC2C1B943A9324A8FED21119FA55037EB418B8252E082512EB4621EA1C0F8B70104B04CEEEC179E12033D5D9D84D"
 	key := hmacKey[:16]
 
-	crypted := AesEncrypt(src, key)
-	fmt.Println("crypted: ", hex.EncodeToString(crypted))
-	out := AesDecrypt(crypted, []byte(key))
-	fmt.Println("out: ", string(out))
+	// crypted := AesEncrypt(src, key)
+	// fmt.Println("crypted: ", hex.EncodeToString(crypted))
+	// out := AesDecrypt(crypted, []byte(key))
+	// fmt.Println("out: ", string(out))
+
+	o, _ := aes_decrypt(src, key)
+	fmt.Println("decrypted: ", o)
+
 }
 
+func aes_decrypt(hex_str, key string) (map[string]interface{}, error) {
+	b, err := hex.DecodeString(hex_str)
+	if err != nil {
+		return nil, err
+	}
+	decrypted, err := utils.AesDecrypt(b, []byte(key))
+	if err != nil {
+		return nil, err
+	}
+
+	var result map[string]interface{}
+	err = json.Unmarshal(decrypted, &result)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+/*
 func Base64URLDecode(data string) ([]byte, error) {
 	var missing = (4 - len(data)%4) % 4
 	data += strings.Repeat("=", missing)
@@ -42,13 +66,14 @@ func Base64UrlSafeEncode(source []byte) string {
 	safeurl = strings.Replace(safeurl, "=", "", -1)
 	return safeurl
 }
-
+*/
 func AesDecrypt(crypted, key []byte) []byte {
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		fmt.Println("err is:", err)
 	}
 	blockMode := NewECBDecrypter(block)
+	// blockMode := utils.NewECBDecrypter(block)
 	origData := make([]byte, len(crypted))
 	blockMode.CryptBlocks(origData, crypted)
 	origData = PKCS5UnPadding(origData)
@@ -64,6 +89,7 @@ func AesEncrypt(src, key string) []byte {
 		fmt.Println("plain content empty")
 	}
 	ecb := NewECBEncrypter(block)
+	// ecb := utils.NewECBEncrypter(block)
 	content := []byte(src)
 	content = PKCS5Padding(content, block.BlockSize())
 	crypted := make([]byte, len(content))

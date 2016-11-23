@@ -12,6 +12,8 @@ import (
 	"net/url"
 	"os"
 	"path"
+	"path/filepath"
+	"regexp"
 	"runtime"
 	"sort"
 	"strconv"
@@ -28,10 +30,13 @@ import (
 	"github.com/pborman/uuid"
 )
 
-var P func(...interface{}) (int, error) = fmt.Println
-var parse func(string, int, int) (int64, error) = strconv.ParseInt
-var atoi func(string) (int, error) = strconv.Atoi
-var EmailPattern = `^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})$`
+var (
+	P            func(...interface{}) (int, error)     = fmt.Println
+	Pf                                                 = fmt.Printf
+	parse        func(string, int, int) (int64, error) = strconv.ParseInt
+	atoi         func(string) (int, error)             = strconv.Atoi
+	EmailPattern                                       = `^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})$`
+)
 
 type JSONTime time.Time
 
@@ -205,11 +210,129 @@ func main() {
 	// tiny()
 	// tryPrintf()
 	// tryLenStr()
-	tryUpper()
+	// tryUpper()
+	// tryFileJoin()
+	// makeMapLen()
+	// graceGoruntine()
+	// graceGoruntine()
+	// tryCkecBankCard()
+	// chanPrac()
+	// chanPracBuffer()
+	formatFloat()
+}
+
+func formatFloat() {
+	f := 1381.15
+	P("origin f: ", f)
+	Pf("fmt format: %f\n", f)
+	P("use strconv...")
+	Pf("pre=2: %s\n", strconv.FormatFloat(f, 'f', 2, 32))
+	Pf("pre=2, float64: %s\n", strconv.FormatFloat(f, 'f', 2, 64))
+}
+
+func tryCkecBankCard() {
+	strs := []string{
+		"1234567890123456",
+		"123456789012345q",
+		"123456789012345",
+		"1234567890123454444",
+		"12345678901234544",
+		"12345678901234544222",
+		"12345678901234544222s",
+	}
+	for _, v := range strs {
+		P(checkBankCard(v))
+	}
+}
+
+func checkBankCard(bankCard string) bool {
+	pattern := `^(\d{16}|\d{19})$`
+	ok, _ := regexp.MatchString(pattern, bankCard)
+	return ok
+}
+
+func chanPrac() {
+	ch := make(chan int)
+	for i := 0; i < 10; i++ {
+		go func(j int) {
+			ch <- j
+		}(i)
+	}
+
+	for i := 0; i < 10; i++ {
+		v := <-ch
+		fmt.Printf("the %dth v from pipe: %d \n", i, v)
+	}
+}
+func chanPracBuffer() {
+	ch := make(chan int, 11)
+	for i := 0; i < 10; i++ {
+		go func(j int) {
+			ch <- j
+		}(i)
+	}
+
+	for i := 0; i < 10; i++ {
+		v := <-ch
+		fmt.Printf("the %dth v from pipe: %d \n", i, v)
+	}
+	P("done")
+}
+
+// 100个id，对每个id做一系列操作，并返回结果（对结果的顺序没有要求）
+// 限制启动goruntine个数为10
+func graceGoruntine() {
+	const (
+		ID_NUM        = 100
+		GORUNTINR_NUM = 10
+	)
+	result := make(chan string, GORUNTINR_NUM)
+
+	work := func(id int, signal chan bool, result chan string) {
+		str := strconv.Itoa(id)
+		result <- str
+		// 解除channel占用
+		<-signal
+	}
+
+	// 分发，处理任务
+	go func() {
+		signal := make(chan bool, GORUNTINR_NUM)
+		for i := 0; i < ID_NUM; i++ {
+			signal <- true
+			go work(i, signal, result)
+		}
+	}()
+	// 处理返回的结果
+	idStrs := make([]string, 0, ID_NUM)
+	for i := 0; i < ID_NUM; i++ {
+		v := <-result
+		idStrs = append(idStrs, v)
+	}
+	fmt.Printf("the result: %+v\n", idStrs)
+}
+
+func makeMapLen() {
+	m := make(map[string]string, 10)
+	P(len(m))
+	m["ka"] = "va"
+	for k, v := range m {
+		P(k, v)
+	}
+}
+
+func tryFileJoin() {
+	base1 := "ab/cd"
+	base2 := "ab/cd/"
+	base3 := "./ab/cd/"
+	P(filepath.Join(base1, "e"))
+	P(filepath.Join(base2, "e"))
+	P(filepath.Join(base2, "/e"))
+	P(filepath.Join(base3, "/e"))
 }
 
 func tryUpper() {
-	str := "61a44429dc5c2b95081c360baf370dcb7fe14ae4241bf9392f3c23f520624a5add5e0ffd3b6e2ecf8b907459455e0c37a91cf1c8f53e969cb96cba67a88a54be19202fca364003a6d2fecdca750ec1964a7683bd418ac772fda08fda8f5c4008b51c926b6568f47581a42d90d5b5b385ba3674544c6c47ef6647e316bb93c9bbe0907751236099baacf71fdb298d8971a9cb0b5c8b842bb037937f683af4ba7b0888e9fcf6bf51455a21e6c8980cb6e5a19177fe1c6047d0f107b08a611295af5a7ccaf1b0f17be4a38761e8c5f7931f5c546c6b641864e7e04232d4feb39dc6c5d2e26779b1131012acb51cda52cfae41373c7c6fe67e9230c1300c96d3022f0ddadb3bd22879cb8ee2afc1792b21493e4f621714aa8b41411be6e53bb06c88743290e2bf7b9eaf6a81df18336b18c1b612f16c92616a0d75f523910ac3eb77b313c05356d8fd3fa39a25dfdd4ce53cbd46ce5b04c0efe778cbc1c33aba068e4dd3000b8d049669d5964e7a66baaec63b12f94b5154e9fa17ca8a68baaec63f3188ac6aded7445a530ddd9ccffad3a1a2c296553d42e217438f35d887425811c93bf715362d5055d6a2f44f515796a41c031bde77399ac57eaaecc2b6da926b0d8d0eca37e4cc0a27566d40b297884f77275407ee27a0fabdca0d173e124e81e5b81ba163faf1a1461cf4c82264c2eb85734df3288992b895eab6434dac216cff2ea0a543c0919ca45cf252f1b39a7d570961a91a2ec30461e5089dcb183cdd3cbd463001d74741c9bc4f67235b17349fbd50553c4ea2ec767ba43ef9cbfc3f"
+	str := "f9cbfc3f"
 	P(strings.ToUpper(str))
 	P(string(0x00), string(0x36), string(0x5c))
 	P(string(byte(0x00)), string(byte(0x36)), string(byte(0x5c)))

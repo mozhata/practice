@@ -6,7 +6,7 @@ import time
 url = "http://www.graduate.study.cam.ac.uk/courses"
 datatable = "http://gaobase.admin.cam.ac.uk/api/courses.datatable"
 json = requests.get(datatable)
-dic = json1.loads(json.text)
+dicsoup = BeautifulSoup(response.text) = json1.loads(json.text)
 #print len(dic['data'])
 
 
