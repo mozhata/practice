@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"math"
 	"net/http"
 	"net/url"
 	"os"
@@ -218,7 +219,96 @@ func main() {
 	// tryCkecBankCard()
 	// chanPrac()
 	// chanPracBuffer()
-	formatFloat()
+	// formatFloat()
+	// tryAddDate()
+	// tryConvertPanicToError()
+	// maxInt64()
+	// tryIfElse()
+	// lenStr()
+	tryUmarshal()
+}
+
+func tryUmarshal() {
+	type PWD struct {
+		User string `json:"user"`
+		PWD  string `json:"pwd"`
+	}
+	origin := PWD{PWD: "123"}
+	str := `{"user": "test_user"}`
+	fmt.Printf("before unmarshaled: %#v\n", origin)
+	json.Unmarshal([]byte(str), &origin)
+	fmt.Printf("after unmarshaled: %#v\n", origin)
+
+	str2 := `{"pwd": "456"}`
+	fmt.Printf("before unmarshaled: %#v\n", origin)
+	json.Unmarshal([]byte(str2), &origin)
+	fmt.Printf("after unmarshaled: %#v\n", origin)
+
+}
+
+func lenStr() {
+	ch := "中国"
+	en := "ch"
+	// len ch: 6, len en: 2
+	fmt.Printf("len ch: %d, len en: %d\n", len(ch), len(en))
+	// len b of ch: 6, len b of en: 2
+	fmt.Printf("len b of ch: %d, len b of en: %d\n", len([]byte(ch)), len([]byte(en)))
+	// len rune of ch: 2, len rune of en: 2
+	fmt.Printf("len rune of ch: %d, len rune of en: %d", len([]rune(ch)), len([]rune(en)))
+}
+
+func tryIfElse() {
+	if a := "abc"; a == "" {
+		fmt.Println("a is nil")
+	} else {
+		// 打印 "abc"
+		fmt.Println("a: ", a)
+	}
+	/*	if a := "abc"; a == "" {
+			fmt.Println("a is nil")
+			b := "b"
+		} else {
+			// 报错，b 未定义
+			fmt.Printf("a: %s, b: %s\b", a, b)
+		}
+	*/
+}
+
+func maxInt64() {
+	mxInt64 := strconv.Itoa(math.MaxInt64)
+	P(len(mxInt64), mxInt64)
+	mxInt32 := strconv.Itoa(math.MaxUint32)
+	P(len(mxInt32), mxInt32)
+}
+
+// // 都会执行
+// func init() {
+// 	P("this is init 1")
+// }
+// func init() {
+// 	P("this is init 2")
+// }
+// func init() {
+// 	P("this is init 3")
+// }
+
+func tryConvertPanicToError() {
+	defer func() {
+		if r := recover(); r != nil {
+			err := r.(error)
+			fmt.Printf("recovered from panic, panic: %s", err)
+		}
+	}()
+	panic("ops...")
+}
+
+func tryAddDate() {
+	date := time.Date(2016, 2, 29, 0, 0, 0, 0, time.UTC)
+	nextMonth := date.AddDate(0, 2, 0)
+	Pf("date : %s and nextMont: %s\n", date, nextMonth)
+	date31 := date.AddDate(0, 0, 1)
+	nextMonth = date31.AddDate(0, 2, 0)
+	Pf("date : %s and nextMont: %s\n", date31, nextMonth)
 }
 
 func formatFloat() {
@@ -228,6 +318,10 @@ func formatFloat() {
 	P("use strconv...")
 	Pf("pre=2: %s\n", strconv.FormatFloat(f, 'f', 2, 32))
 	Pf("pre=2, float64: %s\n", strconv.FormatFloat(f, 'f', 2, 64))
+	var NIlInt []int
+	P(NIlInt == nil, len(NIlInt))
+	NIlInt = nil
+	P(NIlInt == nil, len(NIlInt))
 }
 
 func tryCkecBankCard() {
