@@ -225,7 +225,37 @@ func main() {
 	// maxInt64()
 	// tryIfElse()
 	// lenStr()
-	tryUmarshal()
+	// tryUmarshal()
+	// tryFeildFunc()
+	trySlice()
+}
+func trySlice() {
+	var sl []string
+	fmt.Println(len(sl), sl == nil)
+
+	var m map[string]string
+	fmt.Println(len(m), m == nil)
+
+	// panic: use of untyped nil
+	// fmt.Println(len(nil))
+
+	fmt.Printf("joined:%q\n", strings.Join(sl, ","))
+
+	sl = make([]string, 3, 5)
+	sl[3] = "3"
+	fmt.Printf("%v\n", sl)
+}
+
+func tryFeildFunc() {
+	url1 := "http://192.168.1.123:8989"
+	url2 := "http://192.168.1.123"
+	url3 := "http://192.168.1.123:"
+	split := func(s rune) bool {
+		return s == '/' || s == ':'
+	}
+	fmt.Printf("parts of url1: %#v\n", strings.FieldsFunc(url1, split))
+	fmt.Printf("parts of url2: %#v\n", strings.FieldsFunc(url2, split))
+	fmt.Printf("parts of url3: %#v\n", strings.FieldsFunc(url3, split))
 }
 
 func tryUmarshal() {
@@ -276,7 +306,7 @@ func tryIfElse() {
 
 func maxInt64() {
 	mxInt64 := strconv.Itoa(math.MaxInt64)
-	P(len(mxInt64), mxInt64)
+	P(len(mxInt64), mxInt64, math.MaxInt64)
 	mxInt32 := strconv.Itoa(math.MaxUint32)
 	P(len(mxInt32), mxInt32)
 }

@@ -11,3 +11,4 @@ react/node_modules/*
 .dump
 .vscode
 main
+promethus/data
