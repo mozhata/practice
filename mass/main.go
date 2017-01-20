@@ -32,11 +32,12 @@ import (
 )
 
 var (
-	P            func(...interface{}) (int, error)     = fmt.Println
-	Pf                                                 = fmt.Printf
-	parse        func(string, int, int) (int64, error) = strconv.ParseInt
-	atoi         func(string) (int, error)             = strconv.Atoi
-	EmailPattern                                       = `^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})$`
+	P     func(...interface{}) (int, error)     = fmt.Println
+	Pf                                          = fmt.Printf
+	parse func(string, int, int) (int64, error) = strconv.ParseInt
+
+	atoi         func(string) (int, error) = strconv.Atoi
+	EmailPattern                           = `^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})$`
 )
 
 type JSONTime time.Time
