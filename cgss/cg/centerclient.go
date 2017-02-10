@@ -22,7 +22,7 @@ func (client *CenterClient) AddPlayer(paler *Player) error {
 	return err
 }
 func (client *CenterClient) RemovePlayer(name string) error {
-	ret, _ := client.Call("removeplayer", params)
+	ret, _ := client.Call("removeplayer", name)
 	if ret.Code == "200" {
 		return nil
 	}

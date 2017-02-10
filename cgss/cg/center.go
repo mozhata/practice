@@ -24,7 +24,7 @@ type CenterServer struct {
 func NewCenterServer() *CenterServer {
 	servers := make(map[string]ipc.Server)
 	players := make([]*Player, 0)
-	return &CenterServer{servers: servers, players: players}
+	return &CenterServer{servers: servers, palers: players}
 }
 func (server *CenterServer) addPlayer(params string) error {
 	player := NewPlayer()
@@ -35,7 +35,9 @@ func (server *CenterServer) addPlayer(params string) error {
 	server.mutex.Lock()
 	defer server.mutex.Unlock()
 	server.palers = append(server.palers, player)
+	return nil
 }
+
 func (server *CenterServer) removePlayer(params string) error {
 	server.mutex.Lock()
 	defer server.mutex.Unlock()
@@ -48,14 +50,14 @@ func (server *CenterServer) removePlayer(params string) error {
 			} else if i == 0 {
 				server.palers = server.palers[1:]
 			} else {
-				server.palers = append(server.palers[:i], server.palers[i+1:])
+				// server.palers = append(server.palers[:i], server.palers[i+1:])
 			}
 			return nil
 		}
 	}
 	return errors.New("Player not found")
 }
-func (server *CenterServer) listPlayer(params string) (palyers string, err errors) {
+func (server *CenterServer) listPlayer(params string) (palyers string, err error) {
 	server.mutex.Lock()
 	defer server.mutex.Unlock()
 	if len(server.palers) > 0 {
