@@ -60,11 +60,6 @@ const (
 )
 
 func main() {
-	// s1 := "abcdditui"
-	// // s2 := "1234"
-	// ss := md5.Sum([]byte(s1))
-	// P("md5: ", ss)
-	// fmt.Printf("%x", ss)
 	// boo, _ := regexp.MatchString(EmailPattern, "1.sg@q.com")
 	// P("boo: ", boo)
 	// P("format: ", time.Now().Format(JSONTimeFormat))
