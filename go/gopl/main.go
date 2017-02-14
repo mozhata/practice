@@ -1,16 +1,59 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"log"
 	"net"
+	"strings"
 	"time"
 )
 
+// client at practice/go/tools/
+
 func main() {
 	// basicFib()
-	baicNetConn()
+	// baicNetConn()
+	echoConn()
+}
+
+/*
+8.3. 示例: 并发的Echo服务
+*/
+func echoConn() {
+	listener, err := net.Listen("tcp", ":8181")
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("echoConn listening on :8181")
+
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		// handleEchoConn
+		go handleEchoConn(conn)
+	}
+}
+
+func handleEchoConn(c net.Conn) {
+	fmt.Fprintln(c, "handling conn..")
+	input := bufio.NewScanner(c)
+	for input.Scan() {
+		go echo(c, input.Text(), time.Second)
+	}
+	c.Close()
+}
+
+func echo(c net.Conn, shout string, delay time.Duration) {
+	fmt.Fprintln(c, "\t", strings.ToUpper(shout))
+	time.Sleep(delay)
+	fmt.Fprintln(c, "\t", shout)
+	time.Sleep(delay)
+	fmt.Fprintln(c, "\t", strings.ToLower(shout))
 }
 
 /*
@@ -30,10 +73,12 @@ func baicNetConn() {
 			continue
 		}
 		// handleConn
-		handleConn(conn)
+		go handleConn(conn)
 	}
 }
+
 func handleConn(c net.Conn) {
+	log.Println("handling conn...")
 	defer c.Close()
 	for {
 		_, err := io.WriteString(c, time.Now().Format("15:04:05\n"))
