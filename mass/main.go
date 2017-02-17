@@ -30,8 +30,8 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/golang/glog"
+	"github.com/mozhata/handy"
 	"github.com/pborman/uuid"
-	"github.com/zykzhang/handy"
 )
 
 var (

@@ -1,3 +1,4 @@
+# config for docker
 global:
   scrape_interval:     15s # By default, scrape targets every 15 seconds.
   evaluation_interval: 15s # Evaluate rules every 15 seconds.
@@ -8,8 +9,16 @@ global:
 
 rule_files:
   - 'prometheus.rules'
+  # - "alert.rules"
 
 scrape_configs:
+  - job_name: "node"
+    static_configs:
+      - targets: ["192.168.0.6:9100"]
+        labels:
+          device_ID: "kang-pc"
+
+
   - job_name: 'prometheus'
 
     # Override the global default and scrape targets from this job every 5 seconds.
@@ -24,10 +33,10 @@ scrape_configs:
     scrape_interval: 5s
 
     static_configs:
-      - targets: ['localhost:8080', 'localhost:8081']
+      - targets: ['192.168.0.6:8080', '192.168.0.6:8081']
         labels:
           group: 'production'
 
-      - targets: ['localhost:8082']
+      - targets: ['192.168.0.6:8082']
         labels:
           group: 'canary'
