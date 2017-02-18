@@ -12,3 +12,4 @@ react/node_modules/*
 .vscode
 main
 promethus/data
+.tar.gz
