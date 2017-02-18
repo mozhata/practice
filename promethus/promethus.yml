@@ -1,4 +1,5 @@
 # config for docker
+# laptop: 192.168.1.103
 global:
   scrape_interval:     15s # By default, scrape targets every 15 seconds.
   evaluation_interval: 15s # Evaluate rules every 15 seconds.
@@ -14,7 +15,7 @@ rule_files:
 scrape_configs:
   - job_name: "node"
     static_configs:
-      - targets: ["192.168.0.6:9100"]
+      - targets: ["192.168.1.103:9100"]
         labels:
           device_ID: "kang-pc"
 
@@ -33,10 +34,10 @@ scrape_configs:
     scrape_interval: 5s
 
     static_configs:
-      - targets: ['192.168.0.6:8080', '192.168.0.6:8081']
+      - targets: ['192.168.1.103:8080', '192.168.1.103:8081']
         labels:
           group: 'production'
 
-      - targets: ['192.168.0.6:8082']
+      - targets: ['192.168.1.103:8082']
         labels:
           group: 'canary'
