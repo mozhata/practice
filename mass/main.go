@@ -10,8 +10,10 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"math"
 	"net/http"
+	"net/smtp"
 	"net/url"
 	"os"
 	"path"
@@ -232,8 +234,29 @@ func main() {
 	// tryBreak()
 	// tryRenameType()
 	// tryDelv()
-	tryMethod()
+	// tryMethod()
+	sendEmail()
 }
+
+// sen email
+func sendEmail() {
+	host := "smtp.163.com"
+	userName := "zyk7676@163.com"
+	PWD := "dx853556721"
+
+	to := "mozhata@aliyun.com"
+	targets := []string{to}
+	msg := []byte("To: " + to + "\r\n" +
+		"Subject: discount Gophers!\r\n" +
+		"\r\n" +
+		"This is the email body.\r\n")
+
+	auth := smtp.PlainAuth("", userName, PWD, host)
+
+	err := smtp.SendMail(host+":25", auth, userName, targets, msg)
+	log.Printf("error of SendMail: %v\n", err)
+}
+
 func tryMethod() {
 	m := M{make(map[string]interface{}), ""}
 	fmt.Printf("origin m: %#v\n", m)

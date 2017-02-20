@@ -8,8 +8,8 @@ global:
     monitor: 'codelab-monitor'
 
 rule_files:
-  - 'prometheus.rules'
-  # - "alert.rules"
+  - '/data/prometheus.rules'
+  - "/data/alert.rules"
 
 scrape_configs:
   - job_name: "node"
@@ -40,3 +40,12 @@ scrape_configs:
       - targets: ['192.168.0.6:8082']
         labels:
           group: 'canary'
+
+# alertmanager.url: "192.168.0.6:9093"
+# Alerting specifies settings related to the Alertmanager.
+alerting:
+  alertmanagers:
+    static_configs:
+      - targets: ["192.168.0.6:9093"]
+    # - static_configs:
+    #    - targets: ["192.168.0.6:9093"]

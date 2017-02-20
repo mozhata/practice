@@ -1,5 +1,5 @@
 ALERT cpu_threshold_exceeded  
-  IF (100 * (1 - avg by(job)(irate(node_cpu{mode='idle'}[5m])))) > THRESHOLD_CPU
+  IF (100 * (1 - avg by(job)(irate(node_cpu{mode='idle'}[5m])))) > 6
   ANNOTATIONS {
     summary = "Instance {{ $labels.instance }} CPU usage is dangerously high",
     description = "This device's CPU usage has exceeded the threshold with a value of {{ $value }}.",

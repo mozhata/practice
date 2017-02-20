@@ -13,3 +13,4 @@ react/node_modules/*
 main
 promethus/data
 .tar.gz
+promethus/www.digitalocean.com/prometheus-1.5.2.linux-amd64.tar.gz

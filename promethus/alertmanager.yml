@@ -1,3 +1,14 @@
+global:
+  # The smarthost and SMTP sender used for mail notifications.
+  smtp_smarthost: 'smtp.163.com:25'
+  smtp_from: "zyk7676@163.com"
+  smtp_auth_username: "zyk7676@163.com"
+  smtp_auth_password: 'dx853556721'
+  # The auth token for Hipchat.
+  hipchat_auth_token: 'dx853556721'
+  # Alternative host for Hipchat.
+  # hipchat_url: 'https://hipchat.foobar.org/'
+
 route:  
   group_by: [Alertname]
   # Send all notifications to me.
@@ -23,10 +34,14 @@ route:
 receivers:  
 - name: email-me
   email_configs:
-  - to: GMAIL_ACCOUNT
-    from: GMAIL_ACCOUNT
-    smarthost: smtp.gmail.com:587
-    html: '{{ template "email.default.html" . }}'
-    auth_username: "GMAIL_ACCOUNT"
-    auth_identity: "GMAIL_ACCOUNT"
-    auth_password: "GMAIL_AUTH_TOKEN"
+  - to: "mozhata@aliyun.com"
+    # smtp_smarthost: 'localhost:25'
+    # from: 'alertmanager@example.org'
+    # # smarthost: smtp.gmail.com:587
+    # smarthost:  smtp.163.com
+    # html: '{{ template "email.default.html" . }}'
+    # auth_username: "zyk7676@163.com"
+    # auth_password: "dx853556721"
+    # auth_secret: "dx853556721"
+    # auth_identity: "dx853556721"
+    # require_tls: "dx853556721"

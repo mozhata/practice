@@ -1,11 +1,11 @@
 docker_start:
-	docker run --rm -p 9090:9090 -v /home/kang/go/src/practice/promethus/promethus.yml:/etc/prometheus/prometheus.yml -d prom/prometheus
+	docker run --rm -p 9090:9090 -v /home/kang/go/src/practice/promethus:/data -v /home/kang/go/src/practice/promethus/promethus.yml:/etc/prometheus/prometheus.yml -v /etc/localtime:/etc/localtime -d prom/prometheus
 
 live:
 		docker run --rm -p 9090:9090 --rm -v /home/kang/go/src/practice/promethus/promethus.yml:/etc/prometheus/prometheus.yml prom/prometheus
 
-start:
-	prometheus -config.file=promethus.yml
+# start:
+# 	prometheus -config.file=promethus.yml
 
 random1:
 	random -listen-address=:8080 &
@@ -19,3 +19,7 @@ random:
 
 docker_init:
 	make docker_start;make random;
+
+
+reload:
+	curl -X POST http://localhost:9090/-/reload
