@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM alpine:latest
 
 COPY main /cmd/
 EXPOSE 8091

@@ -14,7 +14,7 @@ rule_files:
 scrape_configs:
   - job_name: "node"
     static_configs:
-      - targets: ["192.168.0.6:9100"]
+      - targets: ["192.168.0.66:9100"]
         labels:
           device_ID: "kang-pc"
 
@@ -33,19 +33,19 @@ scrape_configs:
     scrape_interval: 5s
 
     static_configs:
-      - targets: ['192.168.0.6:8080', '192.168.0.6:8081']
+      - targets: ['192.168.0.66:8080', '192.168.0.66:8081']
         labels:
           group: 'production'
 
-      - targets: ['192.168.0.6:8082']
+      - targets: ['192.168.0.66:8082']
         labels:
           group: 'canary'
 
-# alertmanager.url: "192.168.0.6:9093"
+# alertmanager.url: "192.168.0.66:9093"
 # Alerting specifies settings related to the Alertmanager.
-alerting:
-  alertmanagers:
-    static_configs:
-      - targets: ["192.168.0.6:9093"]
+# alerting:
+#   alertmanagers:
+#     static_configs:
+#       - targets: ["192.168.0.66:9093"]
     # - static_configs:
-    #    - targets: ["192.168.0.6:9093"]
+    #    - targets: ["192.168.0.66:9093"]
