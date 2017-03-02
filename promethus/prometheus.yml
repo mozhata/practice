@@ -8,44 +8,18 @@ global:
     monitor: 'codelab-monitor'
 
 rule_files:
-  - '/data/prometheus.rules'
-  - "/data/alert.rules"
+  - "/conf/alert.rules"
 
 scrape_configs:
   - job_name: "node"
     static_configs:
       - targets: ["192.168.0.66:9100"]
         labels:
-          device_ID: "kang-pc"
+          device_ID: "local"
 
-
-  - job_name: 'prometheus'
-
-    # Override the global default and scrape targets from this job every 5 seconds.
-    scrape_interval: 5s
-
+alerting:
+  alertmanagers:
+  - scheme: http
     static_configs:
-      - targets: ['localhost:9090']
-
-  - job_name:       'example-random'
-
-    # Override the global default and scrape targets from this job every 5 seconds.
-    scrape_interval: 5s
-
-    static_configs:
-      - targets: ['192.168.0.66:8080', '192.168.0.66:8081']
-        labels:
-          group: 'production'
-
-      - targets: ['192.168.0.66:8082']
-        labels:
-          group: 'canary'
-
-# alertmanager.url: "192.168.0.66:9093"
-# Alerting specifies settings related to the Alertmanager.
-# alerting:
-#   alertmanagers:
-#     static_configs:
-#       - targets: ["192.168.0.66:9093"]
-    # - static_configs:
-    #    - targets: ["192.168.0.66:9093"]
+    - targets:
+      - "192.168.0.66:9093"

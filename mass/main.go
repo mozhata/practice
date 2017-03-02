@@ -235,7 +235,12 @@ func main() {
 	// tryRenameType()
 	// tryDelv()
 	// tryMethod()
-	sendEmail()
+	// sendEmail()
+	timeFormat()
+}
+
+func timeFormat() {
+	fmt.Println(time.Now().Format(time.RFC3339))
 }
 
 // sen email

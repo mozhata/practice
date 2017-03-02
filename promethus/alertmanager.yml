@@ -3,11 +3,8 @@ global:
   smtp_smarthost: 'smtp.163.com:25'
   smtp_from: "zyk7676@163.com"
   smtp_auth_username: "zyk7676@163.com"
-  smtp_auth_password: 'dx853556721'
+  smtp_auth_password: "MYPASSWORD"
   # The auth token for Hipchat.
-  hipchat_auth_token: 'dx853556721'
-  # Alternative host for Hipchat.
-  # hipchat_url: 'https://hipchat.foobar.org/'
 
 route:  
   group_by: [Alertname]
@@ -28,20 +25,7 @@ route:
   # resend them.
   repeat_interval: 5m
 
-# templates:  
-# - '/etc/ALERTMANAGER_PATH/default.tmpl'
-
 receivers:  
 - name: email-me
   email_configs:
   - to: "mozhata@aliyun.com"
-    # smtp_smarthost: 'localhost:25'
-    # from: 'alertmanager@example.org'
-    # # smarthost: smtp.gmail.com:587
-    # smarthost:  smtp.163.com
-    # html: '{{ template "email.default.html" . }}'
-    # auth_username: "zyk7676@163.com"
-    # auth_password: "dx853556721"
-    # auth_secret: "dx853556721"
-    # auth_identity: "dx853556721"
-    # require_tls: "dx853556721"
