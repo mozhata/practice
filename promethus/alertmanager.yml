@@ -3,7 +3,7 @@ global:
   smtp_smarthost: 'smtp.163.com:25'
   smtp_from: "zyk7676@163.com"
   smtp_auth_username: "zyk7676@163.com"
-  smtp_auth_password: "MYPASSWORD"
+  smtp_auth_password: "dx853556721"
   # The auth token for Hipchat.
 
 route:  
@@ -29,3 +29,16 @@ receivers:
 - name: email-me
   email_configs:
   - to: "mozhata@aliyun.com"
+
+# An inhibition rule is a rule that mutes an alert matching a set of matchers under the condition that an alert exists that matches another set of matchers. Both alerts must have a set of equal labels.
+# Inhibition rules allow to mute a set of alerts given that another alert is
+# firing.
+# We use this to mute any warning-level notifications if the same alert is 
+# already critical.
+# inhibit_rules:
+# - source_match:
+#     severity: 'critical'
+#   target_match:
+#     severity: 'warning'
+#   # Apply inhibition if the alertname is the same.
+#   equal: ['alertname', 'cluster', 'service']

@@ -5,6 +5,61 @@ ALERT cpu_threshold_exceeded
     description = "This device's CPU usage has exceeded the threshold with a value of {{ $value }}.",
   }
 
+ALERT gorountine_less_5
+  IF (go_goroutines{device_ID="local",instance="192.168.0.66:9100",job="node"}) > 5
+  LABELS{
+  	go_label = "gorountine_less_5",
+  	alter = "goroutine",
+  }
+  ANNOTATIONS {
+    summary = "Instance {{ $labels.instance }} goroutine is dangerously high",
+    description = "This device's goroutine is has exceeded the threshold with a value of {{ $value }}.",
+  }
+
+ALERT gorountine_less_8
+  IF (go_goroutines{device_ID="local",instance="192.168.0.66:9100",job="node"}) > 8
+  LABELS{
+  	go_label = "gorountine_less_8",
+  	alter = "goroutine",
+  }
+  ANNOTATIONS {
+    summary = "Instance {{ $labels.instance }} goroutine is dangerously high",
+    description = "This device's goroutine is has exceeded the threshold with a value of {{ $value }}.",
+  }
+
+ALERT gorountine_less_12
+  IF (go_goroutines{device_ID="local",instance="192.168.0.66:9100",job="node"}) > 12
+  LABELS{
+  	go_label = "gorountine_less_12",
+  	alter = "goroutine",
+  }
+  ANNOTATIONS {
+    summary = "Instance {{ $labels.instance }} goroutine is dangerously high",
+    description = "This device's goroutine is has exceeded the threshold with a value of {{ $value }}.",
+  }
+
+ALERT gorountine_less_18
+  IF (go_goroutines{device_ID="local",instance="192.168.0.66:9100",job="node"}) > 18
+  LABELS{
+  	go_label = "gorountine_less_18",
+  	alter = "goroutine",
+  }
+  ANNOTATIONS {
+    summary = "Instance {{ $labels.instance }} goroutine is dangerously high",
+    description = "This device's goroutine is has exceeded the threshold with a value of {{ $value }}.",
+  }
+
+ALERT gorountine_less_24
+  IF (go_goroutines{device_ID="local",instance="192.168.0.66:9100",job="node"}) > 24
+  LABELS{
+  	go_label = "gorountine_less_24",
+  	alter = "goroutine",
+  }
+  ANNOTATIONS {
+    summary = "Instance {{ $labels.instance }} goroutine is dangerously high",
+    description = "This device's goroutine is has exceeded the threshold with a value of {{ $value }}.",
+  }
+
 ALERT service_down
     IF up == 0
     ANNOTATIONS {

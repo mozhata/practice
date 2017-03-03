@@ -236,7 +236,22 @@ func main() {
 	// tryDelv()
 	// tryMethod()
 	// sendEmail()
-	timeFormat()
+	// timeFormat()
+	startGoruntine()
+}
+func startGoruntine() {
+	var wg sync.WaitGroup
+	for i := 0; i < 100; i++ {
+		wg.Add(1)
+		go func(index int) {
+			defer wg.Done()
+			for {
+				fmt.Printf("the %d goruntine\n", index)
+				time.Sleep(time.Second * 3)
+			}
+		}(i)
+	}
+	wg.Wait()
 }
 
 func timeFormat() {
