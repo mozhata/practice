@@ -30,11 +30,28 @@ receivers:
   email_configs:
   - to: "mozhata@aliyun.com"
 
-# An inhibition rule is a rule that mutes an alert matching a set of matchers under the condition that an alert exists that matches another set of matchers. Both alerts must have a set of equal labels.
+
+
 # Inhibition rules allow to mute a set of alerts given that another alert is
 # firing.
 # We use this to mute any warning-level notifications if the same alert is 
 # already critical.
+inhibit_rules:
+- source_match:
+    go_label: 'gorountine_less_2'
+  target_match_re:
+    go_label: 'gorountine_less_[0,1]'
+  # target_match:
+  #   go_label: 'gorountine_less_0'
+  #   go_label: 'gorountine_less_1'
+  # Apply inhibition if the alertname is the same.
+  equal: ['Alertname']
+
+
+# # Inhibition rules allow to mute a set of alerts given that another alert is
+# # firing.
+# # We use this to mute any warning-level notifications if the same alert is 
+# # already critical.
 # inhibit_rules:
 # - source_match:
 #     severity: 'critical'

@@ -34,6 +34,7 @@ import (
 	"github.com/golang/glog"
 	"github.com/mozhata/handy"
 	"github.com/pborman/uuid"
+	"github.com/prometheus/prometheus/promql"
 )
 
 var (
@@ -62,120 +63,6 @@ const (
 )
 
 func main() {
-	// boo, _ := regexp.MatchString(EmailPattern, "1.sg@q.com")
-	// P("boo: ", boo)
-	// P("format: ", time.Now().Format(JSONTimeFormat))
-	// t, err := time.Parse(JSONTimeFormat, toConverted)
-	// P("t: ", t, "\nerr : ", err)
-	// t, err = time.Parse(JSONTimeFormat, formated)
-	// P("t: ", t, "\nerr : ", err)
-	// var s string
-	// P(s == "")
-	// P(formated[:len(formated)-1])
-	// P(time.Now().Format("2006-01-02"))
-	// P(rand.Int())
-	// P(rand.Int())
-	// P(PlantformIos)
-	// P(PlantformAndriod)
-	// source := rand.NewSource(8)
-	// r := rand.New(source)
-	// P(r.Int())
-	// P(r.Int())
-	// P(rand.Intn(5))
-	// P(rand.Intn(5))
-	// P(rand.Intn(5))
-	// P(rand.Intn(5))
-	// flo := float32(1.0 / 3)
-	// P(flo)
-	// P(time.Now())
-	// P(time.Now().Local())
-	// locationC, errC := time.LoadLocation("Asia/Shanghai")
-	// locationU, errU := time.LoadLocation("UTC")
-	// P(locationC, errC)
-	// P(locationU, errU)
-	// P(time.Now().In(locationC))
-	// P(time.Now().In(locationU))
-	// timeStamp := strconv.Itoa(int(time.Now().In(locationC).Unix()))
-	// P(timeStamp)
-	// v, e := atoi("a")
-	// P(v, e)
-	// v, e = atoi("")
-	// P(v, e)
-	// c := cron.New()
-	// c.AddFunc("2 0 0 * * *", func() { fmt.Println("...") })
-	// c.Start()
-	// code := "abcd12"
-	// P(code[:4])
-	// password := fmt.Sprintf("%x", md5.Sum([]byte("cn.sduhaliluya")))[:4]
-	// P(password)
-	// var floaNan float64
-	// var floatSmall float64 = 11.01
-	// P(floaNan)
-	// P(floatSmall)
-	// P(math.IsNaN(floaNan), math.IsInf(floaNan, 0), math.IsInf(floaNan, 1), math.IsInf(floaNan, -1))
-	// P(math.IsNaN(floatSmall), math.IsInf(floatSmall, 0), math.IsInf(floatSmall, 1), math.IsInf(floatSmall, -1))
-	// P(&floaNan, &floatSmall)
-	// var s map[string]interface{}
-	// P(s)
-	// P(len(s))
-	// P(s == nil)
-	// date := time.Now().Add(time.Hour * -24 * 7).Format("2006-01-02")
-	// P(date)
-	// var f float64
-	// var ff float64 = 0.00001
-	// P(f, ff)
-	// P(ff > f)
-	// P(ff > 0)
-	// P(f > 0)
-	// P(f == 0.0000000000000000000000)
-	// var ss = struct {
-	// 	a int
-	// 	b string
-	// }{}
-	// P(ss)
-	// P(&ss == nil)
-	// l := field_of_study.KeyList
-	// P(l)
-	// P(len(l))
-
-	// dic1 := map[string]string{"a": "aa", "as": "asas", "dd": "dddd"}
-	// P(dic1, &dic1)
-	// dic2 := dic1
-	// dic2["a"] = "cc"
-	// P(dic1, dic2)
-	// P(&dic2)
-
-	// var dic map[string]string
-	// P(len(dic))
-	// var s string
-	// ll := strings.Split(s, ",")
-	// P(ll)
-	// P(len(ll))
-
-	// reg := func() *regexp.Regexp {
-	// 	wordList := []string{}
-	// 	for i := range wordList {
-	// 		wordList[i] = regexp.QuoteMeta(wordList[i])
-	// 	}
-	// 	return regexp.MustCompile(strings.Join(wordList, "|"))
-	// }()
-	// P(reg.MatchString("abc"))
-	// P("reg is nil", reg == nil)
-	// P(reg)
-	// P(*reg)
-	// P("string: ", reg.String(), reg.String() == "")
-	// P(MarshalJSONOrDie(reg))
-	// dest := []string{"abc", "dsa"}
-	// fmt.Println(dest)
-	// saveToSlice("source", dest)
-	// fmt.Println(dest)
-	// P(buldCountySlug(""))
-	// P((1 == 2) ^ (3 == 4))
-	// sl := make([]string, 0)
-	// P(len(sl))
-	// sle := make([]string, 7)
-	// P(len(sle))
-	// hello()
 
 	// osPath()
 	// urlParse()
@@ -237,8 +124,68 @@ func main() {
 	// tryMethod()
 	// sendEmail()
 	// timeFormat()
-	startGoruntine()
+	// startGoruntine()
+	tryParseExpr()
 }
+
+func tryParseExpr() {
+	input := `(go_goroutines{device_ID="local",instance="192.168.0.66:9100",job="node"}) > 2`
+	parseExpr(input)
+	input = `go_goroutines > 2`
+	parseExpr(input)
+}
+
+func parseExpr(input string) {
+	expr, err := promql.ParseExpr(input)
+	if err != nil {
+		fmt.Println("err: ", err)
+	}
+	fmt.Printf("expr: %#v\n", expr)
+	binaryExpr := expr.(*promql.BinaryExpr)
+	fmt.Printf("lhs: %#v\t rhs: %#v\t VectorMatching: %s\n", binaryExpr.LHS, binaryExpr.RHS, handy.MarshalJSONOrDie(binaryExpr.VectorMatching))
+	var vs *promql.VectorSelector
+	if expr, ok := binaryExpr.LHS.(*promql.ParenExpr); ok {
+		if t, ok := expr.Expr.(*promql.VectorSelector); ok {
+			vs = t
+		} else {
+			fmt.Printf("unknown type %T\n", expr.Expr)
+		}
+	} else if expr, ok := binaryExpr.LHS.(*promql.VectorSelector); ok {
+		vs = expr
+	} else {
+		fmt.Printf("unknown type %T\n", binaryExpr.LHS)
+	}
+	fmt.Printf("VectorSelector is %#v\n", vs)
+	fmt.Printf("VectorSelector.LabelMatchers: %s\n", handy.MarshalJSONOrDie(vs.LabelMatchers))
+
+	// fmt.Printf("lhs insid: %#v\nLabelMatchers: %s", binaryExpr.LHS.(*promql.ParenExpr).Expr.(*promql.VectorSelector), handy.MarshalJSONOrDie(binaryExpr.LHS.(*promql.ParenExpr).Expr.(*promql.VectorSelector).LabelMatchers))
+}
+
+/*// not compliable, try reflect
+func (cl *ClusterModel) nonblankCols(ingoredCols []string) []string {
+	t := reflect.TypeOf(cl).Elem()
+	v := reflect.ValueOf(cl).Elem()
+	cols := make([]string, 0, t.NumField())
+	for i := 0; i < t.NumField(); i++ {
+
+		rawCol := t.Field(i).Tag.Get("orm")
+		parts := strings.Split(rawCol, "column")
+		if len(parts) == 2 {
+			col := strings.TrimFunc(parts[1], func(r rune) bool { return r == '(' || r == ')' })
+			// fmt.Println(col)
+			fmt.Printf("col %s is valid: \t%v, value:\t%v\n", col, (v.Field(i).Interface() == reflect.Zero(t.Field(i).Type)), v.Field(i))
+			// fmt.Printf("col %s is valid: \t%v, value:\t%v\n", col, reflect.DeepEqual(v.Field(i).Interface(), reflect.Zero(t.Field(i).Type)), v.Field(i))
+			// fmt.Printf("col %s is valid: \t%v, value:\t%v\n", col, reflect.DeepEqual(v.Field(i), reflect.Zero(t.Field(i).Type)), v.Field(i))
+			if !common.StringInSlice(col, ingoredCols) {
+				cols = append(cols, col)
+			}
+		}
+	}
+
+	return cols
+}
+
+*/
 func startGoruntine() {
 	var wg sync.WaitGroup
 	for i := 0; i < 100; i++ {
@@ -256,6 +203,10 @@ func startGoruntine() {
 
 func timeFormat() {
 	fmt.Println(time.Now().Format(time.RFC3339))
+	t, err := time.Parse(time.RFC3339, "2017-03-09T09:41:41+08:00")
+	fmt.Printf("err: %v\t time: %v\n", err, t)
+	t, err = time.Parse(time.RFC3339, "2017-03-09T09:41:41Z08:00")
+	fmt.Printf("err: %v\t time: %v\n", err, t)
 }
 
 // sen email
