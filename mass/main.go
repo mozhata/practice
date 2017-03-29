@@ -123,15 +123,28 @@ func main() {
 	// tryDelv()
 	// tryMethod()
 	// sendEmail()
-	// timeFormat()
+	timeFormat()
 	// startGoruntine()
-	tryParseExpr()
+	// tryParseExpr()
+	// tryMap()
+}
+
+func tryMap() {
+	var strDic map[string]string
+	fmt.Printf("strDic is nil: %v\n", strDic == nil)
+	_, ok := strDic["bar"]
+	fmt.Printf("try to get a key from a nil map not panic, ok: %v\n", ok)
 }
 
 func tryParseExpr() {
-	input := `(go_goroutines{device_ID="local",instance="192.168.0.66:9100",job="node"}) > 2`
+	input := `go_goroutines{device_ID="local",instance="192.168.0.66:9100",job="node"} > 2`
 	parseExpr(input)
 	input = `go_goroutines > 2`
+	parseExpr(input)
+	input = `rate(container_cpu_user_seconds_total{
+        instance="ubuntu-24",job="kubernetes-nodes",kubernetes_io_hostname="ubuntu-24",id="/"
+    }[5m]
+) * 100 > 20`
 	parseExpr(input)
 }
 
@@ -143,6 +156,7 @@ func parseExpr(input string) {
 	fmt.Printf("expr: %#v\n", expr)
 	binaryExpr := expr.(*promql.BinaryExpr)
 	fmt.Printf("lhs: %#v\t rhs: %#v\t VectorMatching: %s\n", binaryExpr.LHS, binaryExpr.RHS, handy.MarshalJSONOrDie(binaryExpr.VectorMatching))
+	fmt.Printf("\nlhs string: \t%s rhs: \t%s\n\n", binaryExpr.LHS.String(), binaryExpr.RHS.String())
 	var vs *promql.VectorSelector
 	if expr, ok := binaryExpr.LHS.(*promql.ParenExpr); ok {
 		if t, ok := expr.Expr.(*promql.VectorSelector); ok {
@@ -156,7 +170,7 @@ func parseExpr(input string) {
 		fmt.Printf("unknown type %T\n", binaryExpr.LHS)
 	}
 	fmt.Printf("VectorSelector is %#v\n", vs)
-	fmt.Printf("VectorSelector.LabelMatchers: %s\n", handy.MarshalJSONOrDie(vs.LabelMatchers))
+	fmt.Printf("VectorSelector.LabelMatchers: %s\n\n", handy.MarshalJSONOrDie(vs.LabelMatchers))
 
 	// fmt.Printf("lhs insid: %#v\nLabelMatchers: %s", binaryExpr.LHS.(*promql.ParenExpr).Expr.(*promql.VectorSelector), handy.MarshalJSONOrDie(binaryExpr.LHS.(*promql.ParenExpr).Expr.(*promql.VectorSelector).LabelMatchers))
 }
@@ -463,6 +477,74 @@ func tryUmarshal() {
 	json.Unmarshal([]byte(str2), &origin)
 	fmt.Printf("after unmarshaled: %#v\n", origin)
 
+	// round two
+	type ruleSpec struct {
+		MetricName string `json:"metricName"`
+		Operator   string `json:"operator"`
+		Value      string `json:"value"`
+		Inerval    string `json:"interval"` // time intervl
+	}
+	type ruleCommon struct {
+		DisableNotifyInterval string    `json:"disableNotifyEndTime"` // eg: 200h
+		User                  string    `json:"user"`
+		ID                    int64     `orm:"pk;column(id)"`
+		StrategyID            string    `orm:"column(strategy_id)" json:"strategyID"`
+		Enable                int       `orm:"column(enable)" json:"enable"`
+		ClusterID             string    `orm:"column(clusterid)" json:"clusterID"`
+		Namespace             string    `orm:"column(namespace)" json:"namespace"`
+		NamespaceType         int       `orm:"column(namespace_type)" json:"namespaceType"`
+		TargetName            string    `orm:"column(target_name)" json:"targetName"`
+		TargetType            int       `orm:"column(target_type)" json:"targetType"`
+		StrategyName          string    `orm:"size(45);column(strategy_name)" json:"strategyName"`
+		AppName               string    `orm:"column(app_name)" json:"appName"`
+		ReceiversGroup        int64     `orm:"column(receivers_group)" json:"receiversGroup"`
+		RepeatInterval        int       `orm:"column(repeat_interval)" json:"repeatInterval"` // seconds
+		Description           string    `orm:"column(description)" json:"description"`
+		CreateTime            time.Time `orm:"column(create_time)"`
+		ModifyTime            time.Time `orm:"column(modify_time)"`
+		Creator               string    `orm:"column(creator)"`
+		Updater               string    `orm:"column(updater)"`
+		DisableNotifyEndTime  time.Time `orm:"column(disable_notify_end_time)"`
+	}
+	type params struct {
+		ruleCommon
+		Specs []ruleSpec `json:"specs"`
+	}
+	comm := ruleCommon{
+		User: "admin",
+		DisableNotifyInterval: "25m",
+		Enable:                1,
+		ClusterID:             "CID-fe23111d77cb",
+		Namespace:             "admin",
+		TargetType:            1,
+		TargetName:            "ubuntu-24",
+		StrategyName:          "test_strategy",
+	}
+	specs := []ruleSpec{
+		ruleSpec{"cpu/usage_rate", ">", "20", "5m"},
+		ruleSpec{"cpu/usage_rate", "<", "80", ""},
+		ruleSpec{"cpu/usage_rate", "<", "50", ""},
+	}
+	param := params{comm, specs}
+	strParam := handy.MarshalJSONOrDie(param)
+	fmt.Printf("param marshaled:\n%s\n", strParam)
+	var input params
+	err := json.Unmarshal([]byte(strParam), &input)
+	fmt.Printf("err: %v\t input: %#v\n", err, input)
+	type strategy struct {
+		StrategyID string `json:"strategyID"`
+		Enable     int    `json:"enable"`
+	}
+	type update struct {
+		User       string     `json:"user"`
+		Strategies []strategy `json:"strategies"`
+	}
+	strategies := []strategy{
+		strategy{"q2WDCM6k6RUn", 0},
+		strategy{"ZSNW4XXw9RMx", 0},
+	}
+	inputUpdate := update{"kang", strategies}
+	fmt.Printf("inputUpdate update params: %s\n", handy.MarshalJSONOrDie(inputUpdate))
 }
 
 func lenStr() {
@@ -960,6 +1042,8 @@ func tesMap() {
 	dic["a"] = 9
 	delete(dic, "b")
 	dic["c"] += 2
+	fmt.Println(dic)
+	delete(dic, "c")
 	fmt.Println(dic)
 
 	// for k := range dic {

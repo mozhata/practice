@@ -1,6 +1,6 @@
 # config for docker
 global:
-  scrape_interval:     15s # By default, scrape targets every 15 seconds.
+  scrape_interval:     5s # By default, scrape targets every 15 seconds.
   evaluation_interval: 15s # Evaluate rules every 15 seconds.
 
   # Attach these extra labels to all timeseries collected by this Prometheus instance.
@@ -8,14 +8,20 @@ global:
     monitor: 'codelab-monitor'
 
 rule_files:
-  - "/conf/alert.rules"
+  - "/conf/*.rules"
 
 scrape_configs:
   - job_name: "node"
     static_configs:
-      - targets: ["192.168.0.66:9100"]
+      - targets: ["192.168.0.66:9100","localhost:9090"]
         labels:
           device_ID: "local"
+  # - job_name: "24"
+  #   static_configs:
+  #     - targets: ["192.168.1.24:10250"]
+  #     - scheme: http
+  #       labels:
+  #         device_ID: "local"
 
 alerting:
   alertmanagers:
@@ -23,3 +29,6 @@ alerting:
     static_configs:
     - targets:
       - "192.168.0.66:9093"
+
+
+
