@@ -232,7 +232,44 @@ func main() {
 	// tryBreak()
 	// tryRenameType()
 	// tryDelv()
-	tryMethod()
+	// tryMethod()
+	// tryFilepath()
+	tryShadowVariable()
+}
+func tryShadowVariable() {
+	var (
+		a = "a"
+		b = "b"
+		c = "c"
+	)
+	abc := []*string{&a, &b, &c}
+	for _, v := range abc {
+		fmt.Println("v: ", v)
+		v := v
+		fmt.Println("local v: ", v)
+	}
+	add1 := func(i int) {
+		fmt.Println("add1, result is: ", i+1)
+	}
+	add2 := func(i int) {
+		fmt.Println("add2, result is: ", i+2)
+	}
+	add3 := func(i int) {
+		fmt.Println("add3, result is: ", i+3)
+	}
+	funcs := []func(int){add1, add2, add3}
+	for i, f := range funcs {
+		fmt.Printf("the %dst func: %v, result is:", i, f)
+		f(1)
+		f := f
+		fmt.Printf("the %dst local func: %v, result is:", i, f)
+		f(1)
+	}
+}
+func tryFilepath() {
+	fmt.Println(filepath.Join("a/b", "/c"))
+	fmt.Println(filepath.Join("a/b/", "/c"))
+	fmt.Println(filepath.Join("a/b/", "/c/"))
 }
 func tryMethod() {
 	m := M{make(map[string]interface{}), ""}

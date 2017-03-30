@@ -2,6 +2,30 @@
 
 use choose;
 
+-- codies
+create table `local_auth` (
+	`uuid` char(36) PRIMARY KEY,
+	`email` varchar(45),
+	`phone` varchar(16),
+	`password` char(8) NOT NULL
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table `oauth` (
+	`uuid` char(36) PRIMARY KEY,
+	`oauth_name`  varchar(20) NOT NULL,
+	`oauth_id` varchar(45) NOT NULL,
+	`oauth_token` varchar(45) NOT NULL
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table `user` (
+	`id` int auto_increment PRIMARY KEY,
+	`uuid` char(36) unique,
+	`name` varchar(50) NOT NULL,
+	`phone` varchar(16),
+	`email` varchar(45),
+	`bio` text
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- end codis
 DROP TABLE IF EXISTS `teacher`;
 CREATE TABLE `teacher`(
 	`teacher_no` char(15) PRIMARY KEY,
