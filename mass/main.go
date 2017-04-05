@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"crypto/md5"
 	"crypto/tls"
+	"encoding/hex"
 	"encoding/json"
 	"encoding/pem"
 	"flag"
@@ -128,15 +129,16 @@ func main() {
 	// startGoruntine()
 	// tryParseExpr()
 	// tryMap()
+	tryMd5Encrypt()
 }
 
 func tryMd5Encrypt() {
 	pwd := "123"
 	salt := "abc"
 	h := md5.New()
-	ioutil.WriteString(h, pwd)
-	ioutil.WriteString(h, salt)
-	fmt.Printf("pwd: %s, salt: %s, encrypted: %s", pwd, salt)
+	io.WriteString(h, pwd)
+	io.WriteString(h, salt)
+	fmt.Printf("pwd: %s, salt: %s, encrypted: %s", pwd, salt, hex.EncodeToString(h.Sum(nil)))
 }
 
 func tryMap() {
