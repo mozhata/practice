@@ -33,7 +33,38 @@ func main() {
 }
 
 /*
-chapter8.3: 示例: 并发的Echo服务
+chapter8.4 Channels
+*/
+func pipeLine() {
+	naturals := make(chan int)
+	squares := make(chan int)
+
+	go counter(naturals)
+	go squarer(squares, naturals)
+	printer(squares)
+}
+func counter(out chan<- int) {
+	for x := 0; x < 20; x++ {
+		out <- x
+		time.Sleep(time.Millisecond * 300)
+	}
+	close(out)
+}
+func squarer(out chan<- int, in <-chan int) {
+	for x := range in {
+		out <- x * x
+	}
+	close(out)
+}
+func printer(in <-chan int) {
+	for x := range in {
+		fmt.Println(x)
+	}
+	fmt.Println("finished")
+}
+
+/*
+chapter8.3. 示例: 并发的Echo服务
 */
 func echoConn() {
 	listener, err := net.Listen("tcp", ":8181")

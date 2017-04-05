@@ -12,6 +12,7 @@ react/node_modules/*
 .vscode
 main
 promethus/data
+go/gopl/gopl
 .tar.gz
 /home/kang/go/src/practice/go/gopl/gopl
 mass/mass

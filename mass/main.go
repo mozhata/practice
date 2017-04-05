@@ -124,12 +124,44 @@ func main() {
 	// tryRenameType()
 	// tryDelv()
 	// tryMethod()
+	// tryFilepath()
+	tryShadowVariable()
 	// sendEmail()
 	// timeFormat()
 	// startGoruntine()
 	// tryParseExpr()
 	// tryMap()
 	tryMd5Encrypt()
+}
+func tryShadowVariable() {
+	var (
+		a = "a"
+		b = "b"
+		c = "c"
+	)
+	abc := []*string{&a, &b, &c}
+	for _, v := range abc {
+		fmt.Println("v: ", v)
+		v := v
+		fmt.Println("local v: ", v)
+	}
+	add1 := func(i int) {
+		fmt.Println("add1, result is: ", i+1)
+	}
+	add2 := func(i int) {
+		fmt.Println("add2, result is: ", i+2)
+	}
+	add3 := func(i int) {
+		fmt.Println("add3, result is: ", i+3)
+	}
+	funcs := []func(int){add1, add2, add3}
+	for i, f := range funcs {
+		fmt.Printf("the %dst func: %v, result is:", i, f)
+		f(1)
+		f := f
+		fmt.Printf("the %dst local func: %v, result is:", i, f)
+		f(1)
+	}
 }
 
 func tryMd5Encrypt() {
@@ -210,8 +242,14 @@ func (cl *ClusterModel) nonblankCols(ingoredCols []string) []string {
 
 	return cols
 }
-
 */
+
+func tryFilepath() {
+	fmt.Println(filepath.Join("a/b", "/c"))
+	fmt.Println(filepath.Join("a/b/", "/c"))
+	fmt.Println(filepath.Join("a/b/", "/c/"))
+}
+
 func startGoruntine() {
 	var wg sync.WaitGroup
 	for i := 0; i < 100; i++ {
@@ -1306,9 +1344,3 @@ map-reduce
 	 return if doc.doc_type isnt 'Profile'
 	 emit [doc.app_info.device_identifier.substr(0,2),doc.app_info.device_identifier.substr(0,4) ],null if doc.app_info.device_identifier
 */
-// func Tt(s1,s2 string){
-// 	print s1,s2
-// }
-func hello() {
-	fmt.Println("hello world")
-}
