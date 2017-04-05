@@ -13,3 +13,4 @@ react/node_modules/*
 main
 promethus/data
 go/gopl/gopl
+.tar.gz
