@@ -1,3 +1,11 @@
+global:
+  # The smarthost and SMTP sender used for mail notifications.
+  smtp_smarthost: 'smtp.163.com:25'
+  smtp_from: "zyk7676@163.com"
+  smtp_auth_username: "zyk7676@163.com"
+  smtp_auth_password: "dx853556721"
+  # The auth token for Hipchat.
+
 route:  
   group_by: [Alertname]
   # Send all notifications to me.
@@ -15,18 +23,39 @@ route:
 
   # If an alert has successfully been sent, wait 'repeat_interval' to
   # resend them.
-  repeat_interval: 3h
-
-# templates:  
-# - '/etc/ALERTMANAGER_PATH/default.tmpl'
+  repeat_interval: 5m
 
 receivers:  
 - name: email-me
   email_configs:
-  - to: GMAIL_ACCOUNT
-    from: GMAIL_ACCOUNT
-    smarthost: smtp.gmail.com:587
-    html: '{{ template "email.default.html" . }}'
-    auth_username: "GMAIL_ACCOUNT"
-    auth_identity: "GMAIL_ACCOUNT"
-    auth_password: "GMAIL_AUTH_TOKEN"
+  - to: "mozhata@aliyun.com"
+
+
+
+# Inhibition rules allow to mute a set of alerts given that another alert is
+# firing.
+# We use this to mute any warning-level notifications if the same alert is 
+# already critical.
+inhibit_rules:
+- source_match:
+    go_label: 'gorountine_less_2'
+  target_match_re:
+    go_label: 'gorountine_less_[0,1]'
+  # target_match:
+  #   go_label: 'gorountine_less_0'
+  #   go_label: 'gorountine_less_1'
+  # Apply inhibition if the alertname is the same.
+  equal: ['Alertname']
+
+
+# # Inhibition rules allow to mute a set of alerts given that another alert is
+# # firing.
+# # We use this to mute any warning-level notifications if the same alert is 
+# # already critical.
+# inhibit_rules:
+# - source_match:
+#     severity: 'critical'
+#   target_match:
+#     severity: 'warning'
+#   # Apply inhibition if the alertname is the same.
+#   equal: ['alertname', 'cluster', 'service']

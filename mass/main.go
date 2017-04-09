@@ -3,15 +3,19 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"crypto/md5"
 	"crypto/tls"
+	"encoding/hex"
 	"encoding/json"
 	"encoding/pem"
 	"flag"
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"math"
 	"net/http"
+	"net/smtp"
 	"net/url"
 	"os"
 	"path"
@@ -32,6 +36,7 @@ import (
 	"github.com/golang/glog"
 	"github.com/mozhata/handy"
 	"github.com/pborman/uuid"
+	"github.com/prometheus/prometheus/promql"
 )
 
 var (
@@ -60,120 +65,6 @@ const (
 )
 
 func main() {
-	// boo, _ := regexp.MatchString(EmailPattern, "1.sg@q.com")
-	// P("boo: ", boo)
-	// P("format: ", time.Now().Format(JSONTimeFormat))
-	// t, err := time.Parse(JSONTimeFormat, toConverted)
-	// P("t: ", t, "\nerr : ", err)
-	// t, err = time.Parse(JSONTimeFormat, formated)
-	// P("t: ", t, "\nerr : ", err)
-	// var s string
-	// P(s == "")
-	// P(formated[:len(formated)-1])
-	// P(time.Now().Format("2006-01-02"))
-	// P(rand.Int())
-	// P(rand.Int())
-	// P(PlantformIos)
-	// P(PlantformAndriod)
-	// source := rand.NewSource(8)
-	// r := rand.New(source)
-	// P(r.Int())
-	// P(r.Int())
-	// P(rand.Intn(5))
-	// P(rand.Intn(5))
-	// P(rand.Intn(5))
-	// P(rand.Intn(5))
-	// flo := float32(1.0 / 3)
-	// P(flo)
-	// P(time.Now())
-	// P(time.Now().Local())
-	// locationC, errC := time.LoadLocation("Asia/Shanghai")
-	// locationU, errU := time.LoadLocation("UTC")
-	// P(locationC, errC)
-	// P(locationU, errU)
-	// P(time.Now().In(locationC))
-	// P(time.Now().In(locationU))
-	// timeStamp := strconv.Itoa(int(time.Now().In(locationC).Unix()))
-	// P(timeStamp)
-	// v, e := atoi("a")
-	// P(v, e)
-	// v, e = atoi("")
-	// P(v, e)
-	// c := cron.New()
-	// c.AddFunc("2 0 0 * * *", func() { fmt.Println("...") })
-	// c.Start()
-	// code := "abcd12"
-	// P(code[:4])
-	// password := fmt.Sprintf("%x", md5.Sum([]byte("cn.sduhaliluya")))[:4]
-	// P(password)
-	// var floaNan float64
-	// var floatSmall float64 = 11.01
-	// P(floaNan)
-	// P(floatSmall)
-	// P(math.IsNaN(floaNan), math.IsInf(floaNan, 0), math.IsInf(floaNan, 1), math.IsInf(floaNan, -1))
-	// P(math.IsNaN(floatSmall), math.IsInf(floatSmall, 0), math.IsInf(floatSmall, 1), math.IsInf(floatSmall, -1))
-	// P(&floaNan, &floatSmall)
-	// var s map[string]interface{}
-	// P(s)
-	// P(len(s))
-	// P(s == nil)
-	// date := time.Now().Add(time.Hour * -24 * 7).Format("2006-01-02")
-	// P(date)
-	// var f float64
-	// var ff float64 = 0.00001
-	// P(f, ff)
-	// P(ff > f)
-	// P(ff > 0)
-	// P(f > 0)
-	// P(f == 0.0000000000000000000000)
-	// var ss = struct {
-	// 	a int
-	// 	b string
-	// }{}
-	// P(ss)
-	// P(&ss == nil)
-	// l := field_of_study.KeyList
-	// P(l)
-	// P(len(l))
-
-	// dic1 := map[string]string{"a": "aa", "as": "asas", "dd": "dddd"}
-	// P(dic1, &dic1)
-	// dic2 := dic1
-	// dic2["a"] = "cc"
-	// P(dic1, dic2)
-	// P(&dic2)
-
-	// var dic map[string]string
-	// P(len(dic))
-	// var s string
-	// ll := strings.Split(s, ",")
-	// P(ll)
-	// P(len(ll))
-
-	// reg := func() *regexp.Regexp {
-	// 	wordList := []string{}
-	// 	for i := range wordList {
-	// 		wordList[i] = regexp.QuoteMeta(wordList[i])
-	// 	}
-	// 	return regexp.MustCompile(strings.Join(wordList, "|"))
-	// }()
-	// P(reg.MatchString("abc"))
-	// P("reg is nil", reg == nil)
-	// P(reg)
-	// P(*reg)
-	// P("string: ", reg.String(), reg.String() == "")
-	// P(MarshalJSONOrDie(reg))
-	// dest := []string{"abc", "dsa"}
-	// fmt.Println(dest)
-	// saveToSlice("source", dest)
-	// fmt.Println(dest)
-	// P(buldCountySlug(""))
-	// P((1 == 2) ^ (3 == 4))
-	// sl := make([]string, 0)
-	// P(len(sl))
-	// sle := make([]string, 7)
-	// P(len(sle))
-	// hello()
 
 	// osPath()
 	// urlParse()
@@ -234,8 +125,14 @@ func main() {
 	// tryDelv()
 	// tryMethod()
 	// tryFilepath()
-	// tryShadowVariable()
 	// convertRate()
+	// sendEmail()
+	// timeFormat()
+	// startGoruntine()
+	// tryParseExpr()
+	// tryMap()
+	// tryMd5Encrypt()
+	tryShadowVariable()
 }
 func convertRate() {
 	fmt.Printf("0: %d, 9: %d, a: %d, z: %d, A: %d",
@@ -272,11 +169,135 @@ func tryShadowVariable() {
 		f(1)
 	}
 }
+
+func tryMd5Encrypt() {
+	pwd := "123"
+	salt := "abc"
+	h := md5.New()
+	io.WriteString(h, pwd)
+	io.WriteString(h, salt)
+	fmt.Printf("pwd: %s, salt: %s, encrypted: %s", pwd, salt, hex.EncodeToString(h.Sum(nil)))
+}
+
+func tryMap() {
+	var strDic map[string]string
+	fmt.Printf("strDic is nil: %v\n", strDic == nil)
+	_, ok := strDic["bar"]
+	fmt.Printf("try to get a key from a nil map not panic, ok: %v\n", ok)
+}
+
+func tryParseExpr() {
+	input := `go_goroutines{device_ID="local",instance="192.168.0.66:9100",job="node"} > 2`
+	parseExpr(input)
+	input = `go_goroutines > 2`
+	parseExpr(input)
+	input = `rate(container_cpu_user_seconds_total{
+        instance="ubuntu-24",job="kubernetes-nodes",kubernetes_io_hostname="ubuntu-24",id="/"
+    }[5m]
+) * 100 > 20`
+	parseExpr(input)
+}
+
+func parseExpr(input string) {
+	expr, err := promql.ParseExpr(input)
+	if err != nil {
+		fmt.Println("err: ", err)
+	}
+	fmt.Printf("expr: %#v\n", expr)
+	binaryExpr := expr.(*promql.BinaryExpr)
+	fmt.Printf("lhs: %#v\t rhs: %#v\t VectorMatching: %s\n", binaryExpr.LHS, binaryExpr.RHS, handy.MarshalJSONOrDie(binaryExpr.VectorMatching))
+	fmt.Printf("\nlhs string: \t%s rhs: \t%s\n\n", binaryExpr.LHS.String(), binaryExpr.RHS.String())
+	var vs *promql.VectorSelector
+	if expr, ok := binaryExpr.LHS.(*promql.ParenExpr); ok {
+		if t, ok := expr.Expr.(*promql.VectorSelector); ok {
+			vs = t
+		} else {
+			fmt.Printf("unknown type %T\n", expr.Expr)
+		}
+	} else if expr, ok := binaryExpr.LHS.(*promql.VectorSelector); ok {
+		vs = expr
+	} else {
+		fmt.Printf("unknown type %T\n", binaryExpr.LHS)
+	}
+	fmt.Printf("VectorSelector is %#v\n", vs)
+	fmt.Printf("VectorSelector.LabelMatchers: %s\n\n", handy.MarshalJSONOrDie(vs.LabelMatchers))
+
+	// fmt.Printf("lhs insid: %#v\nLabelMatchers: %s", binaryExpr.LHS.(*promql.ParenExpr).Expr.(*promql.VectorSelector), handy.MarshalJSONOrDie(binaryExpr.LHS.(*promql.ParenExpr).Expr.(*promql.VectorSelector).LabelMatchers))
+}
+
+/*// not compliable, try reflect
+func (cl *ClusterModel) nonblankCols(ingoredCols []string) []string {
+	t := reflect.TypeOf(cl).Elem()
+	v := reflect.ValueOf(cl).Elem()
+	cols := make([]string, 0, t.NumField())
+	for i := 0; i < t.NumField(); i++ {
+
+		rawCol := t.Field(i).Tag.Get("orm")
+		parts := strings.Split(rawCol, "column")
+		if len(parts) == 2 {
+			col := strings.TrimFunc(parts[1], func(r rune) bool { return r == '(' || r == ')' })
+			// fmt.Println(col)
+			fmt.Printf("col %s is valid: \t%v, value:\t%v\n", col, (v.Field(i).Interface() == reflect.Zero(t.Field(i).Type)), v.Field(i))
+			// fmt.Printf("col %s is valid: \t%v, value:\t%v\n", col, reflect.DeepEqual(v.Field(i).Interface(), reflect.Zero(t.Field(i).Type)), v.Field(i))
+			// fmt.Printf("col %s is valid: \t%v, value:\t%v\n", col, reflect.DeepEqual(v.Field(i), reflect.Zero(t.Field(i).Type)), v.Field(i))
+			if !common.StringInSlice(col, ingoredCols) {
+				cols = append(cols, col)
+			}
+		}
+	}
+
+	return cols
+}
+*/
+
 func tryFilepath() {
 	fmt.Println(filepath.Join("a/b", "/c"))
 	fmt.Println(filepath.Join("a/b/", "/c"))
 	fmt.Println(filepath.Join("a/b/", "/c/"))
 }
+
+func startGoruntine() {
+	var wg sync.WaitGroup
+	for i := 0; i < 100; i++ {
+		wg.Add(1)
+		go func(index int) {
+			defer wg.Done()
+			for {
+				fmt.Printf("the %d goruntine\n", index)
+				time.Sleep(time.Second * 3)
+			}
+		}(i)
+	}
+	wg.Wait()
+}
+
+func timeFormat() {
+	fmt.Println(time.Now().Format(time.RFC3339))
+	t, err := time.Parse(time.RFC3339, "2017-03-09T09:41:41+08:00")
+	fmt.Printf("err: %v\t time: %v\n", err, t)
+	t, err = time.Parse(time.RFC3339, "2017-03-09T09:41:41Z08:00")
+	fmt.Printf("err: %v\t time: %v\n", err, t)
+}
+
+// sen email
+func sendEmail() {
+	host := "smtp.163.com"
+	userName := "zyk7676@163.com"
+	PWD := "dx853556721"
+
+	to := "mozhata@aliyun.com"
+	targets := []string{to}
+	msg := []byte("To: " + to + "\r\n" +
+		"Subject: discount Gophers!\r\n" +
+		"\r\n" +
+		"This is the email body.\r\n")
+
+	auth := smtp.PlainAuth("", userName, PWD, host)
+
+	err := smtp.SendMail(host+":25", auth, userName, targets, msg)
+	log.Printf("error of SendMail: %v\n", err)
+}
+
 func tryMethod() {
 	m := M{make(map[string]interface{}), ""}
 	fmt.Printf("origin m: %#v\n", m)
@@ -512,6 +533,74 @@ func tryUmarshal() {
 	json.Unmarshal([]byte(str2), &origin)
 	fmt.Printf("after unmarshaled: %#v\n", origin)
 
+	// round two
+	type ruleSpec struct {
+		MetricName string `json:"metricName"`
+		Operator   string `json:"operator"`
+		Value      string `json:"value"`
+		Inerval    string `json:"interval"` // time intervl
+	}
+	type ruleCommon struct {
+		DisableNotifyInterval string    `json:"disableNotifyEndTime"` // eg: 200h
+		User                  string    `json:"user"`
+		ID                    int64     `orm:"pk;column(id)"`
+		StrategyID            string    `orm:"column(strategy_id)" json:"strategyID"`
+		Enable                int       `orm:"column(enable)" json:"enable"`
+		ClusterID             string    `orm:"column(clusterid)" json:"clusterID"`
+		Namespace             string    `orm:"column(namespace)" json:"namespace"`
+		NamespaceType         int       `orm:"column(namespace_type)" json:"namespaceType"`
+		TargetName            string    `orm:"column(target_name)" json:"targetName"`
+		TargetType            int       `orm:"column(target_type)" json:"targetType"`
+		StrategyName          string    `orm:"size(45);column(strategy_name)" json:"strategyName"`
+		AppName               string    `orm:"column(app_name)" json:"appName"`
+		ReceiversGroup        int64     `orm:"column(receivers_group)" json:"receiversGroup"`
+		RepeatInterval        int       `orm:"column(repeat_interval)" json:"repeatInterval"` // seconds
+		Description           string    `orm:"column(description)" json:"description"`
+		CreateTime            time.Time `orm:"column(create_time)"`
+		ModifyTime            time.Time `orm:"column(modify_time)"`
+		Creator               string    `orm:"column(creator)"`
+		Updater               string    `orm:"column(updater)"`
+		DisableNotifyEndTime  time.Time `orm:"column(disable_notify_end_time)"`
+	}
+	type params struct {
+		ruleCommon
+		Specs []ruleSpec `json:"specs"`
+	}
+	comm := ruleCommon{
+		User: "admin",
+		DisableNotifyInterval: "25m",
+		Enable:                1,
+		ClusterID:             "CID-fe23111d77cb",
+		Namespace:             "admin",
+		TargetType:            1,
+		TargetName:            "ubuntu-24",
+		StrategyName:          "test_strategy",
+	}
+	specs := []ruleSpec{
+		ruleSpec{"cpu/usage_rate", ">", "20", "5m"},
+		ruleSpec{"cpu/usage_rate", "<", "80", ""},
+		ruleSpec{"cpu/usage_rate", "<", "50", ""},
+	}
+	param := params{comm, specs}
+	strParam := handy.MarshalJSONOrDie(param)
+	fmt.Printf("param marshaled:\n%s\n", strParam)
+	var input params
+	err := json.Unmarshal([]byte(strParam), &input)
+	fmt.Printf("err: %v\t input: %#v\n", err, input)
+	type strategy struct {
+		StrategyID string `json:"strategyID"`
+		Enable     int    `json:"enable"`
+	}
+	type update struct {
+		User       string     `json:"user"`
+		Strategies []strategy `json:"strategies"`
+	}
+	strategies := []strategy{
+		strategy{"q2WDCM6k6RUn", 0},
+		strategy{"ZSNW4XXw9RMx", 0},
+	}
+	inputUpdate := update{"kang", strategies}
+	fmt.Printf("inputUpdate update params: %s\n", handy.MarshalJSONOrDie(inputUpdate))
 }
 
 func lenStr() {
@@ -1010,6 +1099,8 @@ func tesMap() {
 	delete(dic, "b")
 	dic["c"] += 2
 	fmt.Println(dic)
+	delete(dic, "c")
+	fmt.Println(dic)
 
 	// for k := range dic {
 	// 	fmt.Println("K: ", k)
@@ -1259,9 +1350,3 @@ map-reduce
 	 return if doc.doc_type isnt 'Profile'
 	 emit [doc.app_info.device_identifier.substr(0,2),doc.app_info.device_identifier.substr(0,4) ],null if doc.app_info.device_identifier
 */
-// func Tt(s1,s2 string){
-// 	print s1,s2
-// }
-func hello() {
-	fmt.Println("hello world")
-}

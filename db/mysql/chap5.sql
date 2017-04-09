@@ -36,3 +36,4 @@ use choose;
 -- where student.class_no=classes.class_no;
 
 
+	/*select trigger_rule, count(trigger_rule) from tenx_alert_notify_history where strategy_id='SID-3ns8a3a3f' and trigger_rule in ('cpu > 30', 'cpu > 33') group by trigger_rule;*/

@@ -1,0 +1,94 @@
+sum(rate(container_cpu_user_seconds_total{
+        instance="ubuntu-25",job="kubernetes-nodes",kubernetes_io_hostname="ubuntu-25",id="/"
+    }[5m]
+)) 
+
+
+sum(rate(container_cpu_usage_seconds_total{
+        instance="ubuntu-25",job="kubernetes-nodes",kubernetes_io_hostname="ubuntu-25",id="/"
+    }[5m]
+))
+
+avg_over_time(container_memory_usage_bytes
+    {
+        instance="ubuntu-26",job="kubernetes-nodes",kubernetes_io_hostname="ubuntu-26",id="/"
+    }[5m]
+)
+
+sum(avg_over_time(container_memory_usage_bytes{
+    namespace="admin",pod_name="mysql-3767295487-ow0qz"
+}[5m])) by (namespace, pod_name)
+
+# HELP container_network_transmit_bytes_total Cumulative count of bytes transmitted
+# TYPE container_network_transmit_bytes_total counter
+
+# HELP container_network_receive_packets_total Cumulative count of packets received
+# TYPE container_network_receive_packets_total counter
+
+# HELP container_network_receive_packets_dropped_total Cumulative count of packets dropped while receiving
+# TYPE container_network_receive_packets_dropped_total counter
+
+# HELP container_network_receive_errors_total Cumulative count of errors encountered while receiving
+# TYPE container_network_receive_errors_total counter
+
+# HELP container_network_receive_bytes_total Cumulative count of bytes received
+# TYPE container_network_receive_bytes_total counter
+
+# HELP container_cpu_user_seconds_total Cumulative user cpu time consumed in seconds.
+# TYPE container_cpu_user_seconds_total counter
+
+# HELP container_cpu_usage_seconds_total Cumulative cpu time consumed per cpu in seconds.
+# TYPE container_cpu_usage_seconds_total counter
+
+# HELP container_cpu_system_seconds_total Cumulative system cpu time consumed in seconds.
+# TYPE container_cpu_system_seconds_total counter
+
+# HELP node_cpu Seconds the cpus spent in each mode.
+# TYPE node_cpu counter
+
+# HELP container_memory_cache Number of bytes of page cache memory.
+# TYPE container_memory_cache gauge
+
+# HELP container_memory_failcnt Number of memory usage hits limits
+# TYPE container_memory_failcnt counter
+
+# HELP container_memory_failures_total Cumulative count of memory allocation failures.
+# TYPE container_memory_failures_total counter
+
+# HELP container_memory_swap Container swap usage in bytes.
+# TYPE container_memory_swap gauge
+
+# HELP container_memory_rss Size of RSS in bytes.
+# TYPE container_memory_rss gauge
+
+# HELP container_memory_usage_bytes Current memory usage in bytes.
+# TYPE container_memory_usage_bytes gauge
+
+# HELP container_memory_working_set_bytes Current working set in bytes.
+# TYPE container_memory_working_set_bytes gauge
+
+# HELP container_network_receive_bytes_total Cumulative count of bytes received
+# TYPE container_network_receive_bytes_total counter
+
+
+rate()
+rate(v range-vector) calculates the per-second average rate of increase of the time series in the range vector. Breaks in monotonicity (such as counter resets due to target restarts) are automatically adjusted for.
+
+The following example expression returns the per-second rate of HTTP requests as measured over the last 5 minutes, per time series in the range vector:
+
+rate(http_requests_total{job="api-server"}[5m])
+rate should only be used with counters. It is best suited for alerting, and for graphing of slow-moving counters.
+
+Note that when combining rate() with an aggregation operator (e.g. sum()) or a function aggregating over time (any function ending in _over_time), always take a rate() first, then aggregate. Otherwise rate() cannot detect counter resets when your target restarts.
+
+
+
+irate()
+irate(v range-vector) calculates the per-second instant rate of increase of the time series in the range vector. This is based on the last two data points. Breaks in monotonicity (such as counter resets due to target restarts) are automatically adjusted for.
+
+The following example expression returns the per-second rate of HTTP requests looking up to 5 minutes back for the two most recent data points, per time series in the range vector:
+
+irate(http_requests_total{job="api-server"}[5m])
+irate should only be used when graphing volatile, fast-moving counters. Use rate for alerts and slow-moving counters, as brief changes in the rate can reset the FOR clause and graphs consisting entirely of rare spikes are hard to read.
+
+Note that when combining irate() with an aggregation operator (e.g. sum()) or a function aggregating over time (any function ending in _over_time), always take a irate() first, then aggregate. Otherwise irate() cannot detect counter resets when your target restarts.
