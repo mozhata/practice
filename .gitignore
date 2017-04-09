@@ -13,3 +13,6 @@ react/node_modules/*
 main
 promethus/data
 go/gopl/gopl
+temp/log_dir
+go/novel/logs
+go/novel/*.txt

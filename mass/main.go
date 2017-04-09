@@ -183,7 +183,7 @@ func main() {
 	// convertInterface()
 
 	// runes()
-	// logFlush()
+	logFlush()
 	// build()
 	// intLoop()
 	// syncRuntime()
@@ -234,8 +234,14 @@ func main() {
 	// tryDelv()
 	// tryMethod()
 	// tryFilepath()
-	tryShadowVariable()
+	// tryShadowVariable()
+	// convertRate()
 }
+func convertRate() {
+	fmt.Printf("0: %d, 9: %d, a: %d, z: %d, A: %d",
+		'0', '9', 'a', 'z', 'A')
+}
+
 func tryShadowVariable() {
 	var (
 		a = "a"
