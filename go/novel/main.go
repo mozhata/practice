@@ -10,15 +10,26 @@ import (
 	"github.com/golang/glog"
 )
 
-// var url = "http://m.biquge.tw/1_1280/all.html"
+var novelMap = map[string]string{
+	"86_86745": "shengxu",
+	"1_1280":   "zaohuazhiwang",
+}
 
 const (
 	host     = "http://m.biquge.tw"
-	novelNum = "1_1280"
+	novelNum = "86_86745" // 圣墟
 
-	from = 500
-	size = 100
+	from = 312
+	size = 30
 )
+
+// const (
+// 	host     = "http://m.biquge.tw"
+// 	novelNum = "1_1280" // 造化之王
+
+// 	from = 500
+// 	size = 100
+// )
 
 type chapterLink struct {
 	Href  string `json:"href"`
@@ -52,7 +63,7 @@ func main() {
 		}
 	}
 
-	novelFile := novelNum + ".txt"
+	novelFile := fmt.Sprintf("%s_%d_%d.txt", novelMap[novelNum], from, size)
 	// parse
 	for i, l := range links {
 		glog.Infof("parsing the %dst chapter: %s", i, l.Title)
