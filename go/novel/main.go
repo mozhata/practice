@@ -142,7 +142,7 @@ func getChaperList(from, size int, catalogURL string) ([]chapterLink, error) {
 		panic(fmt.Sprintf("failed to catalogURL. err: %s", err))
 	}
 
-	result := make([]chapterLink, size)
+	result := make([]chapterLink, 0, size)
 	chapList := doc.Find("div#chapterlist > p > a")
 	for i := from; i < chapList.Length(); i++ {
 		if i > from+size {
