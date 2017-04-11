@@ -74,7 +74,7 @@ func main() {
 	// convertInterface()
 
 	// runes()
-	// logFlush()
+	logFlush()
 	// build()
 	// intLoop()
 	// syncRuntime()

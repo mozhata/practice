@@ -13,6 +13,9 @@ react/node_modules/*
 main
 promethus/data
 go/gopl/gopl
+temp/log_dir
+go/novel/logs
+go/novel/*.txt
 .tar.gz
 /home/kang/go/src/practice/go/gopl/gopl
 mass/mass
