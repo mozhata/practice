@@ -19,3 +19,4 @@ go/novel/*.txt
 .tar.gz
 /home/kang/go/src/practice/go/gopl/gopl
 mass/mass
+searchengine
