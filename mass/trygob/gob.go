@@ -24,10 +24,10 @@ func BaiscGOB() {
 
 	var dataSent = P{1, 2, 3, "instance of P"}
 	err := enc.Encode(dataSent)
-	Check(err)
+	check(err)
 	var dataReceived Q
 	err = dec.Decode(&dataReceived)
-	Check(err)
+	check(err)
 	fmt.Printf("dataSent: %#v\tdataReceived: %#v", dataSent, dataReceived)
 }
 
@@ -68,12 +68,12 @@ func interfaceEncode(enc *gob.Encoder, p Pythagoras) {
 	// interface type. If we passed p directly it would see the concrete type instead.
 	// See the blog post, "The Laws of Reflection" for background.
 	err := enc.Encode(&p)
-	Check(err)
+	check(err)
 }
 func interfaceDecod(dec *gob.Decoder) Pythagoras {
 	var p Pythagoras
 	err := dec.Decode(&p)
-	Check(err)
+	check(err)
 	return p
 }
 
@@ -82,12 +82,12 @@ func EncodeDecode() {
 	var network bytes.Buffer // Stand-in for a network connection
 	enc := gob.NewEncoder(&network)
 	err := enc.Encode(Vector{1, 2, 3})
-	Check(err)
+	check(err)
 	// create a decoder and receive value
 	dec := gob.NewDecoder(&network)
 	var v Vector
 	err = dec.Decode(&v)
-	Check(err)
+	check(err)
 	fmt.Printf("received value: %#v\n", v)
 	testMarshalUnmarshal()
 }
@@ -115,13 +115,43 @@ func (v *Vector) UnmarshalBinary(data []byte) error {
 func testMarshalUnmarshal() {
 	source := Vector{2, 3, 4}
 	b, err := source.MarshalBinary()
-	Check(err)
+	check(err)
 	var dest Vector
 	err = dest.UnmarshalBinary(b)
 	fmt.Printf("source: %#v\t, binaried: %q\n, umarshaled: %#v\n", source, b, dest)
 }
 
-func Check(err error) {
+func GobEncoderDecoder() {
+	var network bytes.Buffer // Stand-in for a network connection
+	enc := gob.NewEncoder(&network)
+	err := enc.Encode(Person{12, "test-name"})
+	check(err)
+	// create a decoder and receive value
+	dec := gob.NewDecoder(&network)
+	var v Person
+	err = dec.Decode(&v)
+	check(err)
+	fmt.Printf("received value: %#v\n", v)
+}
+
+// Person impletemant GobEncoder and GobDecoder
+type Person struct {
+	age  int
+	name string
+}
+
+func (p Person) GobEncode() ([]byte, error) {
+	var b bytes.Buffer
+	fmt.Fprintln(&b, p.age, p.name)
+	return b.Bytes(), nil
+}
+func (p *Person) GobDecode(data []byte) error {
+	b := bytes.NewBuffer(data)
+	_, err := fmt.Fscanln(b, &p.age, &p.name)
+	return err
+}
+
+func check(err error) {
 	if err != nil {
 		panic(err)
 	}

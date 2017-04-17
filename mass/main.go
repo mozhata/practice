@@ -131,7 +131,8 @@ func main() {
 	// tryStrConv()
 	// trygob.BaiscGOB()
 	// trygob.EncodeDecode()
-	trygob.InterfaceEncDec()
+	// trygob.InterfaceEncDec()
+	trygob.GobEncoderDecoder()
 }
 
 func tryStrConv() {
