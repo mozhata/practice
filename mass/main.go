@@ -20,7 +20,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"practice/mass/trygob"
+	"practice/mass/tryjson"
 	"regexp"
 	"runtime"
 	"sort"
@@ -93,7 +93,6 @@ func main() {
 	// testDefer()
 	// tryBuffer()
 	// tryPrintfV()
-	// tryEmpty()
 	// tryCrypto()
 	// tiny()
 	// tryPrintf()
@@ -132,8 +131,35 @@ func main() {
 	// trygob.BaiscGOB()
 	// trygob.EncodeDecode()
 	// trygob.InterfaceEncDec()
-	trygob.GobEncoderDecoder()
+	// trygob.GobEncoderDecoder()
+	tryjson.Empty()
+	// tryjson.UmarshalJSON()
 }
+
+/*// not compliable, try reflect
+func (cl *ClusterModel) nonblankCols(ingoredCols []string) []string {
+	t := reflect.TypeOf(cl).Elem()
+	v := reflect.ValueOf(cl).Elem()
+	cols := make([]string, 0, t.NumField())
+	for i := 0; i < t.NumField(); i++ {
+
+		rawCol := t.Field(i).Tag.Get("orm")
+		parts := strings.Split(rawCol, "column")
+		if len(parts) == 2 {
+			col := strings.TrimFunc(parts[1], func(r rune) bool { return r == '(' || r == ')' })
+			// fmt.Println(col)
+			fmt.Printf("col %s is valid: \t%v, value:\t%v\n", col, (v.Field(i).Interface() == reflect.Zero(t.Field(i).Type)), v.Field(i))
+			// fmt.Printf("col %s is valid: \t%v, value:\t%v\n", col, reflect.DeepEqual(v.Field(i).Interface(), reflect.Zero(t.Field(i).Type)), v.Field(i))
+			// fmt.Printf("col %s is valid: \t%v, value:\t%v\n", col, reflect.DeepEqual(v.Field(i), reflect.Zero(t.Field(i).Type)), v.Field(i))
+			if !common.StringInSlice(col, ingoredCols) {
+				cols = append(cols, col)
+			}
+		}
+	}
+
+	return cols
+}
+*/
 
 func tryStrConv() {
 	a, b := 10, 3
@@ -197,31 +223,6 @@ func parseExpr(input string) {
 
 	// fmt.Printf("lhs insid: %#v\nLabelMatchers: %s", binaryExpr.LHS.(*promql.ParenExpr).Expr.(*promql.VectorSelector), handy.MarshalJSONOrDie(binaryExpr.LHS.(*promql.ParenExpr).Expr.(*promql.VectorSelector).LabelMatchers))
 }
-
-/*// not compliable, try reflect
-func (cl *ClusterModel) nonblankCols(ingoredCols []string) []string {
-	t := reflect.TypeOf(cl).Elem()
-	v := reflect.ValueOf(cl).Elem()
-	cols := make([]string, 0, t.NumField())
-	for i := 0; i < t.NumField(); i++ {
-
-		rawCol := t.Field(i).Tag.Get("orm")
-		parts := strings.Split(rawCol, "column")
-		if len(parts) == 2 {
-			col := strings.TrimFunc(parts[1], func(r rune) bool { return r == '(' || r == ')' })
-			// fmt.Println(col)
-			fmt.Printf("col %s is valid: \t%v, value:\t%v\n", col, (v.Field(i).Interface() == reflect.Zero(t.Field(i).Type)), v.Field(i))
-			// fmt.Printf("col %s is valid: \t%v, value:\t%v\n", col, reflect.DeepEqual(v.Field(i).Interface(), reflect.Zero(t.Field(i).Type)), v.Field(i))
-			// fmt.Printf("col %s is valid: \t%v, value:\t%v\n", col, reflect.DeepEqual(v.Field(i), reflect.Zero(t.Field(i).Type)), v.Field(i))
-			if !common.StringInSlice(col, ingoredCols) {
-				cols = append(cols, col)
-			}
-		}
-	}
-
-	return cols
-}
-*/
 
 func tryFilepath() {
 	fmt.Println(filepath.Join("a/b", "/c"))
@@ -825,17 +826,6 @@ func tryCrypto() {
 	unixStr := fmt.Sprintf("%d", unix)
 	P("time: ", unix, len(unixStr))
 
-}
-
-func tryEmpty() {
-	type s struct {
-		FieldOne   int    `json:"one,omitempty"`
-		FieldTwo   string `json:"two, omitempty"`
-		FieldThree int    `json:"three"`
-	}
-	s1 := s{FieldTwo: ""}
-	b1, _ := json.Marshal(s1)
-	P("s1: ", string(b1))
 }
 
 func tryPrintfV() {
