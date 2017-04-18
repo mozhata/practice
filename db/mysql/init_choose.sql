@@ -5,6 +5,7 @@ use choose;
 -- codies
 create table `praise` (
 	target_id varchar(36) PRIMARY KEY,
+	target_type int,
 	liker_id varchar(36) NOT NULL,
 	created_at int NOT NULL,
 	delete_at int
@@ -12,6 +13,7 @@ create table `praise` (
 
 create table `post` (
 	`id` varchar(20) PRIMARY KEY,
+	`type` int,
 	`title` varchar(200),
 	`content` text,
 	`author_id` char(36) NOT NULL,
