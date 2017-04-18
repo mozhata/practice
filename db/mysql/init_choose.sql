@@ -3,6 +3,24 @@
 use choose;
 
 -- codies
+create table `praise` (
+	target_id varchar(36) PRIMARY KEY,
+	liker_id varchar(36) NOT NULL,
+	created_at int NOT NULL,
+	delete_at int
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table `post` (
+	`id` varchar(20) PRIMARY KEY,
+	`title` varchar(200),
+	`content` text,
+	`author_id` char(36) NOT NULL,
+	`to_users` varchar(333),
+	`created_at` int NOT NULL,
+	`modified_at` int NOT NULL,
+	`delete_at` int
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 create table `local_auth` (
 	`uuid` char(36) PRIMARY KEY,
 	`email` varchar(45),
@@ -25,6 +43,7 @@ create table `user` (
 	`email` varchar(45),
 	`bio` text
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- end codis
 DROP TABLE IF EXISTS `teacher`;
 CREATE TABLE `teacher`(

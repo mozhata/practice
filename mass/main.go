@@ -20,7 +20,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"practice/mass/tryjson"
+	"practice/mass/others"
 	"regexp"
 	"runtime"
 	"sort"
@@ -132,8 +132,9 @@ func main() {
 	// trygob.EncodeDecode()
 	// trygob.InterfaceEncDec()
 	// trygob.GobEncoderDecoder()
-	tryjson.Empty()
+	// tryjson.Empty()
 	// tryjson.UmarshalJSON()
+	others.TryUniqueID()
 }
 
 /*// not compliable, try reflect
@@ -610,6 +611,7 @@ func maxInt64() {
 	P(len(mxInt64), mxInt64, math.MaxInt64)
 	mxInt32 := strconv.Itoa(math.MaxUint32)
 	P(len(mxInt32), mxInt32)
+	fmt.Printf("time unix: %d, len: %d\n", time.Now().Unix(), len(strconv.Itoa(int(time.Now().Unix()))))
 }
 
 // // 都会执行
