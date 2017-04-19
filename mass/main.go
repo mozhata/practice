@@ -20,7 +20,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"practice/mass/others"
+	"practice/mass/tryrouter"
 	"regexp"
 	"runtime"
 	"sort"
@@ -134,7 +134,8 @@ func main() {
 	// trygob.GobEncoderDecoder()
 	// tryjson.Empty()
 	// tryjson.UmarshalJSON()
-	others.TryUniqueID()
+	// others.TryUniqueID()
+	tryrouter.TryGoji()
 }
 
 /*// not compliable, try reflect
