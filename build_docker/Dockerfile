@@ -1,5 +1,5 @@
 FROM alpine:latest
 
-COPY main /cmd/
+COPY echotime /cmd/
 EXPOSE 8091
-CMD ["/cmd/main"]
+CMD ["/cmd/echotime"]

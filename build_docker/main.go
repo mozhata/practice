@@ -27,7 +27,7 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "hello, now is %s", time.Now().Format(layout))
+		fmt.Fprintf(w, "hello, now is %s\n", time.Now().Format(layout))
 	})
 	log.Fatal(http.ListenAndServe(":8091", mux))
 
