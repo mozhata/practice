@@ -35,7 +35,6 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/golang/glog"
-	"github.com/mozhata/handy"
 	"github.com/pborman/uuid"
 	"github.com/prometheus/prometheus/promql"
 )
@@ -206,7 +205,7 @@ func parseExpr(input string) {
 	}
 	fmt.Printf("expr: %#v\n", expr)
 	binaryExpr := expr.(*promql.BinaryExpr)
-	fmt.Printf("lhs: %#v\t rhs: %#v\t VectorMatching: %s\n", binaryExpr.LHS, binaryExpr.RHS, handy.MarshalJSONOrDie(binaryExpr.VectorMatching))
+	fmt.Printf("lhs: %#v\t rhs: %#v\t VectorMatching: %s\n", binaryExpr.LHS, binaryExpr.RHS, MarshalJSONOrDie(binaryExpr.VectorMatching))
 	fmt.Printf("\nlhs string: \t%s rhs: \t%s\n\n", binaryExpr.LHS.String(), binaryExpr.RHS.String())
 	var vs *promql.VectorSelector
 	if expr, ok := binaryExpr.LHS.(*promql.ParenExpr); ok {
@@ -221,9 +220,9 @@ func parseExpr(input string) {
 		fmt.Printf("unknown type %T\n", binaryExpr.LHS)
 	}
 	fmt.Printf("VectorSelector is %#v\n", vs)
-	fmt.Printf("VectorSelector.LabelMatchers: %s\n\n", handy.MarshalJSONOrDie(vs.LabelMatchers))
+	fmt.Printf("VectorSelector.LabelMatchers: %s\n\n", MarshalJSONOrDie(vs.LabelMatchers))
 
-	// fmt.Printf("lhs insid: %#v\nLabelMatchers: %s", binaryExpr.LHS.(*promql.ParenExpr).Expr.(*promql.VectorSelector), handy.MarshalJSONOrDie(binaryExpr.LHS.(*promql.ParenExpr).Expr.(*promql.VectorSelector).LabelMatchers))
+	// fmt.Printf("lhs insid: %#v\nLabelMatchers: %s", binaryExpr.LHS.(*promql.ParenExpr).Expr.(*promql.VectorSelector), MarshalJSONOrDie(binaryExpr.LHS.(*promql.ParenExpr).Expr.(*promql.VectorSelector).LabelMatchers))
 }
 
 func tryFilepath() {
@@ -390,7 +389,7 @@ CCCFdqzqU3pk8fgYUGuGELPHzDkO77YcfX1GxCYRN4Tpbsyk96j9/5UQlNSj1Pec
 4ACUAm63lE6mZBUMqL//QzVvU3fi0HVGRx/XcTxdM62JM0Lwmx9s
 -----END RSA PRIVATE KEY-----`,
 	}
-	fmt.Println(handy.MarshalJSONOrDie(dic))
+	fmt.Println(MarshalJSONOrDie(dic))
 }
 
 func tryPem() {
@@ -447,21 +446,21 @@ UNMautOYTbNJlCqGLd1GMCErcKUQjcGg3x6F+EuA70o5Y1mS+IF1wYo06I18ASc7
 	// var data []byte
 	// var err error
 	key, rest := pem.Decode([]byte(validKey))
-	fmt.Printf("valid key of key: %s and rest: %s\n\n", handy.MarshalJSONOrDie(key), rest)
+	fmt.Printf("valid key of key: %s and rest: %s\n\n", MarshalJSONOrDie(key), rest)
 	cert, rest := pem.Decode([]byte(validCert))
-	fmt.Printf("valid cert of cert: %s and rest: %s\n\n", handy.MarshalJSONOrDie(cert), rest)
+	fmt.Printf("valid cert of cert: %s and rest: %s\n\n", MarshalJSONOrDie(cert), rest)
 	certificate, err := tls.X509KeyPair([]byte(validCert), []byte(validKey))
-	fmt.Printf("err: %v\tcert:\n%s", err, handy.MarshalJSONOrDie(certificate))
+	fmt.Printf("err: %v\tcert:\n%s", err, MarshalJSONOrDie(certificate))
 	// fmt.Printf("byte: %s\n", base64.StdEncoding.EncodeToString(cert.Bytes))
 	// _, err = encoding.Decode(data, cert.Bytes)
 	// fmt.Println("data: ", string(data), err)
 
 	// p, rest = pem.Decode([]byte(invalidKey))
-	// fmt.Printf("invalid * of p: %s and rest: %s\n\n", handy.MarshalJSONOrDie(p), rest)
+	// fmt.Printf("invalid * of p: %s and rest: %s\n\n", MarshalJSONOrDie(p), rest)
 	// p, rest = pem.Decode([]byte(invalidCert))
-	// fmt.Printf("invalid * of p: %s and rest: %s\n\n", handy.MarshalJSONOrDie(p), rest)
+	// fmt.Printf("invalid * of p: %s and rest: %s\n\n", MarshalJSONOrDie(p), rest)
 	// p, rest = pem.Decode([]byte(validKey + "\n" + validCert))
-	// fmt.Printf("valid of bind of p: %s and rest: %s\n\n", handy.MarshalJSONOrDie(p), rest)
+	// fmt.Printf("valid of bind of p: %s and rest: %s\n\n", MarshalJSONOrDie(p), rest)
 }
 
 func trySlice() {
@@ -558,7 +557,7 @@ func tryUmarshal() {
 		ruleSpec{"cpu/usage_rate", "<", "50", ""},
 	}
 	param := params{comm, specs}
-	strParam := handy.MarshalJSONOrDie(param)
+	strParam := MarshalJSONOrDie(param)
 	fmt.Printf("param marshaled:\n%s\n", strParam)
 	var input params
 	err := json.Unmarshal([]byte(strParam), &input)
@@ -576,7 +575,7 @@ func tryUmarshal() {
 		strategy{"ZSNW4XXw9RMx", 0},
 	}
 	inputUpdate := update{"kang", strategies}
-	fmt.Printf("inputUpdate update params: %s\n", handy.MarshalJSONOrDie(inputUpdate))
+	fmt.Printf("inputUpdate update params: %s\n", MarshalJSONOrDie(inputUpdate))
 }
 
 func lenStr() {
