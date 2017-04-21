@@ -134,7 +134,10 @@ func main() {
 	// tryjson.Empty()
 	// tryjson.UmarshalJSON()
 	// others.TryUniqueID()
-	tryrouter.TryGoji()
+	// tryrouter.TryGoji()
+	// tryrouter.TryIssue9Mux()
+	tryrouter.TrygorillaMux()
+	// tryrouter.TryForkRouter()
 }
 
 /*// not compliable, try reflect
