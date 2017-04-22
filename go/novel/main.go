@@ -27,8 +27,8 @@ const (
 	host     = "http://m.biquge.tw"
 	novelNum = "1_1280" // 造化之王
 
-	from = 1000
-	size = 100
+	from = 1700
+	size = 200
 )
 
 type chapterLink struct {
