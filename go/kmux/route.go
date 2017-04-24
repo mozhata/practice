@@ -63,11 +63,11 @@ func buildRoutePattern(pattern string) *routePattern {
 	}
 
 	p := &routePattern{}
-	p.parts = strings.Split(pattern, "/")
+	parts := strings.Split(pattern, "/")
+	p.parts = parts[1 : len(parts)-1]
 	p.partsCount = len(p.parts)
 	p.pathVariable = make(map[int]Param)
-
-	for i, segment := range p.parts[1 : p.partsCount-1] {
+	for i, segment := range p.parts {
 		if len(segment) < 1 {
 			panic("segment of pattern should at least own one character")
 		}
@@ -85,11 +85,13 @@ func buildRoutePattern(pattern string) *routePattern {
 }
 
 func (rp *routePattern) match(pattern string) bool {
-	segments := strings.Split(pattern, ",")
+	segments := strings.Split(pattern, "/")
+	segments = segments[1 : len(segments)-1]
 	if len(segments) != rp.partsCount {
 		return false
 	}
-	for i, seg := range segments[1 : rp.partsCount-1] {
+	params := make(map[int]Param, len(rp.pathVariable))
+	for i, seg := range segments {
 		if rp.parts[i] == seg {
 			continue
 		}
@@ -98,9 +100,10 @@ func (rp *routePattern) match(pattern string) bool {
 			return false
 		}
 		param.Value = seg
-		rp.pathVariable[i] = param
+		params[i] = param
 	}
-	return false
+	rp.pathVariable = params
+	return true
 }
 
 func (r *route) getHandle(pattern string) (Handle, Params) {
