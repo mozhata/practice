@@ -16,12 +16,21 @@ type route struct {
 	// matchAlls []routePattern
 }
 
+func newRoute() *route {
+	r := route{}
+	r.allRegistered = make(map[string]bool)
+	r.statics = make(map[string]Handle)
+	return &r
+}
+
 type routePattern struct {
 	parts        []string
 	partsCount   int
-	pathVariable map[int]Param
+	pathVariable Params
 	handle       Handle
 }
+
+type Params map[int]Param
 
 type Param struct {
 	Key   string
@@ -29,6 +38,7 @@ type Param struct {
 }
 
 func (r *route) add(pattern string, handle Handle) {
+
 	if r.allRegistered == nil {
 		r.allRegistered = make(map[string]bool)
 	}
@@ -39,6 +49,7 @@ func (r *route) add(pattern string, handle Handle) {
 	if dynamic == nil {
 		r.statics[pattern] = handle
 	} else {
+		dynamic.handle = handle
 		r.dynamics = append(r.dynamics, dynamic)
 	}
 	r.allRegistered[pattern] = true
@@ -46,11 +57,17 @@ func (r *route) add(pattern string, handle Handle) {
 
 // buildRoutePattern retrun routePattern, isStatic
 func buildRoutePattern(pattern string) *routePattern {
+	// static
+	if pattern == "/" {
+		return nil
+	}
+
 	p := &routePattern{}
 	p.parts = strings.Split(pattern, "/")
-	p.pathVariable = make([int]Param)
+	p.partsCount = len(p.parts)
+	p.pathVariable = make(map[int]Param)
 
-	for i, segment := range p.parts {
+	for i, segment := range p.parts[1 : p.partsCount-1] {
 		if len(segment) < 1 {
 			panic("segment of pattern should at least own one character")
 		}
@@ -64,7 +81,6 @@ func buildRoutePattern(pattern string) *routePattern {
 	if len(p.pathVariable) == 0 {
 		return nil
 	}
-	p.partsCount = len(p.parts)
 	return p
 }
 
@@ -73,7 +89,7 @@ func (rp *routePattern) match(pattern string) bool {
 	if len(segments) != rp.partsCount {
 		return false
 	}
-	for i, seg := range segments {
+	for i, seg := range segments[1 : rp.partsCount-1] {
 		if rp.parts[i] == seg {
 			continue
 		}
@@ -85,4 +101,17 @@ func (rp *routePattern) match(pattern string) bool {
 		rp.pathVariable[i] = param
 	}
 	return false
+}
+
+func (r *route) getHandle(pattern string) (Handle, Params) {
+	h, ok := r.statics[pattern]
+	if ok {
+		return h, nil
+	}
+	for _, rp := range r.dynamics {
+		if rp.match(pattern) {
+			return rp.handle, rp.pathVariable
+		}
+	}
+	return nil, nil
 }

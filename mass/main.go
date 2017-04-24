@@ -20,7 +20,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"practice/mass/tryrouter"
 	"regexp"
 	"runtime"
 	"sort"
@@ -63,6 +62,11 @@ const (
 	PlantformIos UMPlatform = iota
 	PlantformAndriod
 )
+
+func init() {
+	flag.Lookup("logtostderr").Value.Set("true")
+	flag.Parse()
+}
 
 func main() {
 
@@ -136,8 +140,11 @@ func main() {
 	// others.TryUniqueID()
 	// tryrouter.TryGoji()
 	// tryrouter.TryIssue9Mux()
-	tryrouter.TrygorillaMux()
+	// tryrouter.TrygorillaMux()
 	// tryrouter.TryForkRouter()
+	// tryrouter.TryKmux()
+
+	trySplit()
 }
 
 /*// not compliable, try reflect
@@ -164,6 +171,15 @@ func (cl *ClusterModel) nonblankCols(ingoredCols []string) []string {
 	return cols
 }
 */
+
+func trySplit() {
+	small := "a/b/c"
+	long := "/a/b/c/"
+	sp := strings.Split(small, "/")
+	lp := strings.Split(long, "/")
+	spec := strings.Split("/", "/")
+	fmt.Printf("smal: %#v\tlong: %#v\t/: %#v\n", sp, lp, spec)
+}
 
 func tryStrConv() {
 	a, b := 10, 3

@@ -1,6 +1,8 @@
 package kmux
 
-import "net/http"
+import (
+	"net/http"
+)
 
 type Mux struct {
 	trees map[string]*route
@@ -54,35 +56,68 @@ type Mux struct {
 	PanicHandler func(http.ResponseWriter, *http.Request, interface{})
 }
 
-func (m *Mux) Register(method, path, handle Handle) {
-	if r.trees == nil {
-		r.trees = make(map[string]*route)
+func New() *Mux {
+	return &Mux{
+		RedirectTrailingSlash:  true,
+		RedirectFixedPath:      true,
+		HandleMethodNotAllowed: true,
+		HandleOPTIONS:          true,
+	}
+}
+
+// Make sure the Mux conforms with the http.Handler interface
+var _ http.Handler = New()
+
+func (m *Mux) Register(path, method string, handle Handle) {
+	if m.trees == nil {
+		m.trees = make(map[string]*route)
 	}
 
-	root := r.trees[method]
+	root := m.trees[method]
 	if root == nil {
-		root = new(route)
-		r.trees[method] = root
+		root = newRoute()
+		m.trees[method] = root
 	}
 
-	root.add(path, handle)
+	root.add(validatePattern(path), handle)
 }
 
-/*// both used at register route, and parse url path
-func cleanPath(p string) string {
-	if path[0] != '/' {
-		panic("path must begin with '/' in path '" + path + "'")
+func (k *Mux) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	if k.PanicHandler != nil {
+		defer k.recv(w, req)
 	}
 
-	pp := path.Clean(p)
-	if pp == "/" {
-		return pp
+	path := unifyPath(req.URL.Path)
+	if root := k.trees[req.Method]; root != nil {
+		if handle, ps := root.getHandle(path); handle != nil {
+			handle(w, req, ps)
+			return
+		}
 	}
-
-	// path.Clean 会去掉最后的 / 符号，所以原来有 / 的，需要加回去
-	if p[len(p)-1] == '/' {
-		pp += "/"
+	if k.NotFound != nil {
+		k.NotFound.ServeHTTP(w, req)
+	} else {
+		http.NotFound(w, req)
 	}
-	return pp
 }
-*/
+
+func (k *Mux) recv(w http.ResponseWriter, req *http.Request) {
+	if rcv := recover(); rcv != nil {
+		k.PanicHandler(w, req, rcv)
+	}
+}
+
+func unifyPath(path string) string {
+	if path[len(path)-1] != '/' {
+		path += "/"
+	}
+	return path
+}
+
+func validatePattern(pattern string) string {
+	if pattern[0] != '/' {
+		panic("path must begin with '/' in path '" + pattern + "'")
+	}
+
+	return unifyPath(pattern)
+}

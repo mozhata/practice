@@ -6,6 +6,7 @@ import (
 	"net"
 	"net/http"
 	"practice/go/forkrouter"
+	"practice/go/kmux"
 
 	"github.com/golang/glog"
 	"github.com/gorilla/mux"
@@ -85,4 +86,17 @@ func TryForkRouter() {
 }
 func Index(w http.ResponseWriter, r *http.Request, _ forkrouter.Params) {
 	fmt.Fprint(w, "Welcome!\n")
+}
+
+func TryKmux() {
+	router := kmux.New()
+	router.Register("/", "GET", testWork)
+
+	port := ":8080"
+	glog.Infof("serving at %s", port)
+	log.Fatal(http.ListenAndServe(port, router))
+}
+
+func testWork(w http.ResponseWriter, r *http.Request, ps kmux.Params) {
+	fmt.Fprintf(w, "ps: %#v\nheader: %v\n", ps, r.Header)
 }
