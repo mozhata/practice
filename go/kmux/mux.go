@@ -27,12 +27,7 @@ type Mux struct {
 }
 
 func New() *Mux {
-	return &Mux{
-		RedirectTrailingSlash:  true,
-		RedirectFixedPath:      true,
-		HandleMethodNotAllowed: true,
-		HandleOPTIONS:          true,
-	}
+	return &Mux{}
 }
 
 // Make sure the Mux conforms with the http.Handler interface
