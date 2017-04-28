@@ -8,7 +8,7 @@ docker_start:
 	-web.console.templates=/usr/share/prometheus/consoles
 
 docker_live:
-	docker run -it -p 9090:9090 -v /home/kang/go/src/practice/promethus:/conf prom/prometheus -config.file=/conf/prometheus.yml -storage.local.path=/prometheus -web.console.libraries=/usr/share/prometheus/console_libraries -web.console.templates=/usr/share/prometheus/consoles -alertmanager.url=http://192.168.0.66:9093
+	docker run -it -p 9090:9090 -v /home/kang/go/src/practice/promethus:/conf 192.168.1.55/tenx_containers/prometheus:v1.6.1 -config.file=/conf/changing.yml -storage.local.path=/prometheus -web.console.libraries=/usr/share/prometheus/console_libraries -web.console.templates=/usr/share/prometheus/consoles -alertmanager.url=http://192.168.0.65:9093
 
 alertmanager:
 	alertmanager -config.file=./alertmanager.yml &
@@ -34,3 +34,9 @@ docker_init:
 
 reload:
 	curl -X POST http://localhost:9090/-/reload
+
+test_am:
+	docker run -p 9093:9093 -v /home/kang/go/src/practice/promethus/dockerconfig/:/etc/config -d prom/alertmanager:v0.6.0 -config.file=/etc/config/alertmanager.json -storage.path=/alertmanager
+
+al_local:
+	alertmanager -config.file=dockerconfig/alertmanager.json
