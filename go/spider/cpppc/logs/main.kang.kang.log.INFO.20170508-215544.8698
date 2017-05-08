@@ -1,0 +1,6 @@
+Log file created at: 2017/05/08 21:55:44
+Running on machine: kang
+Binary: Built with gc go1.7.4 for linux/amd64
+Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+I0508 21:55:44.407002    8698 main.go:49] err <nil>
+resp: &{200 OK 200 HTTP/1.1 1 1 map[X-Powered-By:[Servlet/2.5 JSP/2.1 Servlet/2.5 JSP/2.1] Date:[Mon, 08 May 2017 13:56:51 GMT] Content-Type:[application/json;charset=UTF-8]] 0xc4200148c0 -1 [chunked] false false map[] 0xc4200d80f0 <nil>}
