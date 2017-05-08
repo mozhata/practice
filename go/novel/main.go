@@ -15,21 +15,21 @@ var novelMap = map[string]string{
 	"1_1280":   "zaohuazhiwang",
 }
 
-// const (
-// 	host     = "http://m.biquge.tw"
-// 	novelNum = "86_86745" // 圣墟
-
-// 	from = 312
-// 	size = 30
-// )
-
 const (
 	host     = "http://m.biquge.tw"
-	novelNum = "1_1280" // 造化之王
+	novelNum = "86_86745" // 圣墟
 
-	from = 1700
-	size = 200
+	from = 342
+	size = 100
 )
+
+// const (
+// 	host     = "http://m.biquge.tw"
+// 	novelNum = "1_1280" // 造化之王
+
+// 	from = 1700
+// 	size = 200
+// )
 
 type chapterLink struct {
 	Href  string `json:"href"`
