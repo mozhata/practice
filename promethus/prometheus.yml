@@ -16,12 +16,11 @@ scrape_configs:
       - targets: ["192.168.0.66:9100","localhost:9090"]
         labels:
           device_ID: "local"
-  # - job_name: "24"
-  #   static_configs:
-  #     - targets: ["192.168.1.24:10250"]
-  #     - scheme: http
-  #       labels:
-  #         device_ID: "local"
+  - job_name: "25"
+    static_configs:
+      - targets: ["192.168.1.25:10250"]
+        labels:
+          device_ID: "25"
 
 alerting:
   alertmanagers:
