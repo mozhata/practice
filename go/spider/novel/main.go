@@ -13,23 +13,31 @@ import (
 var novelMap = map[string]string{
 	"86_86745": "shengxu",
 	"1_1280":   "zaohuazhiwang",
+	"0_444":    "xiuxiankuangtu",
 }
 
-// const (
-// 	host     = "http://m.biquge.tw"
-// 	novelNum = "86_86745" // 圣墟
+const (
+	host = "http://m.biquge.tw"
+	size = 100
+)
 
-// 	from = 312
-// 	size = 30
+// const (
+// 	novelNum = "86_86745" // 圣墟
+// 	from     = 342
 // )
 
 const (
-	host     = "http://m.biquge.tw"
-	novelNum = "1_1280" // 造化之王
-
-	from = 1700
-	size = 200
+	novelNum = "0_444" // 修仙狂徒
+	from     = 1200
 )
+
+// const (
+// 	host     = "http://m.biquge.tw"
+// 	novelNum = "1_1280" // 造化之王
+
+// 	from = 1700
+// 	size = 200
+// )
 
 type chapterLink struct {
 	Href  string `json:"href"`

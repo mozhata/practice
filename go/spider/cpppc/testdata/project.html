@@ -1,0 +1,238 @@
+
+<!DOCTYPE html>
+<html>
+<head> 
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache"> 
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache"> 
+<META HTTP-EQUIV="Expires" CONTENT="0">
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<base href="http://www.cpppc.org:8082/efmisweb/"> 
+<!-- 龙图的JS -->  
+
+<script type="text/javascript" src="getScript.do?url=static/ext.lt/js/frameworksupport.gzjs&version=1"></script>  
+<script type="text/javascript" src="getScript.do?url=static/ext.lt/js/ltext_core.gzjs&version=1"></script>
+ 
+<!--wanhm 2015/7/6
+<script type="text/javascript" src="static/ext.lt/js/datatable3.0.gzjs"></script> 
+<script type="text/javascript" src="static/ext.lt/js/editdatatable.gzjs"></script>  
+<script type="text/javascript" src="getScript.do?url=static/ext.lt/js/formulasdatatable.gzjs&version=1"></script>
+-->               
+
+<!--添加jquery --> 
+<script type="text/javascript" src="getScript.do?url=static/jquery/jquery-1.9.0.min.gzjs&version=1"></script> 
+
+<!--    
+<script type="text/javascript" src="static/jquery/jquery-1.9.0.min.js"></script>  
+-->
+<script type="text/javascript"> 
+var basePath = "http://www.cpppc.org:8082/efmisweb/";
+var systemStyle = "default";
+var fileServerPort = "7002";
+var systemTitle = "金财工程应用支撑平台";
+var skinConfig={
+    style: "default"
+
+}; 
+var tokenID =  "null";
+var moduleId =  "null";
+var tokenParam = "tokenid=null";
+function setTokenID(e) {
+	var url = e.url;
+	if (e.dataType != null && e.dataType.toLowerCase() == 'script') {
+		return e;
+	}
+	if (url.indexOf("?") == -1) {
+		url = url + "?" + tokenParam;
+	} else if (url.indexOf("tokenid") == -1) {
+		url = url + "&" + tokenParam;
+	}
+	e.url = url;
+	return e;
+}
+
+function getPort(){
+	return ":8083/";
+}
+ /**
+  Hq.modules.version={
+  "static/ext.lt/js/editpanel.js":"1",
+  "static/json/json2.js":"3"  
+  }; 
+  */ 
+  // Hq.modules.version="2" 
+  
+ </script> 
+</head>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+	    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+		<link rel="stylesheet" type="text/css" href="static/hqui/themes/metro/easyui.css">
+		<link rel="stylesheet" type="text/css" href="static/hqui/themes/icon.css">
+		<link rel="stylesheet" type="text/css" href="static/hqui/themes/icon_hq.css">
+		<link rel="stylesheet" type="text/css" href="css/ppp/project/projectTable.css?pv=201702231">
+		<link rel="stylesheet" type="text/css" href="style/default/css/default.css?pv=201702231" />
+		<link href="css/map/base.css" rel="stylesheet" type="text/css" />
+		<link href="css/map/layout.css" rel="stylesheet" type="text/css" />
+		
+		<script type="text/javascript" src="static/hqui/jquery.easyui.min.gzjs"></script>
+		<script type="text/javascript" src="static/hqui/locale/easyui-lang-zh_CN.js"></script>
+		
+		<title>项目详情</title>
+	
+	<style type="text/css">
+	.view_table tr {height: 40px;}
+	</style>
+	
+	<style type="text/css">
+		.view_table {
+		    border-collapse: collapse;
+		    line-height: 14px;
+		    width: 100%;
+		    color: #7D6666;
+		    margin-top: 15px;
+		}
+		.view_table tr td.view_field_label {
+		    text-align: center;
+		    padding-right: 5px;
+		    background: #FFFFFF;
+		    /* background: #F7F7F7; */
+		    width: 20%;
+		    font-weight: bold;
+		}
+		
+		.view_table tr td.view_field_con {
+		    text-align: center;
+		    padding-left: 8px;
+		    width: 80%;
+		}
+	</style>
+</head>
+
+<body class="background">
+	<div class="header" style="height:80px;">
+		<div class="margin">
+			<div class="logo" style="margin-top:10px;">
+				<img src="images/map/logo1.png" />
+			</div>
+			<!-- <div class="CPPPC">
+				<img src="images/map/CPPPC.png" />
+			</div> -->
+		</div>
+	</div>
+	<div class="line"></div>
+	<div class="wrap" style="padding-bottom: 20px;">
+		<div class="Over">
+			<div class="dist">
+				<div class="att" style="margin-top: -50px;">
+					<center><font size="6" color="#004C93"><b>木垒县饮水安全工程更新改造（提质增效）</b></font> </center>
+
+					<table class="view_table">
+						
+						<tr>
+							<td class="view_field_label">所在地区</td>
+							<td class="view_field_con">新疆维吾尔自治区
+								
+									--> 昌吉回族自治州	
+								
+								
+									--> 木垒哈萨克自治县	
+								
+							</td>
+						</tr>
+						<tr>
+							<td class="view_field_label">所属行业</td>
+							<td class="view_field_con">水利建设->其他</td>
+						</tr>
+						<tr>
+							<td class="view_field_label">项目总投资</td>
+							<td class="view_field_con">        27,400万元</td>
+						</tr>
+						
+						<tr>
+							<td class="view_field_label">所处阶段</td>
+							<td class="view_field_con">识别阶段</td>
+						</tr>
+						<tr>
+							<td class="view_field_label">合作期限</td>
+							<td class="view_field_con">15年</td>
+						</tr>
+						<tr>
+							<td class="view_field_label">运作方式</td>
+							<td class="view_field_con">BOO</td>
+						</tr>
+						<tr>
+							<td class="view_field_label">回报机制</td>
+							<td class="view_field_con">使用者付费</td>
+						</tr>
+						<tr>
+							<td class="view_field_label">发起时间</td>
+							<td class="view_field_con">2016-04-01</td>
+						</tr>
+						<tr>
+							<td class="view_field_label">发起类型</td>
+							<td class="view_field_con">政府发起</td>
+						</tr>
+						
+						<tr>
+							<td class="view_field_label">项目概况</td>
+							<td class="view_field_con" style="text-align: left">
+								<div style="text-indent: 25px; line-height:2;">水源地保护，管网更新改造，水质净化处理，水质检测，信息化管理及配套设施。</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="view_field_label">项目联系人</td>
+							<td class="view_field_con">李晓亮</td>
+						</tr>
+						<tr>
+							<td class="view_field_label">联系电话</td>
+							<td class="view_field_con">13899648746</td>
+						</tr>
+						<tr>
+							<td class="view_field_label">示范级别</td>
+							<td class="view_field_con">其它</td>
+						</tr>
+						<tr>
+							<td class="view_field_label">示范批次</td>
+							<td class="view_field_con"></td>
+						</tr>
+					</table>
+					
+				</div>
+				
+				
+			</div>
+		</div>
+	</div>
+	<div class="footer">
+		<div class="mar">
+			<div class="img">
+				<img src="images/map/footer-img.png" width="50" height="62" />
+			</div>
+			<div class="dis">
+				<div class="guild">
+					<a href="javascript:void(0);">联系我们</a><i>|</i><a href="javascript:void(0);">加入我们</a><i>|</i><a href="javascript:void(0);">友情链接</a><i>|</i><a
+						href="javascript:void(0);">网站地图</a>
+				</div>
+				<div class="copyr">
+					政府和社会资本合作中心 © · All Rights Reserved <br /> 
+					京ICP备07504037号-2 京公网安备110102005872号-2 
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="code">
+		<div class="con">
+			<img src="images/map/code.png" width="105" height="135" />
+		</div>
+		<div class="con" style="margin-top:10px;"><img src="images/map/ppp_ma.png" width="105" height="135" /></div>
+	</div>
+	
+	
+	<script type="text/javascript" src="static/hqui/jquery.easyui.min.gzjs"></script>
+</body>
+</html></html>
