@@ -13,14 +13,22 @@ import (
 var novelMap = map[string]string{
 	"86_86745": "shengxu",
 	"1_1280":   "zaohuazhiwang",
+	"0_444":    "xiuxiankuangtu",
 }
 
 const (
-	host     = "http://m.biquge.tw"
-	novelNum = "86_86745" // 圣墟
-
-	from = 342
+	host = "http://m.biquge.tw"
 	size = 100
+)
+
+// const (
+// 	novelNum = "86_86745" // 圣墟
+// 	from     = 342
+// )
+
+const (
+	novelNum = "0_444" // 修仙狂徒
+	from     = 1200
 )
 
 // const (

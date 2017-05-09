@@ -45,33 +45,40 @@ func init() {
 func main() {
 	defer glog.Flush()
 
-	var badLink []string
-	projects := validUUIDs(projectListEntryPoint, totalPage)
+	// var badLink []string
+	// projects := processingProject(projectListEntryPoint, totalPage)
 
-	glog.Infof("all the processing stage pro: %v", projects)
-	glog.Infoln("begin downloading...")
-	for _, uuid := range projects {
-		glog.Infof("downloading %s..", uuid)
-		link := fmt.Sprintf("%s?projId=%s", singalProjectEntryPoint, uuid)
-		fileName := fmt.Sprintf("%s.html", uuid)
-		if err := downloadFile(link, fileName); err != nil {
-			glog.Errorf("download page by link %s failed, saving to badLik..", link)
-			badLink = append(badLink, link)
-			continue
-		}
-	}
-
-	glog.Infoln("getting all table head..")
-	var unformatLink []string
+	// glog.Infof("all the processing stage pro: %v", projects)
+	// glog.Infoln("begin downloading...")
 	// for _, uuid := range projects {
-
+	// 	glog.Infof("downloading %s..", uuid)
+	// 	link := fmt.Sprintf("%s?projId=%s", singalProjectEntryPoint, uuid)
+	// 	fileName := fmt.Sprintf("%s.html", uuid)
+	// 	if err := downloadFile(link, fileName); err != nil {
+	// 		glog.Errorf("download page by link %s failed, saving to badLik..", link)
+	// 		badLink = append(badLink, link)
+	// 		continue
+	// 	}
 	// }
 
-	glog.Infof("finished, badLink: %v", badLink)
+	// glog.Infoln("getting all table head..")
+	// var unformatLink []string
+	// // for _, uuid := range projects {
+
+	// // }
+
+	// glog.Infof("finished, badLink: %v", badLink)
+	// getTableHead("testdata/project.html")
 }
 
-func validUUIDs(entryPointURL string, totalPage int) []project {
-	var uuids []project
+func fileName(uuid string) string {
+	return fmt.Sprintf("%s.html", uuid)
+}
+func link(uuid string) string {
+	return fmt.Sprintf("%s?projId=%s", singalProjectEntryPoint, uuid)
+}
+func processingProject(entryPointURL string, totalPage int) []project {
+	var projects []project
 	for i := 1; i > totalPage; i++ {
 		glog.Infof("query %dsth page", i)
 		formData := url.Values{
@@ -92,17 +99,17 @@ func validUUIDs(entryPointURL string, totalPage int) []project {
 			if pro[Stage] == ProcessStage {
 				uuid, ok := pro[UUIDKey]
 				if !ok {
-					panic("%s not found, project: %v", UUIDKey, pro)
+					panic(fmt.Sprintf("%s not found, project: %v", UUIDKey, pro))
 				}
 				project := project{
 					UUID: uuid,
 					Name: pro[ProjectNameKey],
 				}
-				uuids = append(uuids, uuid)
+				projects = append(projects, project)
 			}
 		}
 	}
-	return uuids
+	return projects
 }
 func getProjectList(resp *http.Response) (*projectList, error) {
 	defer resp.Body.Close()
@@ -118,22 +125,40 @@ func getProjectList(resp *http.Response) (*projectList, error) {
 	return &list, nil
 }
 
-// func getAllTableHead(uuids []string, unformatLink []string) map[string]string {
-// 	th := make([string]string, 10)
-// 	for _, uuid := range uuids {
-
-// 	}
-// }
-// func getTableHead(fileName string) []string {
-// 	f, err := os.Open(filename)
-// 	if err != nil {
-// 		panic(fmt.Sprintf("getTableHead: open file failed: %v", err))
-// 	}
-// 	doc, err := goquery.NewDocumentFromReader(f)
-// 	if err != nil {
-// 		panic(fmt.Sprintf("NewDocumentFromReader failed: %v", err))
-// 	}
-// }
+func getAllTableHead(projects []project, unformatLink []string) ([]string, []string) {
+	result := make([string]string, 10)
+	for _, pro := range projects {
+		th, err := getTableHead(fileName(pro.UUID))
+		if err != nil {
+			glog.Errorf("project %s(%s) parse failed: %v, save to unformatLink..", pro.Name, pro.UUID, err)
+			unformatLink = append(unformatLink, link(pro.UUID))
+			continue
+		}
+		//
+	}
+}
+func getTableHead(fileName string) ([]string, error) {
+	f, err := os.Open(fileName)
+	if err != nil {
+		panic(fmt.Sprintf("getTableHead: open file failed: %v", err))
+	}
+	defer f.Close()
+	doc, err := goquery.NewDocumentFromReader(f)
+	if err != nil {
+		panic(fmt.Sprintf("NewDocumentFromReader failed: %v", err))
+	}
+	tbody := doc.Find(".wrap > .Over > .dist > .att > table.view_table")
+	if tbody.Length() != 1 {
+		return nil, fmt.Errorf("file %s not valid", fileName)
+	}
+	heads := tbody.Find("tbody > tr > td.view_field_label")
+	th := make([]string, 0, heads.Length())
+	for i := 0; i < heads.Length(); i++ {
+		glog.V(2).Infof("the %dth iterm: %s", i, heads.Eq(i).Text())
+		th = append(th, heads.Eq(i).Text())
+	}
+	return th, nil
+}
 
 func writeContentToFile(content, filename string) error {
 	dest, err := os.OpenFile(filename, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0666)
