@@ -35,8 +35,11 @@ docker_init:
 reload:
 	curl -X POST http://localhost:9090/-/reload
 
+reloadAM:
+	curl -X POST http://192.168.1.25:9093/-/reload
+
 test_am:
 	docker run -p 9093:9093 -v /home/kang/go/src/practice/promethus/dockerconfig/:/etc/config -d prom/alertmanager:v0.6.0 -config.file=/etc/config/alertmanager.json -storage.path=/alertmanager
 
 al_local:
-	alertmanager -config.file=dockerconfig/alertmanager.json
+	alertmanager -config.file=dockerconfig/alertmanager.json -log.level=debug
