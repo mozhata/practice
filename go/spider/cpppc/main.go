@@ -125,17 +125,21 @@ func getProjectList(resp *http.Response) (*projectList, error) {
 	return &list, nil
 }
 
+// getAllTableHead return th and unformatLink
 func getAllTableHead(projects []project, unformatLink []string) ([]string, []string) {
-	result := make([string]string, 10)
+	result := make([string]bool, 10)
 	for _, pro := range projects {
-		th, err := getTableHead(fileName(pro.UUID))
+		ths, err := getTableHead(fileName(pro.UUID))
 		if err != nil {
 			glog.Errorf("project %s(%s) parse failed: %v, save to unformatLink..", pro.Name, pro.UUID, err)
 			unformatLink = append(unformatLink, link(pro.UUID))
 			continue
 		}
-		//
+		for _, th := range ths {
+			result[th] = true
+		}
 	}
+	return result, unformatLink
 }
 func getTableHead(fileName string) ([]string, error) {
 	f, err := os.Open(fileName)
@@ -158,6 +162,9 @@ func getTableHead(fileName string) ([]string, error) {
 		th = append(th, heads.Eq(i).Text())
 	}
 	return th, nil
+}
+func parseProject() {
+
 }
 
 func writeContentToFile(content, filename string) error {
