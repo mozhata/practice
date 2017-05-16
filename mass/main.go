@@ -69,7 +69,6 @@ func init() {
 }
 
 func main() {
-
 	// osPath()
 	// urlParse()
 	// loopMap()
@@ -143,8 +142,8 @@ func main() {
 	// tryrouter.TrygorillaMux()
 	// tryrouter.TryForkRouter()
 	// tryrouter.TryKmux()
-
-	trySplit()
+	// trySplit()
+	tryStringen()
 }
 
 /*// not compliable, try reflect
@@ -171,6 +170,11 @@ func (cl *ClusterModel) nonblankCols(ingoredCols []string) []string {
 	return cols
 }
 */
+func tryStringen() {
+	fmt.Println(string("a"))
+	fmt.Println(string('a'))
+	fmt.Println(string(11))
+}
 
 func trySplit() {
 	small := "a/b/c"
