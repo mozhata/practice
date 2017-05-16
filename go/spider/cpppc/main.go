@@ -54,13 +54,16 @@ const (
 
 var (
 	groupKeyWords = []string{
-		"水利",
-		"生态保护",
-		"河道",
-		"废水",
-		"生态区",
-		"河流",
-		"污水处理",
+		"水",
+		"生态",
+		"保护",
+		"海",
+		"湖",
+		"湾",
+		"源",
+		"河",
+		"自然",
+		"环境",
 	}
 )
 
@@ -121,18 +124,18 @@ func init() {
 func main() {
 	defer glog.Flush()
 
-	// projects := processingProject(projectListEntryPoint)
+	projects := processingProject(projectListEntryPoint)
 
-	// glog.Infof("all the processing stage pro: %v", projects)
-	// saveIndexs(projects, "projectindexs.csv")
-	// generateAllLinks(rawProjectIndex, allProjectLinks)
+	glog.Infof("all the processing stage pro: %v", projects)
+	saveIndexs(projects, "projectindexs.csv")
+	generateAllLinks(rawProjectIndex, allProjectLinks)
 	// download file
-	// ReadLine(allProjectLinks, downloadByLink)
+	ReadLine(allProjectLinks, downloadByLink)
 
 	// parse local html
-	// ReadLine(sucessLinks, parseProjectBySuccessLine)
+	ReadLine(sucessLinks, parseProjectBySuccessLine)
 	// trim space to regin
-	// ReadLine(allProjects, trimSpace)
+	ReadLine(allProjects, trimSpace)
 	// grop projects
 	groupProjects()
 }
