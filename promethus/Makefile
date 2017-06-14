@@ -43,3 +43,13 @@ test_am:
 
 al_local:
 	alertmanager -config.file=dockerconfig/alertmanager.json -log.level=debug
+
+# http://192.168.1.103:48000/spi/v2/alerts/notifications/intervals/600\",\"send_resolved\":false}]}]}"
+# curl -XPOST http://localhost:9093/api/v1/alerts -d '{
+# curl -XPOST http://alertmanager:9093/api/v1/alerts -d '{
+#     "labels": {
+#        "alertname": "DiskRunningFull",
+#        "dev": "sda1",
+#        "instance": "example3"
+#      }
+#   }'
