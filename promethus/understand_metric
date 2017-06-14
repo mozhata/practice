@@ -1,4 +1,15 @@
 # HELP container_cpu_user_seconds_total Cumulative user cpu time consumed in seconds.
 # TYPE container_cpu_user_seconds_total counter
 
+# HELP container_memory_usage_bytes Current memory usage in bytes. // current value represent current memory using
+# TYPE container_memory_usage_bytes gauge
+
+# HELP container_cpu_usage_seconds_total Cumulative cpu time consumed per cpu in seconds.
+# TYPE container_cpu_usage_seconds_total counter
+sum(rate(
+	container_cpu_usage_seconds_total
+		{
+			namespace="admin",pod_name="tomcat-1452093961-5t6g5"
+		}[5m]
+	))  by (namespace, pod_name)
 

@@ -13,6 +13,7 @@ import (
 
 	goji "goji.io"
 
+	bmux "github.com/beego/mux"
 	"github.com/gorilla/mux"
 	mux9 "github.com/issue9/mux"
 )
@@ -77,7 +78,25 @@ var (
 		kkk.Register(dynamic9, "GET", khandler)
 		return kkk
 	}()
+	bMux = func() *bMux {
+		bMux := bmux.New()
+		bmux.Get("/abc/:id", stdHandler)
+	}
 )
+
+/*
+func main() {
+	mx := mux.New()
+	mx.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("hello, beego mux"))
+	})
+	mx.Get("/abc/:id", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "hello, abc page %s", mux.Param(r,":id"))
+	})
+
+	log.Fatal(http.ListenAndServe("127.0.0.1:9999", mx))
+}
+*/
 
 // func init() {
 // 	flag.Lookup("logtostderr").Value.Set("true")

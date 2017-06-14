@@ -143,7 +143,22 @@ func main() {
 	// tryrouter.TryForkRouter()
 	// tryrouter.TryKmux()
 	// trySplit()
-	tryStringen()
+	// tryStringen()
+	// tryLoopDelMap()
+	// cha.TryChannel()
+
+	ch := make(chan int, 1024)
+	for i := 0; i < 100; i++ {
+		select {
+		case ch <- 1:
+		case ch <- 2:
+		}
+		// i := <-ch
+		// fmt.Printf("value received: %v\n", i)
+	}
+	for i := range ch {
+		fmt.Printf("value received: %v\n", i)
+	}
 }
 
 /*// not compliable, try reflect
@@ -170,6 +185,22 @@ func (cl *ClusterModel) nonblankCols(ingoredCols []string) []string {
 	return cols
 }
 */
+
+func tryLoopDelMap() {
+	dic := map[string]string{
+		"a": "asdf",
+		"b": "sadf",
+		"c": "dsf",
+	}
+	fmt.Printf("origin dic: %#v\n,loop del self..\n", dic)
+	var counter int
+	for k := range dic {
+		fmt.Printf("couter %d del %s\n", counter, k)
+		delete(dic, k)
+		counter++
+	}
+	fmt.Printf("after looped: %#v", dic)
+}
 func tryStringen() {
 	fmt.Println(string("a"))
 	fmt.Println(string('a'))
