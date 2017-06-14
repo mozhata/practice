@@ -146,7 +146,6 @@ func main() {
 	// tryStringen()
 	// tryLoopDelMap()
 	// cha.TryChannel()
-	// func TryChannel() {
 
 	ch := make(chan int, 1024)
 	for i := 0; i < 100; i++ {
