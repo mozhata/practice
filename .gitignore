@@ -20,3 +20,5 @@ go/novel/*.txt
 /home/kang/go/src/practice/go/gopl/gopl
 mass/mass
 searchengine
+go/spider/novel/logs/
+go/spider/novel/*.txt
