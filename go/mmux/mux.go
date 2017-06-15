@@ -1,11 +1,11 @@
-package kmux
+package mmux
 
 import (
 	"net/http"
 )
 
 type Mux struct {
-	trees map[string]*route
+	routes map[string]*route
 
 	// Configurable http.Handler which is called when no matching route is
 	// found. If it is not set, http.NotFound is used.
@@ -27,21 +27,18 @@ type Mux struct {
 }
 
 func New() *Mux {
-	return &Mux{}
+	routes := make(map[string]*route)
+	return Mux{routes: routes}
 }
 
 // Make sure the Mux conforms with the http.Handler interface
 var _ http.Handler = New()
 
 func (m *Mux) Register(path, method string, handle Handle) {
-	if m.trees == nil {
-		m.trees = make(map[string]*route)
-	}
-
-	root := m.trees[method]
+	root := m.routes[method]
 	if root == nil {
 		root = newRoute()
-		m.trees[method] = root
+		m.routes[method] = root
 	}
 
 	root.add(validatePattern(path), handle)
@@ -53,7 +50,7 @@ func (k *Mux) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 
 	path := unifyPath(req.URL.Path)
-	if root := k.trees[req.Method]; root != nil {
+	if root := k.routes[req.Method]; root != nil {
 		if handle, ps := root.getHandle(path); handle != nil {
 			handle(w, req, ps)
 			return

@@ -1,4 +1,4 @@
-package kmux
+package mmux
 
 import (
 	"net/http"
@@ -53,6 +53,12 @@ func (t *trie) match(segments []string, pathVariables map[string]string) (Handle
 	return nil, false
 }
 
+// func (t *trie) add(segments []string, handle Handle) {
+// 	if len(segments) == 1 {
+
+// 	}
+// }
+
 func newRoute() *route {
 	r := route{}
 	r.allRegistered = make(map[string]bool)
@@ -76,8 +82,27 @@ type Param struct {
 
 func (r *route) add(pattern string, handle Handle) {
 	if handle == nil {
-		panic("handler should not empty")
+		panic("handler should not empty. register pattern: " + pattern)
 	}
+	// check if the pattern have registered to statics
+	if _, ok := r.statics[pattern]; ok {
+		panic("pattern " + pattern + "already registered.")
+	}
+	// check whether the pattern contains regx segment
+	if !strings.Contains(pattern, "/:") {
+		r.statics[pattern] = handle
+		return
+	}
+	// pattern contains regx segments.
+	// check whether the pattern registered to dynamics
+	segments := strings.Split(pattern, "/")
+	// ignore the first and last emtyp string
+	segments := segments[:len(segments)-1]
+	pathVariables := make(map[string]string)
+	if _, ok := r.dynamics.match(segments, pathVariables); ok {
+		panic("pattern " + pattern + "already registered.")
+	}
+
 	// TODO: change this
 
 	if r.allRegistered == nil {
