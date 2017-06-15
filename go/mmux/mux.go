@@ -84,7 +84,7 @@ func validatePattern(pattern string) string {
 		panic("emtpty pattern !")
 	}
 	if pattern[0] != '/' {
-		panic("path must begin with '/' in path '" + pattern + "'")
+		panic("path must begin with '/'. pattern: '" + pattern + "'")
 	}
 	segments := strings.Split(pattern, "/")
 	for _, seg := range segments[1 : len(segments)-1] {

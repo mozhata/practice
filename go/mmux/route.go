@@ -20,17 +20,13 @@ type trie struct {
 }
 
 func (t *trie) match(segments []string, pathVariables map[string]string) (Handle, bool) {
-	// seg 相同, 比较下一级
-	// seg 不同, 1, segement是regx, 比较下一级
-	// seg 不同, 2, segement是static, return false
 	// TODO: not neccessary
-	if len(segments) < 1 {
-		return nil, false
-	}
+	// if len(segments) < 1 {
+	// 	return nil, false
+	// }
 	if t.segment == "" && len(t.branches) == 0 {
 		return nil, false
 	}
-	// if segments[0]
 	if len(segments) == 1 {
 		if segments[0] == t.segment {
 			return t.handle, true
@@ -41,8 +37,6 @@ func (t *trie) match(segments []string, pathVariables map[string]string) (Handle
 		}
 		return nil, false
 	}
-	// len(segements) > 1
-	fmt.Printf("t.segment: %q\n", t.segment)
 	if t.segment[0] == ':' {
 		pathVariables[t.segment[1:]] = segments[0]
 	} else {
@@ -94,7 +88,7 @@ func (r *route) add(pattern string, handle Handle) {
 	}
 	// check if the pattern have registered to statics
 	if _, ok := r.statics[pattern]; ok {
-		panic("pattern " + pattern + "already registered.")
+		panic("pattern " + pattern + " already registered.")
 	}
 	// check whether the pattern contains regx segment
 	if !strings.Contains(pattern, "/:") {
@@ -114,19 +108,21 @@ func (r *route) add(pattern string, handle Handle) {
 		}
 	}
 	pathVariables := make(map[string]string)
-	if _, ok := r.dynamics.match(segments, pathVariables); ok {
-		// build exist pattern
-		shadows := make([]string, 0, len(segments))
-		for _, seg := range segments {
-			if seg[0] == ':' {
-				regxSeg, _ := findKeyByValue(pathVariables, seg)
-				shadows = append(shadows, ":"+regxSeg)
-				continue
+	for _, branch := range r.dynamics.branches {
+		if _, ok := branch.match(segments, pathVariables); ok {
+			// build exist pattern
+			shadows := make([]string, 0, len(segments))
+			for _, seg := range segments {
+				if seg[0] == ':' {
+					regxSeg, _ := findKeyByValue(pathVariables, seg)
+					shadows = append(shadows, ":"+regxSeg)
+					continue
+				}
+				shadows = append(shadows, seg)
 			}
-			shadows = append(shadows, seg)
+			existPattern := "/" + strings.Join(shadows, "/") + "/"
+			panic(fmt.Sprintf("pattern %s conflict with %s", pattern, existPattern))
 		}
-		existPattern := "/" + strings.Join(shadows, "/")
-		panic(fmt.Sprintf("pattern %s conflict with %s", pattern, existPattern))
 	}
 	r.dynamics.add(segments, handle)
 }
