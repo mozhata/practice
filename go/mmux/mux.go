@@ -1,7 +1,9 @@
 package mmux
 
 import (
+	"fmt"
 	"net/http"
+	"strings"
 )
 
 type Mux struct {
@@ -28,7 +30,7 @@ type Mux struct {
 
 func New() *Mux {
 	routes := make(map[string]*route)
-	return Mux{routes: routes}
+	return &Mux{routes: routes}
 }
 
 // Make sure the Mux conforms with the http.Handler interface
@@ -49,6 +51,7 @@ func (k *Mux) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		defer k.recv(w, req)
 	}
 
+	fmt.Printf("ServeHTTP.req.URL.Path: %q\n", req.URL.Path)
 	path := unifyPath(req.URL.Path)
 	if root := k.routes[req.Method]; root != nil {
 		if handle, ps := root.getHandle(path); handle != nil {
@@ -77,8 +80,17 @@ func unifyPath(path string) string {
 }
 
 func validatePattern(pattern string) string {
+	if pattern == "" {
+		panic("emtpty pattern !")
+	}
 	if pattern[0] != '/' {
 		panic("path must begin with '/' in path '" + pattern + "'")
+	}
+	segments := strings.Split(pattern, "/")
+	for _, seg := range segments[1 : len(segments)-1] {
+		if seg == "" || seg == ":" {
+			panic("pattern " + pattern + "is not vald")
+		}
 	}
 
 	return unifyPath(pattern)
