@@ -14,6 +14,7 @@ var novelMap = map[string]string{
 	"86_86745": "shengxu",
 	"1_1280":   "zaohuazhiwang",
 	"0_444":    "xiuxiankuangtu",
+	"3_3271":   "haoren",
 }
 
 const (
@@ -21,9 +22,14 @@ const (
 	size = 200
 )
 
+const (
+	novelNum = "3_3271" // 郝仁
+	from     = 600
+)
+
 // const (
 // 	novelNum = "86_86745" // 圣墟
-// 	from     = 380
+// 	from     = 415
 // )
 
 // const (
@@ -31,10 +37,10 @@ const (
 // 	from     = 1200
 // )
 
-const (
-	novelNum = "1_1280" // 造化之王
-	from     = 1800
-)
+// const (
+// novelNum = "1_1280" // 造化之王
+// from     = 1878
+// )
 
 type chapterLink struct {
 	Href  string `json:"href"`
@@ -87,6 +93,8 @@ func main() {
 					"<>",
 					"纯文字在线阅读本站域名手机同步阅读请访问",
 					"%一%本%读%小说",
+					"混血女主播直播后忘关摄像头",
+					"私_生活视频遭曝光!!请关注微信公众号在线看：meinvmei222（长按三秒复制）！！",
 				}
 				suffixTrims := []string{
 					"(未完待续……)",

@@ -19,38 +19,45 @@ type trie struct {
 	branches []*trie
 }
 
-func (t *trie) match(segments []string, pathVariables map[string]string) (Handle, bool) {
-	// TODO: not neccessary
-	// if len(segments) < 1 {
-	// 	return nil, false
-	// }
-	if t.segment == "" && len(t.branches) == 0 {
-		return nil, false
+// return Handle, score, matched
+func (t *trie) match(segments []string, score int, pathVariables map[string]string) (Handle, int) {
+	if len(segments) == 0 || t.segment == "" && len(t.branches) == 0 {
+		return nil, 0
 	}
+	score = score + 1
 	if len(segments) == 1 {
 		if segments[0] == t.segment {
-			return t.handle, true
+			return t.handle, score + 1
 		}
 		if t.segment[0] == ':' {
 			pathVariables[t.segment[1:]] = segments[0]
-			return t.handle, true
+			return t.handle, score
 		}
-		return nil, false
+		return nil, 0
 	}
+	// len(segments) > 1
 	if t.segment[0] == ':' {
 		pathVariables[t.segment[1:]] = segments[0]
-	} else {
-		if t.segment != segments[0] {
-			return nil, false
-		}
+	} else if t.segment != segments[0] {
+		return nil, 0
 	}
+	var (
+		flag      int
+		handlFunc Handle
+	)
 	for _, tree := range t.branches {
-		if handler, matched := tree.match(segments[1:], pathVariables); matched {
-			return handler, true
+		handle, sumScore := tree.match(segments[1:], score, pathVariables)
+		if flag < sumScore {
+			flag = sumScore
+			handlFunc = handle
 		}
 	}
+	if flag > 0 {
+		return handlFunc, flag
+	}
+	// regx not match
 	delete(pathVariables, t.segment[1:])
-	return nil, false
+	return nil, 0
 }
 
 func (t *trie) add(segments []string, handle Handle) {
@@ -99,7 +106,7 @@ func (r *route) add(pattern string, handle Handle) {
 	// check whether the pattern registered to dynamics
 	segments := strings.Split(pattern, "/")
 	// ignore the first and last emtyp string
-	fmt.Printf("\n\nroute.add, segments: %#v, segments[1:len(segments) -1]: %#v\n\n", segments, segments[1:len(segments)-1])
+	// fmt.Printf("\n\nroute.add, segments: %#v, segments[1:len(segments) -1]: %#v\n\n", segments, segments[1:len(segments)-1])
 	segments = segments[1 : len(segments)-1]
 	// check segment is valid
 	for _, seg := range segments {
@@ -109,7 +116,7 @@ func (r *route) add(pattern string, handle Handle) {
 	}
 	pathVariables := make(map[string]string)
 	for _, branch := range r.dynamics.branches {
-		if _, ok := branch.match(segments, pathVariables); ok {
+		if _, score := branch.match(segments, 0, pathVariables); score > 0 {
 			// build exist pattern
 			shadows := make([]string, 0, len(segments))
 			for _, seg := range segments {
@@ -143,9 +150,10 @@ func (r *route) getHandle(pattern string) (Handle, map[string]string) {
 	}
 	pathVariables := make(map[string]string)
 	parts := strings.Split(pattern, "/")
+	var score int
 	for _, branch := range r.dynamics.branches {
-		h, ok = branch.match(parts[1:len(parts)-1], pathVariables)
-		if ok {
+		h, score = branch.match(parts[1:len(parts)-1], 1, pathVariables)
+		if score > 0 {
 			return h, pathVariables
 		}
 	}
