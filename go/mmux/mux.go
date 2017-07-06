@@ -1,7 +1,6 @@
 package mmux
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 )
@@ -51,7 +50,6 @@ func (k *Mux) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		defer k.recv(w, req)
 	}
 
-	fmt.Printf("ServeHTTP.req.URL.Path: %q\n", req.URL.Path)
 	path := unifyPath(req.URL.Path)
 	if root := k.routes[req.Method]; root != nil {
 		if handle, ps := root.getHandle(path); handle != nil {
@@ -79,12 +77,15 @@ func unifyPath(path string) string {
 	return path
 }
 
-func validatePattern(pattern string) string {
+func validatePattern(pattern string) []string {
 	if pattern == "" {
 		panic("emtpty pattern !")
 	}
 	if pattern[0] != '/' {
 		panic("path must begin with '/'. pattern: '" + pattern + "'")
+	}
+	if pattern[len(pattern)-1] != '/' {
+		pattern += "/"
 	}
 	segments := strings.Split(pattern, "/")
 	for _, seg := range segments[1 : len(segments)-1] {
@@ -92,6 +93,5 @@ func validatePattern(pattern string) string {
 			panic("pattern " + pattern + "is not vald")
 		}
 	}
-
-	return unifyPath(pattern)
+	return segments
 }
