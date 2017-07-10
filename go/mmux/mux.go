@@ -77,7 +77,7 @@ func unifyPath(path string) string {
 	return path
 }
 
-func validatePattern(pattern string) []string {
+func validatePattern(pattern string) string {
 	if pattern == "" {
 		panic("emtpty pattern !")
 	}
@@ -93,5 +93,5 @@ func validatePattern(pattern string) []string {
 			panic("pattern " + pattern + "is not vald")
 		}
 	}
-	return segments
+	return pattern
 }
