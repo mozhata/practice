@@ -77,6 +77,7 @@ func unifyPath(path string) string {
 	return path
 }
 
+// TODO: 这段代码已到 route.add()里面去
 func validatePattern(pattern string) string {
 	if pattern == "" {
 		panic("emtpty pattern !")

@@ -20,7 +20,7 @@ var (
 
 func TestMux(t *testing.T) {
 
-	mhandler := func(w http.ResponseWriter, r *http.Request, params map[string]string) {
+	mhandler := func(w http.ResponseWriter, r *http.Request, params mmux.PathVars) {
 		fmt.Printf("the URL.Path: %q, params: %s\n", r.URL.Path, handy.MarshalJSONOrDie(params))
 		fmt.Fprintf(w, "the URL.Path: %q, params: %s\n", r.URL.Path, handy.MarshalJSONOrDie(params))
 	}

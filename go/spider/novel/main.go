@@ -24,7 +24,7 @@ const (
 
 const (
 	novelNum = "3_3271" // 郝仁
-	from     = 600
+	from     = 800
 )
 
 // const (
