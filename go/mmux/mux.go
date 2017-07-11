@@ -1,9 +1,6 @@
 package mmux
 
-import (
-	"net/http"
-	"strings"
-)
+import "net/http"
 
 type Mux struct {
 	routes map[string]*route
@@ -35,14 +32,14 @@ func New() *Mux {
 // Make sure the Mux conforms with the http.Handler interface
 var _ http.Handler = New()
 
-func (m *Mux) Register(path, method string, handle Handle) {
+func (m *Mux) Register(pattern, method string, handle Handle) {
 	root := m.routes[method]
 	if root == nil {
 		root = newRoute()
 		m.routes[method] = root
 	}
 
-	root.add(validatePattern(path), handle)
+	root.add(pattern, handle)
 }
 
 func (k *Mux) ServeHTTP(w http.ResponseWriter, req *http.Request) {
@@ -75,24 +72,4 @@ func unifyPath(path string) string {
 		path += "/"
 	}
 	return path
-}
-
-// TODO: 这段代码已到 route.add()里面去
-func validatePattern(pattern string) string {
-	if pattern == "" {
-		panic("emtpty pattern !")
-	}
-	if pattern[0] != '/' {
-		panic("path must begin with '/'. pattern: '" + pattern + "'")
-	}
-	if pattern[len(pattern)-1] != '/' {
-		pattern += "/"
-	}
-	segments := strings.Split(pattern, "/")
-	for _, seg := range segments[1 : len(segments)-1] {
-		if seg == "" || seg == ":" {
-			panic("pattern " + pattern + "is not vald")
-		}
-	}
-	return pattern
 }
