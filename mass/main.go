@@ -106,7 +106,7 @@ func main() {
 	// graceGoruntine()
 	// tryCkecBankCard()
 	// chanPrac()
-	// chanPracBuffer()
+	chanPracBuffer()
 	// formatFloat()
 	// tryAddDate()
 	// tryConvertPanicToError()
@@ -146,19 +146,7 @@ func main() {
 	// tryStringen()
 	// tryLoopDelMap()
 	// cha.TryChannel()
-
-	ch := make(chan int, 1024)
-	for i := 0; i < 100; i++ {
-		select {
-		case ch <- 1:
-		case ch <- 2:
-		}
-		// i := <-ch
-		// fmt.Printf("value received: %v\n", i)
-	}
-	for i := range ch {
-		fmt.Printf("value received: %v\n", i)
-	}
+	// readFile("/home/go/src/tenx_workspace/enterprise_prometheus.yml")
 }
 
 /*// not compliable, try reflect
@@ -185,6 +173,13 @@ func (cl *ClusterModel) nonblankCols(ingoredCols []string) []string {
 	return cols
 }
 */
+func readFile(fileName string) {
+	f, err := os.Open(fileName)
+	Check(err)
+	b, err := ioutil.ReadAll(f)
+	Check(err)
+	Pf("content:\n%q", string(b))
+}
 
 func tryLoopDelMap() {
 	dic := map[string]string{
@@ -753,7 +748,7 @@ func chanPracBuffer() {
 		}(i)
 	}
 
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 100; i++ {
 		v := <-ch
 		fmt.Printf("the %dth v from pipe: %d \n", i, v)
 	}
