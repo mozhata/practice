@@ -147,6 +147,11 @@ func main() {
 	// tryLoopDelMap()
 	// cha.TryChannel()
 	// readFile("/home/go/src/tenx_workspace/enterprise_prometheus.yml")
+	slic := []string{}
+	slic2 := []string{""}
+	slic3 := []string{"", ""}
+	Pf("slic: %q\nslic2: %q\nslic3: %q\n",
+		strings.Join(slic, ","), strings.Join(slic2, ","), strings.Join(slic3, ","))
 }
 
 /*// not compliable, try reflect
