@@ -106,7 +106,7 @@ func main() {
 	// graceGoruntine()
 	// tryCkecBankCard()
 	// chanPrac()
-	// chanPracBuffer()
+	chanPracBuffer()
 	// formatFloat()
 	// tryAddDate()
 	// tryConvertPanicToError()
@@ -146,6 +146,7 @@ func main() {
 	// tryStringen()
 	// tryLoopDelMap()
 	// cha.TryChannel()
+	// readFile("/home/go/src/tenx_workspace/enterprise_prometheus.yml")
 	slic := []string{}
 	slic2 := []string{""}
 	slic3 := []string{"", ""}
@@ -177,6 +178,13 @@ func (cl *ClusterModel) nonblankCols(ingoredCols []string) []string {
 	return cols
 }
 */
+func readFile(fileName string) {
+	f, err := os.Open(fileName)
+	Check(err)
+	b, err := ioutil.ReadAll(f)
+	Check(err)
+	Pf("content:\n%q", string(b))
+}
 
 func tryLoopDelMap() {
 	dic := map[string]string{
@@ -745,7 +753,7 @@ func chanPracBuffer() {
 		}(i)
 	}
 
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 100; i++ {
 		v := <-ch
 		fmt.Printf("the %dth v from pipe: %d \n", i, v)
 	}
