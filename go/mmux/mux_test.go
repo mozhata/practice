@@ -6,7 +6,6 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"practice/go/mmux"
-	"strings"
 	"testing"
 
 	"github.com/mozhata/handy"
@@ -26,7 +25,7 @@ func TestMux(t *testing.T) {
 	}
 	convey.Convey("testMux", t, func() {
 		mMux := mmux.New()
-		convey.Convey("test register static, and ServeHTTP", func() {
+		/*convey.Convey("test register static, and ServeHTTP", func() {
 			static := "/abc/bcd/cde/efg/fgh"
 			mMux.Register(static, "GET", mhandler)
 			resp := lunchHTTPGET(mMux, static, nil)
@@ -96,35 +95,44 @@ func TestMux(t *testing.T) {
 			convey.So(strings.Contains(resp.Body.String(), dynamic52), convey.ShouldBeTrue)
 			convey.So(strings.Contains(resp.Body.String(), dynamic52), convey.ShouldBeTrue)
 			convey.So(strings.Contains(resp.Body.String(), `params: [{"Key":"id1","Value":"id1"},{"Key":"id2","Value":"this-is-id2"}]`), convey.ShouldBeTrue)
-		})
+		})*/
 		convey.Convey("test register conflict pattern", func() {
-			convey.Convey("static conflict", func() {
+			convey.Convey("static same", func() {
 				var msg string
 				staticPattern := "/a/b/c/static"
 				mMux.Register(staticPattern, "GET", mhandler)
-				// func() {
-				// defer func() {
-				// 	r := recover()
-				// 	msg = fmt.Sprintf("%v", r)
-				// }()
-				mMux.Register(staticPattern, "GET", mhandler)
-				// }()
-				convey.So(msg, convey.ShouldEqual, "pattern "+staticPattern+"/ already registered.")
+				func() {
+					defer func() {
+						r := recover()
+						msg = fmt.Sprintf("%v", r)
+					}()
+					mMux.Register(staticPattern, "GET", mhandler)
+				}()
+				convey.So(msg, convey.ShouldEqual, "pattern "+staticPattern+"/ conflict with "+unifyPath(staticPattern))
 			})
-			// convey.Convey("dynamic conflict", func() {
-			// 	var msg string
-			// 	pattern1 := "/a/:b/:c/dynamic"
-			// 	pattern2 := "/a/:bb/:cc/dynamic"
-			// 	mMux.Register(pattern1, "GET", mhandler)
-			// 	func() {
-			// 		defer func() {
-			// 			r := recover()
-			// 			msg = fmt.Sprintf("%v", r)
-			// 		}()
-			// 		mMux.Register(pattern2, "GET", mhandler)
-			// 	}()
-			// 	convey.So(msg, convey.ShouldEqual, fmt.Sprintf("pattern %s/ conflict with %s/", pattern2, pattern1))
-			// })
+			convey.Convey("dynamic conflict", func() {
+				var msg string
+				pattern1 := "/a/:b/:c/dynamic"
+				pattern2 := "/a/:bb/:cc/dynamic"
+				pattern3 := "/a/:bb/ss/dynamic"
+				mMux.Register(pattern1, "GET", mhandler)
+				func() {
+					defer func() {
+						r := recover()
+						msg = fmt.Sprintf("%v", r)
+					}()
+					mMux.Register(pattern2, "GET", mhandler)
+				}()
+				convey.So(msg, convey.ShouldEqual, fmt.Sprintf("pattern %s/ conflict with %s/", pattern2, pattern1))
+				func() {
+					defer func() {
+						r := recover()
+						msg = fmt.Sprintf("%v", r)
+					}()
+					mMux.Register(pattern3, "GET", mhandler)
+				}()
+				convey.So(msg, convey.ShouldEqual, fmt.Sprintf("pattern %s/ conflict with %s/", pattern3, pattern1))
+			})
 		})
 		/*convey.Convey("static pattern prior to dynamic", func() {
 			static := "/this/is/static/pattern"

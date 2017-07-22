@@ -128,20 +128,20 @@ func (r *route) add(pattern string, handle Handle) {
 			panic("pattern \"" + pattern + "\" is not valid")
 		}
 	}
-
 	h, pathVariables := r.match(pattern)
 	if h != nil {
 		// already exist
-		shadows := make([]string, 0, len(segments))
+		shadows := make([]string, len(segments))
 		var regxIndex int
-		for _, seg := range segments {
+		for i, seg := range segments[1 : len(segments)-1] {
+
 			if seg[0] == ':' {
 				param := pathVariables[regxIndex]
-				shadows = append(shadows, ":"+param.Key)
+				shadows[i+1] = ":" + param.Key
 				regxIndex = regxIndex + 1
 				continue
 			}
-			shadows = append(shadows, seg)
+			shadows[i+1] = seg
 		}
 		panic(fmt.Sprintf("pattern %s conflict with %s", pattern, strings.Join(shadows, "/")))
 	}
