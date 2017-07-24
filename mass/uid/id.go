@@ -1,4 +1,4 @@
-package others
+package uid
 
 import (
 	"crypto/rand"

@@ -20,6 +20,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"practice/mass/def"
 	"regexp"
 	"runtime"
 	"sort"
@@ -92,7 +93,6 @@ func main() {
 	// tesArrayEqual()
 	// testMapLen()
 	// WirdTest()
-	// testDefer()
 	// tryBuffer()
 	// tryPrintfV()
 	// tryCrypto()
@@ -106,10 +106,9 @@ func main() {
 	// graceGoruntine()
 	// tryCkecBankCard()
 	// chanPrac()
-	chanPracBuffer()
+	// chanPracBuffer()
 	// formatFloat()
 	// tryAddDate()
-	// tryConvertPanicToError()
 	// maxInt64()
 	// tryIfElse()
 	// lenStr()
@@ -117,7 +116,6 @@ func main() {
 	// tryFeildFunc()
 	// trySlice()
 	// tryPem()
-	// tryJson()
 	// tryBreak()
 	// tryRenameType()
 	// tryDelv()
@@ -134,9 +132,10 @@ func main() {
 	// trygob.EncodeDecode()
 	// trygob.InterfaceEncDec()
 	// trygob.GobEncoderDecoder()
+	// tryJson()
 	// tryjson.Empty()
 	// tryjson.UmarshalJSON()
-	// others.TryUniqueID()
+	// uid.TryUniqueID()
 	// tryrouter.TryGoji()
 	// tryrouter.TryIssue9Mux()
 	// tryrouter.TrygorillaMux()
@@ -147,11 +146,13 @@ func main() {
 	// tryLoopDelMap()
 	// cha.TryChannel()
 	// readFile("/home/go/src/tenx_workspace/enterprise_prometheus.yml")
-	slic := []string{}
-	slic2 := []string{""}
-	slic3 := []string{"", ""}
-	Pf("slic: %q\nslic2: %q\nslic3: %q\n",
-		strings.Join(slic, ","), strings.Join(slic2, ","), strings.Join(slic3, ","))
+	// tryJoin()
+	// loopGorountine()
+	// rangeStruct()
+	// implement()
+	// def.DeferCall()
+	// def.DeferCallV2()
+	def.DeferCallV3()
 }
 
 /*// not compliable, try reflect
@@ -178,6 +179,74 @@ func (cl *ClusterModel) nonblankCols(ingoredCols []string) []string {
 	return cols
 }
 */
+func implement() {
+	t := Teacher{}
+	t.ShowA()
+	t.ShowB()
+}
+
+type People struct{}
+
+func (p *People) ShowA() {
+	fmt.Println("showA")
+	p.ShowB()
+}
+func (p *People) ShowB() {
+	fmt.Println("showB")
+}
+
+type Teacher struct {
+	People
+}
+
+func (t *Teacher) ShowB() {
+	fmt.Println("teacher showB")
+}
+
+func loopGorountine() {
+	runtime.GOMAXPROCS(1)
+	wg := sync.WaitGroup{}
+	wg.Add(20)
+	for i := 0; i < 10; i++ {
+		go func() {
+			fmt.Println("i: ", i)
+			wg.Done()
+		}()
+	}
+	for i := 0; i < 10; i++ {
+		go func(i int) {
+			fmt.Println("i: ", i)
+			wg.Done()
+		}(i)
+	}
+	wg.Wait()
+}
+
+func rangeStruct() {
+	type student struct {
+		Name string
+		Age  int
+	}
+	m := make(map[string]*student)
+	stus := []student{
+		{Name: "zhou", Age: 24},
+		{Name: "li", Age: 23},
+		{Name: "wang", Age: 22},
+	}
+	for _, stu := range stus {
+		fmt.Printf("pointer of stu: %p\n", &stu)
+		m[stu.Name] = &stu
+	}
+	fmt.Printf("m: %#v\n", m)
+}
+
+func tryJoin() {
+	slic := []string{}
+	slic2 := []string{""}
+	slic3 := []string{"", ""}
+	Pf("slic: %q\nslic2: %q\nslic3: %q\n",
+		strings.Join(slic, ","), strings.Join(slic2, ","), strings.Join(slic3, ","))
+}
 func readFile(fileName string) {
 	f, err := os.Open(fileName)
 	Check(err)
@@ -679,16 +748,6 @@ func maxInt64() {
 // 	P("this is init at main package of 3")
 // }
 
-func tryConvertPanicToError() {
-	defer func() {
-		if r := recover(); r != nil {
-			err := r.(error)
-			fmt.Printf("recovered from panic, panic: %s", err)
-		}
-	}()
-	panic("ops...")
-}
-
 func tryAddDate() {
 	date := time.Date(2016, 2, 29, 0, 0, 0, 0, time.UTC)
 	nextMonth := date.AddDate(0, 2, 0)
@@ -911,19 +970,6 @@ func tryBuffer() {
 	P(n, err)
 	P(n2, err2)
 	P(n3, err3)
-}
-
-func testDefer() {
-	start := time.Now()
-	startCopy := start
-	P("start: ", start)
-	defer func(startCopy time.Time) {
-		P("start at defer: ", start)
-		P("startCopy at defer: ", startCopy)
-	}(startCopy)
-	time.Sleep(time.Second * 1)
-	start = time.Now()
-	startCopy = time.Now()
 }
 
 func WirdTest() {
