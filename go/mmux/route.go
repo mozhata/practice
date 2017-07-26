@@ -130,6 +130,7 @@ func (r *route) add(pattern string, handle Handle) {
 	}
 	h, pathVariables := r.match(pattern)
 	if h != nil {
+		fmt.Printf("pathVariables: %#v\n\n", pathVariables)
 		// already exist
 		shadows := make([]string, len(segments))
 		var regxIndex int

@@ -112,18 +112,18 @@ func TestMux(t *testing.T) {
 			})
 			convey.Convey("dynamic conflict", func() {
 				var msg string
-				pattern1 := "/a/:b/:c/dynamic"
-				pattern2 := "/a/:bb/:cc/dynamic"
-				pattern3 := "/a/:bb/ss/dynamic"
-				mMux.Register(pattern1, "GET", mhandler)
-				func() {
-					defer func() {
-						r := recover()
-						msg = fmt.Sprintf("%v", r)
-					}()
-					mMux.Register(pattern2, "GET", mhandler)
-				}()
-				convey.So(msg, convey.ShouldEqual, fmt.Sprintf("pattern %s/ conflict with %s/", pattern2, pattern1))
+				pattern1 := "/a/:b/ss/dynamic"
+				// pattern2 := "/a/:bb/:cc/dynamic"
+				pattern3 := "/a/:bb/:c/dynamic"
+				// mMux.Register(pattern1, "GET", mhandler)
+				// func() {
+				// 	defer func() {
+				// 		r := recover()
+				// 		msg = fmt.Sprintf("%v", r)
+				// 	}()
+				// 	mMux.Register(pattern2, "GET", mhandler)
+				// }()
+				// convey.So(msg, convey.ShouldEqual, fmt.Sprintf("pattern %s/ conflict with %s/", pattern2, pattern1))
 				func() {
 					defer func() {
 						r := recover()
