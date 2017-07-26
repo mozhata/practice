@@ -5,16 +5,46 @@ import (
 	"fmt"
 )
 
+type foo struct {
+	FieldOne   int     `json:"one,omitempty"`
+	FieldTwo   string  `json:"two,omitempty"`
+	FieldThree *string `json:"three,omitempty"`
+	FieldFour  string  `json:"four"`
+}
+
 // Empty omitempty 会去掉零值
 func Empty() {
-	type s struct {
-		FieldOne   int    `json:"one,omitempty"`
-		FieldTwo   string `json:"two,omitempty"`
-		FieldThree int    `json:"three"`
+	type foo struct {
+		Int   int     `json:"int,omitempty"`
+		Pint  *int    `json:"pint,omitempty"`
+		Str   string  `json:"str,omitempty"`
+		Pstr  *string `json:"pstr,omitempty"`
+		Bool  bool    `json:"bool,omitempty"`
+		Pbool *bool   `json:"pbool,omitempty"`
 	}
-	s1 := s{FieldTwo: ""}
-	b1, _ := json.Marshal(s1)
-	fmt.Println("marshaled: ", string(b1))
+	var (
+		zeroInt  = 0
+		zeroStr  = ""
+		zeroBool = false
+	)
+	f := foo{
+		Int:   zeroInt,
+		Pint:  &zeroInt,
+		Str:   zeroStr,
+		Pstr:  &zeroStr,
+		Bool:  zeroBool,
+		Pbool: &zeroBool,
+	}
+
+	b, err := json.Marshal(f)
+	if err != nil {
+		panic(err)
+	}
+	jsoned := string(b)
+	var fu foo
+	err = json.Unmarshal([]byte(jsoned), &fu)
+	fmt.Printf("instance foo:\n\t%#v\nmarshaled to json:\n\t%s\nand unmarshaled back:\n\t%#v\n",
+		f, jsoned, fu)
 }
 
 func UmarshalJSON() {
