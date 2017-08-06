@@ -23,14 +23,14 @@ const (
 	size = 200
 )
 
-const (
-	novelNum = "3_3271" // 郝仁
-	from     = 800
-)
+// const (
+// 	novelNum = "3_3271" // 郝仁
+// 	from     = 800
+// )
 
 // const (
 // 	novelNum = "86_86745" // 圣墟
-// 	from     = 415
+// 	from     = 558
 // )
 
 // const (
@@ -38,10 +38,10 @@ const (
 // 	from     = 1200
 // )
 
-// const (
-// novelNum = "1_1280" // 造化之王
-// from     = 1878
-// )
+const (
+	novelNum = "1_1280" // 造化之王
+	from     = 1971
+)
 
 type chapterLink struct {
 	Href  string `json:"href"`

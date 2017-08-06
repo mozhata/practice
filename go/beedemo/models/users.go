@@ -29,6 +29,11 @@ type User struct {
 func NewUserModel() *User {
 	return &User{}
 }
+
 func (m *User) TableName() string {
 	return "users"
+}
+
+func (u *User) IsValid() bool {
+	return u.Name != "" || u.Email != ""
 }

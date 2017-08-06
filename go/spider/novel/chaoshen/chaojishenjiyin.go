@@ -11,12 +11,7 @@ import (
 )
 
 var novelMap = map[string]string{
-	"86_86745": "shengxu",
-	"1_1280":   "zaohuazhiwang",
-	"0_444":    "xiuxiankuangtu",
-	"3_3271":   "haoren",
-	"0_422":    "manghuangji",
-	"25877":    "chaojishenjiyin",
+	"25877": "chaojishenjiyin",
 }
 
 const (
@@ -27,7 +22,7 @@ const (
 // call chaoshen
 const (
 	novelNum = "25877" // 超级神基因
-	from     = 1145
+	from     = 1230
 )
 
 type chapterLink struct {
@@ -106,7 +101,7 @@ func modifyContent(content, title string, prefixTrims, suffixTrims []string) str
 	for _, suffix := range suffixTrims {
 		content = strings.Replace(content, suffix, "", -1)
 	}
-	content = fmt.Sprintf("%s\n%s\n\n", title, content)
+	content = fmt.Sprintf("%s\\nn%s\n\n\n\n\n\n\n", title, content)
 	return content
 }
 

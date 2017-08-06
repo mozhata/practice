@@ -1,10 +1,32 @@
 package controllers
 
-import "github.com/astaxie/beego"
+import (
+	"encoding/json"
+	"lxn_server/models"
+	"practice/go/beedemo/controllers/basecontroller"
+	"practice/go/beedemo/util"
+	// "github.com/astaxie/beego"
+)
 
 // Operations about Users
 type UserController struct {
-	beego.Controller
+	basecontroller.Controller
+}
+
+// @Title CreateUser
+// @Description create user
+// @Param	body		body 	models.User	true		"body for user content"
+// @Success 200 {int} models.User.ID
+// @router / [post]
+func (c *UserController) CreateUser() {
+	var u models.User
+	err := json.Unmarshal(c.Ctx.Input.RequestBody, &u)
+	if err != nil {
+		err = util.InvalidArgumentErr("read request body failed: %s", err.Error())
+		c.HandleErr(err)
+		return
+	}
+
 }
 
 // // @Title CreateUser

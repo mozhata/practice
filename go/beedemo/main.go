@@ -8,6 +8,7 @@ import (
 )
 
 func init() {
+	flag.Lookup("logtostderr").Value.Set("true")
 	flag.Parse()
 
 	if beego.BConfig.RunMode == "dev" {
