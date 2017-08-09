@@ -1,10 +1,9 @@
-package main
+package chaoshen
 
 import (
 	"flag"
 	"fmt"
 	"os"
-	"practice/go/spider/novel/chaoshen"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
@@ -12,35 +11,18 @@ import (
 )
 
 var novelMap = map[string]string{
-	"86_86745": "shengxu",
-	"1_1280":   "zaohuazhiwang",
-	"0_444":    "xiuxiankuangtu",
-	"3_3271":   "haoren",
+	"25877": "chaojishenjiyin",
 }
 
 const (
-	host = "http://m.biquge.tw"
+	host = "http://www.qu.la"
 	size = 200
 )
 
-// const (
-// 	novelNum = "3_3271" // 郝仁
-// 	from     = 800
-// )
-
-// const (
-// 	novelNum = "86_86745" // 圣墟
-// 	from     = 558
-// )
-
-// const (
-// 	novelNum = "0_444" // 修仙狂徒
-// 	from     = 1200
-// )
-
+// call chaoshen
 const (
-	novelNum = "1_1280" // 造化之王
-	from     = 1971
+	novelNum = "25877" // 超级神基因
+	from     = 1230
 )
 
 type chapterLink struct {
@@ -54,14 +36,8 @@ func init() {
 	flag.Parse()
 }
 
-func main() {
-	defer glog.Flush()
-	// common()
-	chaoshen.Chaoshen()
-}
-
-func common() {
-	catalogURL := fmt.Sprintf("%s/%s/all.html", host, novelNum)
+func Chaoshen() {
+	catalogURL := fmt.Sprintf("%s/book/%s/", host, novelNum)
 	links, err := getChaperList(from, size, catalogURL)
 	if err != nil {
 		glog.Fatalf("getChapterList failed: %v", err)
@@ -69,8 +45,8 @@ func common() {
 
 	// download
 	for i, l := range links {
-		if strings.HasPrefix(l.Href, "/"+novelNum) {
-			filename := strings.TrimPrefix(l.Href, "/"+novelNum+"/")
+		if strings.HasPrefix(l.Href, "/book/"+novelNum) {
+			filename := strings.TrimPrefix(l.Href, "/book/"+novelNum+"/")
 			if filename != "" {
 				chapterURI := host + l.Href
 				downloadFile(chapterURI, filename)
@@ -83,8 +59,8 @@ func common() {
 	// parse
 	for i, l := range links {
 		glog.Infof("parsing the %dst chapter: %s", i, l.Title)
-		if strings.HasPrefix(l.Href, "/"+novelNum) {
-			filename := strings.TrimPrefix(l.Href, "/"+novelNum+"/")
+		if strings.HasPrefix(l.Href, "/book/"+novelNum) {
+			filename := strings.TrimPrefix(l.Href, "/book/"+novelNum+"/")
 			if filename != "" {
 				content, err := parseChapter(filename)
 				if err != nil {
@@ -92,26 +68,20 @@ func common() {
 					continue
 				}
 				prefixTrims := []string{
-					"wz1()",
-					"『章节错误,点此举报』",
-					"一秒记住【爱去小说网.】，为您提供精彩小说阅读。",
-					"<>",
-					"纯文字在线阅读本站域名手机同步阅读请访问",
-					"%一%本%读%小说",
-					"混血女主播直播后忘关摄像头",
-					"私_生活视频遭曝光!!请关注微信公众号在线看：meinvmei222（长按三秒复制）！！",
-					"泰国胸最女主播衣服都快包不住了视频在线看!!",
-					"请关注微信公众号：meinvmei222（长按三秒复制）！！",
-					"app2()",
-					"app1()",
+					"chaptererror();",
+					"(未完待续。。)",
+					"本站重要通知：你还在用网页版追小说吗？使用本站的免费小说APP，会员同步书架，文字大小调节、阅读亮度调整、更好的阅读体验，请关注微信公众号 jiakonglishi (按住三秒复制) 下载免费阅读器!!",
+					"请关注微信公众号",
+					"在线看:meinvmei222",
+					"(长按三秒复制)",
+					"公告：笔趣阁免费APP上线了，支持安卓，苹果。请关注微信公众号进入下载安装 wanbenheji (按住三秒复制)!!",
+					"混血女主播直播后忘关摄像头私_生活视频遭曝光",
+					"公告：免费小说app安卓，支持安卓，苹果，告别一切广告，请关注微信公众号进入下载安装 zuopingshuji 按住三秒复制!!",
+					"请关注微信公众号进入下载安装",
+					"免费小说app安卓，支持安卓，苹果，告别一切广告",
+					"请关注微信公众号在线看:",
 				}
-				suffixTrims := []string{
-					"(未完待续……)",
-					"　　hp:手机用户请访问m.",
-					"　　最快更新，无弹窗阅读请。",
-					"『加入书签，方便阅读』",
-					"最快更新，无弹窗阅读请。",
-				}
+				suffixTrims := []string{}
 				content = modifyContent(content, l.Title, prefixTrims, suffixTrims)
 				err = writeContentToFile(content, novelFile)
 				if err != nil {
@@ -121,7 +91,6 @@ func common() {
 			}
 		}
 	}
-
 }
 
 func modifyContent(content, title string, prefixTrims, suffixTrims []string) string {
@@ -132,7 +101,7 @@ func modifyContent(content, title string, prefixTrims, suffixTrims []string) str
 	for _, suffix := range suffixTrims {
 		content = strings.Replace(content, suffix, "", -1)
 	}
-	content = fmt.Sprintf("%s\n%s\n\n", title, content)
+	content = fmt.Sprintf("%s\\nn%s\n\n\n\n\n\n\n", title, content)
 	return content
 }
 
@@ -155,7 +124,7 @@ func parseChapter(filename string) (string, error) {
 	if err != nil {
 		panic(fmt.Sprintf("NewDocumentFromReader failed: %v", err))
 	}
-	content := doc.Find("div#chaptercontent").Text()
+	content := doc.Find("#content").Text()
 	return content, nil
 }
 
@@ -166,7 +135,7 @@ func getChaperList(from, size int, catalogURL string) ([]chapterLink, error) {
 	}
 
 	result := make([]chapterLink, 0, size)
-	chapList := doc.Find("div#chapterlist > p > a")
+	chapList := doc.Find("#list >dl > dd > a")
 	for i := from; i < chapList.Length(); i++ {
 		if i > from+size {
 			break
@@ -178,7 +147,7 @@ func getChaperList(from, size int, catalogURL string) ([]chapterLink, error) {
 		}
 		result = append(result, chapterLink{href, title})
 
-		glog.Infof("the %dst item: %q href: %s", i, title, href)
+		// glog.Infof("the %dst item: %q href: %s", i, title, href)
 	}
 	return result, nil
 }
