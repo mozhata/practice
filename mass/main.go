@@ -1,6 +1,7 @@
 package main
 
 import (
+	"api-server/modules/tenx/id"
 	"bufio"
 	"bytes"
 	"crypto/md5"
@@ -20,7 +21,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"practice/mass/def"
 	"regexp"
 	"runtime"
 	"sort"
@@ -110,7 +110,7 @@ func main() {
 	// formatFloat()
 	// tryAddDate()
 	// maxInt64()
-	// tryIfElse()
+	tryIfElse()
 	// lenStr()
 	// tryUmarshal()
 	// tryFeildFunc()
@@ -135,6 +135,7 @@ func main() {
 	// tryJson()
 	// tryjson.Empty()
 	// tryjson.UmarshalJSON()
+	// tryjson.MarshalIntMap()
 	// uid.TryUniqueID()
 	// tryrouter.TryGoji()
 	// tryrouter.TryIssue9Mux()
@@ -152,7 +153,18 @@ func main() {
 	// implement()
 	// def.DeferCall()
 	// def.DeferCallV2()
-	def.DeferCallV3()
+	// def.DeferCallV3()
+	/*internal 包: internal内部的子包之间可以正常调用,internal包和子包的可导出量在internal的父包范围之内可见,其他范围不可见*/
+	// tryInternal.Print()
+	// tryInternal.InternalPrint()
+	// tryInternal.CallSubmodule()
+	// sibling.CallInternalFunc()
+	// sibling.CallInternalSubmodul()
+	// sibsub.CallInternalFunc()
+	// sibsub.CallInternalSubmodul()
+
+	// tenxCloudTest()
+	// trySearchInts()
 }
 
 /*// not compliable, try reflect
@@ -179,6 +191,27 @@ func (cl *ClusterModel) nonblankCols(ingoredCols []string) []string {
 	return cols
 }
 */
+
+func trySearchInts() {
+	slc := []int{2, 4, 1, 6, 7, 3}
+	sorted := make([]int, len(slc))
+	copy(sorted, slc)
+	sort.Ints(sorted)
+	fmt.Printf("slc:\t\t%v\nsorted:\t%v\n", slc, sorted)
+	n1, n2, n3 := 3, 4, 5
+	index1 := sort.SearchInts(sorted, n1)
+	index2 := sort.SearchInts(sorted, n2)
+	index3 := sort.SearchInts(sorted, n3)
+	fmt.Printf("index of %d in %v is %d, the indexed value is %d\n", n1, sorted, index1, sorted[index1])
+	fmt.Printf("index of %d in %v is %d, the indexed value is %d\n", n2, sorted, index2, sorted[index2])
+	fmt.Printf("index of %d in %v is %d, the indexed value is %d\n", n3, sorted, index3, sorted[index3])
+}
+
+func tenxCloudTest() {
+	fmt.Println(id.NewRole())
+	fmt.Println(id.NewPermissionRole())
+}
+
 func implement() {
 	t := Teacher{}
 	t.ShowA()
@@ -719,6 +752,8 @@ func tryIfElse() {
 		// 打印 "abc"
 		fmt.Println("a: ", a)
 	}
+	// fmt.Println(a) undefined: a
+
 	/*	if a := "abc"; a == "" {
 			fmt.Println("a is nil")
 			b := "b"

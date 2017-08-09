@@ -3,6 +3,8 @@ package tryjson
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/mozhata/handy"
 )
 
 type foo struct {
@@ -81,4 +83,8 @@ func UmarshalJSON() {
 	err = json.Unmarshal([]byte(source), &c)
 	printOutput("unitC", source, err, c)
 
+}
+
+func MarshalIntMap() {
+	fmt.Printf("try marshal map[int]string:\n%s\n", handy.MarshalJSONOrDie(map[int]string{1: "abc"}))
 }
