@@ -20,7 +20,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"practice/mass/def"
 	"regexp"
 	"runtime"
 	"sort"
@@ -84,7 +83,7 @@ func main() {
 	// syncRuntime()
 	// closure()
 	// timeAdd()
-	// tryCall()
+	tryCall()
 	// getEnv()
 	// tesMap()
 	// tesSlice()
@@ -152,7 +151,7 @@ func main() {
 	// implement()
 	// def.DeferCall()
 	// def.DeferCallV2()
-	def.DeferCallV3()
+	// def.DeferCallV3()
 }
 
 /*// not compliable, try reflect
@@ -1202,6 +1201,12 @@ func tryCall() {
 		}
 		glog.Infof("skip = %v, pc = %v, file = %v, line = %v\n", skip, pc, file, line)
 	}
+	// runtime.Callers
+	const depth = 32
+	var pcs [depth]uintptr
+	n := runtime.Callers(0, pcs[:])
+	var st = pcs[0:n]
+	glog.Infof("~~~~~~\npcs: %v, pcCount: %d, stack: %v", pcs, pcs, st)
 }
 
 func timeAdd() {
