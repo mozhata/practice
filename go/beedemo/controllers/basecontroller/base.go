@@ -15,8 +15,8 @@ type Controller struct {
 }
 
 type Resp struct {
-	Data interface{} `json:"data"`
 	util.BaseErr
+	Data interface{} `json:"data"`
 }
 
 func (c *Controller) HandleErr(err error) {
@@ -30,11 +30,11 @@ func (c *Controller) HandleErr(err error) {
 
 func (c *Controller) Success(data interface{}) {
 	body := Resp{
-		Data: data,
 		BaseErr: util.BaseErr{
 			StatusCode: http.StatusOK,
 			Message:    "success",
 		},
+		Data: data,
 	}
 	c.Response(http.StatusOK, body)
 }

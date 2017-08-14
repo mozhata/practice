@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"time"
 
 	"practice/go/beedemo/controllers/basecontroller"
 	"practice/go/beedemo/models"
@@ -14,10 +15,22 @@ type UserController struct {
 	basecontroller.Controller
 }
 
-// @Title CreateUser
-// @Description create user
-// @Param	body		body 	models.User	true		"body for user content"
-// @Success 200 {int} models.User.ID
+// Search search users by name, if filter is emtpy, return all
+// @router / [get]
+func (c *UserController) Search() {
+	// TODO: build query struct
+	// just list all user for now
+	all, err := user.AllUsers()
+	if err != nil {
+		c.HandleErr(err)
+		return
+	}
+	c.Success(util.M{
+		"users": all,
+	})
+}
+
+// CreateUser create user
 // @router / [post]
 func (c *UserController) CreateUser() {
 	var u models.User
@@ -27,6 +40,10 @@ func (c *UserController) CreateUser() {
 		c.HandleErr(err)
 		return
 	}
+	now := time.Now()
+	u.CreateTime = now
+	u.UpdateTime = now
+
 	if !u.IsValid() {
 		err = util.InvalidArgumentErr(nil, "user %#v is not valid", u)
 		c.HandleErr(err)
@@ -41,6 +58,20 @@ func (c *UserController) CreateUser() {
 		"uid": uid,
 	})
 
+}
+
+// CheckExistence check whether the given name already exist
+// @router /:uname/existance [get]
+func (c *UserController) CheckExistence() {
+	uname := c.GetString(":uname")
+	exist, err := user.CheckExistance(uname)
+	if err != nil {
+		c.HandleErr(err)
+		return
+	}
+	c.Success(util.M{
+		"exist": exist,
+	})
 }
 
 // // @Title CreateUser
