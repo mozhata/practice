@@ -72,7 +72,6 @@ func init() {
 func main() {
 	// osPath()
 	// urlParse()
-	// loopMap()
 	// sorttt()
 	// crawl()
 	// convertInterface()
@@ -84,7 +83,7 @@ func main() {
 	// syncRuntime()
 	// closure()
 	// timeAdd()
-	// tryCall()
+	tryCall()
 	// getEnv()
 	// tesMap()
 	// tesSlice()
@@ -110,7 +109,7 @@ func main() {
 	// formatFloat()
 	// tryAddDate()
 	// maxInt64()
-	tryIfElse()
+	// tryIfElse()
 	// lenStr()
 	// tryUmarshal()
 	// tryFeildFunc()
@@ -340,6 +339,20 @@ func tryMap() {
 	fmt.Printf("strDic is nil: %v\n", strDic == nil)
 	_, ok := strDic["bar"]
 	fmt.Printf("try to get a key from a nil map not panic, ok: %v\n", ok)
+
+	dict := map[string][]string{
+		"key1": []string{"val1"},
+		"key2": []string{"val2"},
+		"key3": []string{"val3"},
+	}
+	val, ok := dict["notExist"]
+	var slc []string
+	fmt.Printf("try not exist value, ok: %t, value %v, value is nil: %t. slc is not nil: %t", ok, val, val == nil, slc == nil)
+	dict["keynil"] = nil
+	val, found := dict["keynil"]
+	fmt.Printf("\nset keynil to dict, dict: %#v\ntry get val by key, found: %t\tvalue is nil: %t\n",
+		dict, found, val == nil)
+
 }
 
 func tryParseExpr() {
@@ -1390,17 +1403,6 @@ func sorttt() {
 	sort.Strings(slice2)
 	P(slice)
 	P(slice2)
-}
-
-func loopMap() {
-	dict := map[string]string{
-		"key1": "val1",
-		"key2": "val2",
-		"key3": "val3",
-	}
-	for key, val := range dict {
-		P(key, val)
-	}
 }
 
 func urlParse() {
