@@ -5,6 +5,10 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+const (
+	UserTable = "users"
+)
+
 func init() {
 	// DB settings
 	orm.RegisterDataBase("default", "mysql", "root:ddd@tcp(localhost:3306)/demo?charset=utf8", 30)

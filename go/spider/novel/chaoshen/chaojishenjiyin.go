@@ -22,7 +22,7 @@ const (
 // call chaoshen
 const (
 	novelNum = "25877" // 超级神基因
-	from     = 1230
+	from     = 1267
 )
 
 type chapterLink struct {
@@ -101,7 +101,7 @@ func modifyContent(content, title string, prefixTrims, suffixTrims []string) str
 	for _, suffix := range suffixTrims {
 		content = strings.Replace(content, suffix, "", -1)
 	}
-	content = fmt.Sprintf("%s\\nn%s\n\n\n\n\n\n\n", title, content)
+	content = fmt.Sprintf("%s\n\n%s\n\n\n\n\n\n\n", title, content)
 	return content
 }
 

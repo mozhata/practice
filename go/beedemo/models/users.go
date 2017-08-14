@@ -31,7 +31,7 @@ func NewUserModel() *User {
 }
 
 func (m *User) TableName() string {
-	return "users"
+	return UserTable
 }
 
 func (u *User) IsValid() bool {

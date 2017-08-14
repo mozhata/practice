@@ -2,10 +2,11 @@ package controllers
 
 import (
 	"encoding/json"
-	"lxn_server/models"
+
 	"practice/go/beedemo/controllers/basecontroller"
+	"practice/go/beedemo/models"
+	"practice/go/beedemo/module/user"
 	"practice/go/beedemo/util"
-	// "github.com/astaxie/beego"
 )
 
 // Operations about Users
@@ -22,10 +23,23 @@ func (c *UserController) CreateUser() {
 	var u models.User
 	err := json.Unmarshal(c.Ctx.Input.RequestBody, &u)
 	if err != nil {
-		err = util.InvalidArgumentErr("read request body failed: %s", err.Error())
+		err = util.InvalidArgumentErr(err, "reurest body is not valid")
 		c.HandleErr(err)
 		return
 	}
+	if !u.IsValid() {
+		err = util.InvalidArgumentErr(nil, "user %#v is not valid", u)
+		c.HandleErr(err)
+		return
+	}
+	uid, err := user.CreateUser(u)
+	if err != nil {
+		c.HandleErr(err)
+		return
+	}
+	c.Success(util.M{
+		"uid": uid,
+	})
 
 }
 

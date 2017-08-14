@@ -1250,6 +1250,12 @@ func tryCall() {
 		}
 		glog.Infof("skip = %v, pc = %v, file = %v, line = %v\n", skip, pc, file, line)
 	}
+	// runtime.Callers
+	const depth = 32
+	var pcs [depth]uintptr
+	n := runtime.Callers(0, pcs[:])
+	var st = pcs[0:n]
+	glog.Infof("~~~~~~\npcs: %v, pcCount: %d, stack: %v", pcs, pcs, st)
 }
 
 func timeAdd() {

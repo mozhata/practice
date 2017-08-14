@@ -4,61 +4,92 @@ import (
 	"fmt"
 	"net/http"
 	"runtime"
+	"strings"
 )
 
 // BaseErr basic error class
 type BaseErr struct {
 	StatusCode int    `json:"code"`
 	Message    string `json:"msg"`
-	stackTrace []byte
+	stackPC    []uintptr
+	originErr  error
+}
+
+func (e BaseErr) OriginErr() string {
+	if e.originErr == nil {
+		return "null"
+	}
+	return e.originErr.Error()
+}
+
+func (e BaseErr) CallStack() string {
+	frames := runtime.CallersFrames(e.stackPC)
+	var (
+		f      runtime.Frame
+		more   bool
+		result string
+		index  int
+	)
+	for {
+		f, more = frames.Next()
+		if index = strings.Index(f.File, "src"); index != -1 {
+			// trim GOPATH or GOROOT prifix
+			f.File = string(f.File[index+4:])
+		}
+		result = fmt.Sprintf("%s%s\n\t%s:%d\n", result, f.Function, f.File, f.Line)
+		if !more {
+			break
+		}
+	}
+	return result
 }
 
 func (e *BaseErr) Error() string {
 	return fmt.Sprintf("%v: %v", e.StatusCode, e.Message)
 }
 
-func (e *BaseErr) Stack() string {
-	return string(e.stackTrace)
+func NotFoundError(err error, fmtAndArgs ...interface{}) error {
+	return wrapErr(err, http.StatusNotFound, fmtAndArgs...)
 }
 
-func NotFoundError(fmtAndArgs ...interface{}) error {
-	return wrapErr(http.StatusNotFound, fmtAndArgs...)
+func InvalidArgumentErr(err error, fmtAndArgs ...interface{}) error {
+	return wrapErr(err, http.StatusBadRequest, fmtAndArgs...)
 }
 
-func InvalidArgumentErr(fmtAndArgs ...interface{}) error {
-	return wrapErr(http.StatusBadRequest, fmtAndArgs...)
+func ForbiddenError(err error, fmtAndArgs ...interface{}) error {
+	return wrapErr(err, http.StatusForbidden, fmtAndArgs...)
 }
 
-func ForbiddenError(fmtAndArgs ...interface{}) error {
-	// return &BaseErr{http.StatusForbidden, BuildErrMsg(fmtAndArgs...)}
-	return wrapErr(http.StatusForbidden, fmtAndArgs...)
-}
-
-func InternalError(fmtAndArgs ...interface{}) error {
-	// return &BaseErr{http.StatusInternalServerError, BuildErrMsg(fmtAndArgs...)}
-	return wrapErr(http.StatusInternalServerError, fmtAndArgs...)
+func InternalError(err error, fmtAndArgs ...interface{}) error {
+	return wrapErr(err, http.StatusInternalServerError, fmtAndArgs...)
 }
 
 func WrapErr(err error) *BaseErr {
-	return wrapErr(http.StatusInternalServerError, err)
+	return wrapErr(err, http.StatusInternalServerError)
 }
 
-func wrapErr(code int, fmtAndArgs ...interface{}) *BaseErr {
-	const size = 1 << 12
-	buf := make([]byte, size)
-	n := runtime.Stack(buf, false)
-	err := &BaseErr{
+func wrapErr(err error, code int, fmtAndArgs ...interface{}) *BaseErr {
+	if e, ok := err.(*BaseErr); ok {
+		return e
+	}
+
+	pcs := make([]uintptr, 32)
+	count := runtime.Callers(3, pcs)
+	e := &BaseErr{
 		StatusCode: code,
-		stackTrace: buf[:n],
+		stackPC:    pcs[:count],
+		originErr:  err,
 	}
-	if len(fmtAndArgs) == 0 || fmtAndArgs == nil {
-		return err
+	e.Message = BuildErrMsg(fmtAndArgs...)
+	if e.Message == "" {
+		e.Message = e.OriginErr()
 	}
-	for _, arg := range fmtAndArgs {
-		if e, ok := arg.(*BaseErr); ok {
-			return e
-		}
+	return e
+}
+
+func formatErr(err error) string {
+	if err == nil {
+		return "null"
 	}
-	err.Message = BuildErrMsg(fmtAndArgs...)
-	return err
+	return err.Error()
 }

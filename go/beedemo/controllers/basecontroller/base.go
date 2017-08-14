@@ -3,11 +3,11 @@ package basecontroller
 import (
 	"encoding/json"
 	"net/http"
+
 	"practice/go/beedemo/util"
 
-	"github.com/golang/glog"
-
 	"github.com/astaxie/beego"
+	"github.com/golang/glog"
 )
 
 type Controller struct {
@@ -21,7 +21,7 @@ type Resp struct {
 
 func (c *Controller) HandleErr(err error) {
 	e := util.WrapErr(err)
-	glog.Errorf("err: %s\nstckTrace: %s", e.Error(), e.Stack())
+	glog.Errorf("err: %s\norigin err msg: %s\ncall stack: %s", e.Error(), e.OriginErr(), e.CallStack())
 	body := Resp{
 		BaseErr: *e,
 	}
