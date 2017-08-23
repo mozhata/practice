@@ -1,7 +1,6 @@
 package main
 
 import (
-	"api-server/modules/tenx/id"
 	"bufio"
 	"bytes"
 	"crypto/md5"
@@ -31,12 +30,13 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"golang.org/x/crypto/bcrypt"
+	"api-server/modules/tenx/id"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/golang/glog"
 	"github.com/pborman/uuid"
 	"github.com/prometheus/prometheus/promql"
+	"golang.org/x/crypto/bcrypt"
 )
 
 var (
@@ -83,7 +83,7 @@ func main() {
 	// syncRuntime()
 	// closure()
 	// timeAdd()
-	tryCall()
+	// tryCall()
 	// getEnv()
 	// tesMap()
 	// tesSlice()
@@ -114,7 +114,7 @@ func main() {
 	// tryUmarshal()
 	// tryFeildFunc()
 	// trySlice()
-	// tryPem()
+	tryPem()
 	// tryBreak()
 	// tryRenameType()
 	// tryDelv()
@@ -164,6 +164,9 @@ func main() {
 
 	// tenxCloudTest()
 	// trySearchInts()
+
+	// goruntine.BasicCtx()
+	// tryNilReceiver()
 }
 
 /*// not compliable, try reflect
@@ -190,6 +193,21 @@ func (cl *ClusterModel) nonblankCols(ingoredCols []string) []string {
 	return cols
 }
 */
+
+func tryNilReceiver() {
+	var a = Person{Age: 9}
+	var b *Person = nil
+	fmt.Printf("a.String: %s\n", a.String())
+	fmt.Printf("b is nil: %t\nb.String: %s\n", b == nil, b.String())
+}
+
+type Person struct {
+	Age int
+}
+
+func (a *Person) String() string {
+	return "a persion"
+}
 
 func trySearchInts() {
 	slc := []int{2, 4, 1, 6, 7, 3}
@@ -619,7 +637,8 @@ UNMautOYTbNJlCqGLd1GMCErcKUQjcGg3x6F+EuA70o5Y1mS+IF1wYo06I18ASc7
 	cert, rest := pem.Decode([]byte(validCert))
 	fmt.Printf("valid cert of cert: %s and rest: %s\n\n", MarshalJSONOrDie(cert), rest)
 	certificate, err := tls.X509KeyPair([]byte(validCert), []byte(validKey))
-	fmt.Printf("err: %v\tcert:\n%s", err, MarshalJSONOrDie(certificate))
+	fmt.Printf("err: %v\tcert:\n%s\n\n", err, MarshalJSONOrDie(certificate))
+
 	// fmt.Printf("byte: %s\n", base64.StdEncoding.EncodeToString(cert.Bytes))
 	// _, err = encoding.Decode(data, cert.Bytes)
 	// fmt.Println("data: ", string(data), err)
@@ -1255,7 +1274,7 @@ func tryCall() {
 	var pcs [depth]uintptr
 	n := runtime.Callers(0, pcs[:])
 	var st = pcs[0:n]
-	glog.Infof("~~~~~~\npcs: %v, pcCount: %d, stack: %v", pcs, pcs, st)
+	glog.Infof("pcs: %v, pcCount: %d, stack: %v", pcs, n, st)
 }
 
 func timeAdd() {
