@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"practice/go/spider/novel/chaoshen"
+	"practice/go/spider/novel/jianzhuang"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
@@ -30,18 +30,23 @@ const (
 
 // const (
 // 	novelNum = "86_86745" // 圣墟
-// 	from     = 558
+// 	from     = 594
 // )
+
+const (
+	novelNum = "3_3514" // jianzhuang
+	from     = 100
+)
 
 // const (
 // 	novelNum = "0_444" // 修仙狂徒
 // 	from     = 1200
 // )
 
-const (
-	novelNum = "1_1280" // 造化之王
-	from     = 1971
-)
+// const (
+// 	novelNum = "1_1280" // 造化之王
+// 	from     = 2045
+// )
 
 type chapterLink struct {
 	Href  string `json:"href"`
@@ -57,7 +62,8 @@ func init() {
 func main() {
 	defer glog.Flush()
 	// common()
-	chaoshen.Chaoshen()
+	// chaoshen.Chaoshen()
+	jianzhuang.Jianzhuang()
 }
 
 func common() {

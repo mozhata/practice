@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"time"
 
+	"github.com/golang/glog"
+
 	"practice/go/beedemo/controllers/basecontroller"
 	"practice/go/beedemo/models"
 	"practice/go/beedemo/module/user"
@@ -51,6 +53,9 @@ func (c *UserController) CreateUser() {
 	}
 	uid, err := user.CreateUser(u)
 	if err != nil {
+		err = util.InternalError(err, "blablsss%s", "sdf")
+		e, ok := err.(*util.BaseErr)
+		glog.Infof("e: %v\tok: %t\n%#v", e, ok, err)
 		c.HandleErr(err)
 		return
 	}

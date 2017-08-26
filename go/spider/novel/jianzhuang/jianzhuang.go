@@ -1,4 +1,4 @@
-package chaoshen
+package jianzhuang
 
 import (
 	"flag"
@@ -11,18 +11,18 @@ import (
 )
 
 var novelMap = map[string]string{
-	"25877": "chaojishenjiyin",
+	"3_3514": "jianzhuang",
 }
 
 const (
-	host = "http://www.qu.la"
+	host = "http://www.xxbiquge.com"
 	size = 200
 )
 
 // call chaoshen
 const (
-	novelNum = "25877" // 超级神基因
-	from     = 1290
+	novelNum = "3_3514" // jianzhuang
+	from     = 197
 )
 
 type chapterLink struct {
@@ -36,8 +36,8 @@ func init() {
 	flag.Parse()
 }
 
-func Chaoshen() {
-	catalogURL := fmt.Sprintf("%s/book/%s/", host, novelNum)
+func Jianzhuang() {
+	catalogURL := fmt.Sprintf("%s/%s/", host, novelNum)
 	links, err := getChaperList(from, size, catalogURL)
 	if err != nil {
 		glog.Fatalf("getChapterList failed: %v", err)
@@ -45,8 +45,8 @@ func Chaoshen() {
 
 	// download
 	for i, l := range links {
-		if strings.HasPrefix(l.Href, "/book/"+novelNum) {
-			filename := strings.TrimPrefix(l.Href, "/book/"+novelNum+"/")
+		if strings.HasPrefix(l.Href, "/"+novelNum+"/") {
+			filename := strings.TrimPrefix(l.Href, "/"+novelNum+"/")
 			if filename != "" {
 				chapterURI := host + l.Href
 				downloadFile(chapterURI, filename)
@@ -59,8 +59,8 @@ func Chaoshen() {
 	// parse
 	for i, l := range links {
 		glog.Infof("parsing the %dst chapter: %s", i, l.Title)
-		if strings.HasPrefix(l.Href, "/book/"+novelNum) {
-			filename := strings.TrimPrefix(l.Href, "/book/"+novelNum+"/")
+		if strings.HasPrefix(l.Href, "/"+novelNum+"/") {
+			filename := strings.TrimPrefix(l.Href, "/"+novelNum+"/")
 			if filename != "" {
 				content, err := parseChapter(filename)
 				if err != nil {
