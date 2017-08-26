@@ -30,12 +30,13 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"golang.org/x/crypto/bcrypt"
+	"api-server/modules/tenx/id"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/golang/glog"
 	"github.com/pborman/uuid"
 	"github.com/prometheus/prometheus/promql"
+	"golang.org/x/crypto/bcrypt"
 )
 
 var (
@@ -71,7 +72,6 @@ func init() {
 func main() {
 	// osPath()
 	// urlParse()
-	// loopMap()
 	// sorttt()
 	// crawl()
 	// convertInterface()
@@ -83,7 +83,7 @@ func main() {
 	// syncRuntime()
 	// closure()
 	// timeAdd()
-	tryCall()
+	// tryCall()
 	// getEnv()
 	// tesMap()
 	// tesSlice()
@@ -114,7 +114,7 @@ func main() {
 	// tryUmarshal()
 	// tryFeildFunc()
 	// trySlice()
-	// tryPem()
+	tryPem()
 	// tryBreak()
 	// tryRenameType()
 	// tryDelv()
@@ -134,6 +134,7 @@ func main() {
 	// tryJson()
 	// tryjson.Empty()
 	// tryjson.UmarshalJSON()
+	// tryjson.MarshalIntMap()
 	// uid.TryUniqueID()
 	// tryrouter.TryGoji()
 	// tryrouter.TryIssue9Mux()
@@ -152,6 +153,20 @@ func main() {
 	// def.DeferCall()
 	// def.DeferCallV2()
 	// def.DeferCallV3()
+	/*internal 包: internal内部的子包之间可以正常调用,internal包和子包的可导出量在internal的父包范围之内可见,其他范围不可见*/
+	// tryInternal.Print()
+	// tryInternal.InternalPrint()
+	// tryInternal.CallSubmodule()
+	// sibling.CallInternalFunc()
+	// sibling.CallInternalSubmodul()
+	// sibsub.CallInternalFunc()
+	// sibsub.CallInternalSubmodul()
+
+	// tenxCloudTest()
+	// trySearchInts()
+
+	// goruntine.BasicCtx()
+	// tryNilReceiver()
 }
 
 /*// not compliable, try reflect
@@ -178,6 +193,42 @@ func (cl *ClusterModel) nonblankCols(ingoredCols []string) []string {
 	return cols
 }
 */
+
+func tryNilReceiver() {
+	var a = Person{Age: 9}
+	var b *Person = nil
+	fmt.Printf("a.String: %s\n", a.String())
+	fmt.Printf("b is nil: %t\nb.String: %s\n", b == nil, b.String())
+}
+
+type Person struct {
+	Age int
+}
+
+func (a *Person) String() string {
+	return "a persion"
+}
+
+func trySearchInts() {
+	slc := []int{2, 4, 1, 6, 7, 3}
+	sorted := make([]int, len(slc))
+	copy(sorted, slc)
+	sort.Ints(sorted)
+	fmt.Printf("slc:\t\t%v\nsorted:\t%v\n", slc, sorted)
+	n1, n2, n3 := 3, 4, 5
+	index1 := sort.SearchInts(sorted, n1)
+	index2 := sort.SearchInts(sorted, n2)
+	index3 := sort.SearchInts(sorted, n3)
+	fmt.Printf("index of %d in %v is %d, the indexed value is %d\n", n1, sorted, index1, sorted[index1])
+	fmt.Printf("index of %d in %v is %d, the indexed value is %d\n", n2, sorted, index2, sorted[index2])
+	fmt.Printf("index of %d in %v is %d, the indexed value is %d\n", n3, sorted, index3, sorted[index3])
+}
+
+func tenxCloudTest() {
+	fmt.Println(id.NewRole())
+	fmt.Println(id.NewPermissionRole())
+}
+
 func implement() {
 	t := Teacher{}
 	t.ShowA()
@@ -306,6 +357,20 @@ func tryMap() {
 	fmt.Printf("strDic is nil: %v\n", strDic == nil)
 	_, ok := strDic["bar"]
 	fmt.Printf("try to get a key from a nil map not panic, ok: %v\n", ok)
+
+	dict := map[string][]string{
+		"key1": []string{"val1"},
+		"key2": []string{"val2"},
+		"key3": []string{"val3"},
+	}
+	val, ok := dict["notExist"]
+	var slc []string
+	fmt.Printf("try not exist value, ok: %t, value %v, value is nil: %t. slc is not nil: %t", ok, val, val == nil, slc == nil)
+	dict["keynil"] = nil
+	val, found := dict["keynil"]
+	fmt.Printf("\nset keynil to dict, dict: %#v\ntry get val by key, found: %t\tvalue is nil: %t\n",
+		dict, found, val == nil)
+
 }
 
 func tryParseExpr() {
@@ -572,7 +637,8 @@ UNMautOYTbNJlCqGLd1GMCErcKUQjcGg3x6F+EuA70o5Y1mS+IF1wYo06I18ASc7
 	cert, rest := pem.Decode([]byte(validCert))
 	fmt.Printf("valid cert of cert: %s and rest: %s\n\n", MarshalJSONOrDie(cert), rest)
 	certificate, err := tls.X509KeyPair([]byte(validCert), []byte(validKey))
-	fmt.Printf("err: %v\tcert:\n%s", err, MarshalJSONOrDie(certificate))
+	fmt.Printf("err: %v\tcert:\n%s\n\n", err, MarshalJSONOrDie(certificate))
+
 	// fmt.Printf("byte: %s\n", base64.StdEncoding.EncodeToString(cert.Bytes))
 	// _, err = encoding.Decode(data, cert.Bytes)
 	// fmt.Println("data: ", string(data), err)
@@ -718,6 +784,8 @@ func tryIfElse() {
 		// 打印 "abc"
 		fmt.Println("a: ", a)
 	}
+	// fmt.Println(a) undefined: a
+
 	/*	if a := "abc"; a == "" {
 			fmt.Println("a is nil")
 			b := "b"
@@ -1206,7 +1274,7 @@ func tryCall() {
 	var pcs [depth]uintptr
 	n := runtime.Callers(0, pcs[:])
 	var st = pcs[0:n]
-	glog.Infof("~~~~~~\npcs: %v, pcCount: %d, stack: %v", pcs, pcs, st)
+	glog.Infof("pcs: %v, pcCount: %d, stack: %v", pcs, n, st)
 }
 
 func timeAdd() {
@@ -1360,17 +1428,6 @@ func sorttt() {
 	sort.Strings(slice2)
 	P(slice)
 	P(slice2)
-}
-
-func loopMap() {
-	dict := map[string]string{
-		"key1": "val1",
-		"key2": "val2",
-		"key3": "val3",
-	}
-	for key, val := range dict {
-		P(key, val)
-	}
 }
 
 func urlParse() {

@@ -15,6 +15,10 @@ alertmanager:
 
 alertmanager_live:
 	alertmanager -config.file=./alertmanager.yml
+
+start:
+	prometheus -config.file=prometheus.yml
+
 # start:
 # 	prometheus -config.file=promethus.yml
 
