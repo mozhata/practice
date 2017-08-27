@@ -4,10 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"practice/go/beedemo/util"
-
 	"github.com/astaxie/beego"
 	"github.com/golang/glog"
+	"github.com/mozhata/merr"
 )
 
 type Controller struct {
@@ -15,22 +14,22 @@ type Controller struct {
 }
 
 type Resp struct {
-	util.BaseErr
+	merr.MErr
 	Data interface{} `json:"data"`
 }
 
 func (c *Controller) HandleErr(err error) {
-	e := util.WrapErr(err)
-	glog.Errorf("err: %s\norigin err msg: %s\ncall stack: %s", e.Error(), e.OriginErr(), e.CallStack())
+	e := merr.WrapErr(err)
+	glog.Errorf("err: %s\nraw err msg: %s\ncall stack: %s", e.Error(), e.RawErr().Error(), e.CallStack())
 	body := Resp{
-		BaseErr: *e,
+		MErr: *e,
 	}
 	c.Response(e.StatusCode, body)
 }
 
 func (c *Controller) Success(data interface{}) {
 	body := Resp{
-		BaseErr: util.BaseErr{
+		MErr: merr.MErr{
 			StatusCode: http.StatusOK,
 			Message:    "success",
 		},

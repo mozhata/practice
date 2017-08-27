@@ -4,15 +4,15 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/golang/glog"
+	"github.com/mozhata/merr"
 
+	"practice/go/beedemo/common"
 	"practice/go/beedemo/controllers/basecontroller"
 	"practice/go/beedemo/models"
 	"practice/go/beedemo/module/user"
-	"practice/go/beedemo/util"
 )
 
-// Operations about Users
+// UserController Operations about Users
 type UserController struct {
 	basecontroller.Controller
 }
@@ -27,7 +27,7 @@ func (c *UserController) Search() {
 		c.HandleErr(err)
 		return
 	}
-	c.Success(util.M{
+	c.Success(common.M{
 		"users": all,
 	})
 }
@@ -38,7 +38,7 @@ func (c *UserController) CreateUser() {
 	var u models.User
 	err := json.Unmarshal(c.Ctx.Input.RequestBody, &u)
 	if err != nil {
-		err = util.InvalidArgumentErr(err, "reurest body is not valid")
+		err = merr.InvalidErr(err, "reurest body is not valid")
 		c.HandleErr(err)
 		return
 	}
@@ -47,19 +47,17 @@ func (c *UserController) CreateUser() {
 	u.UpdateTime = now
 
 	if !u.IsValid() {
-		err = util.InvalidArgumentErr(nil, "user %#v is not valid", u)
+		err = merr.InvalidErr(nil, "user %#v is not valid", u)
 		c.HandleErr(err)
 		return
 	}
 	uid, err := user.CreateUser(u)
 	if err != nil {
-		err = util.InternalError(err, "blablsss%s", "sdf")
-		e, ok := err.(*util.BaseErr)
-		glog.Infof("e: %v\tok: %t\n%#v", e, ok, err)
+		err = merr.InternalError(err, "blablsss%s", "sdf")
 		c.HandleErr(err)
 		return
 	}
-	c.Success(util.M{
+	c.Success(common.M{
 		"uid": uid,
 	})
 
@@ -74,7 +72,7 @@ func (c *UserController) CheckExistence() {
 		c.HandleErr(err)
 		return
 	}
-	c.Success(util.M{
+	c.Success(common.M{
 		"exist": exist,
 	})
 }

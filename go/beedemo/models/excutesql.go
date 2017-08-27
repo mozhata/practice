@@ -1,9 +1,8 @@
 package models
 
 import (
-	"practice/go/beedemo/util"
-
 	"github.com/astaxie/beego/orm"
+	"github.com/mozhata/merr"
 )
 
 func QueryBySQL(sql string, container interface{}, multi bool, orms ...orm.Ormer) error {
@@ -20,7 +19,7 @@ func QueryBySQL(sql string, container interface{}, multi bool, orms ...orm.Ormer
 		err = o.Raw(sql).QueryRow(container)
 	}
 	if err != nil {
-		return util.InternalError(err, "query by sql %s failed", sql)
+		return merr.InternalError(err, "query by sql %s failed", sql)
 	}
 	return nil
 }

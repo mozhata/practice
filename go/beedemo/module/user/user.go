@@ -3,15 +3,15 @@ package user
 import (
 	"fmt"
 	"practice/go/beedemo/models"
-	"practice/go/beedemo/util"
 
 	"github.com/astaxie/beego/orm"
+	"github.com/mozhata/merr"
 )
 
 // CreateUser insert user model to DB and return userID
 func CreateUser(u models.User, orms ...orm.Ormer) (int64, error) {
 	if !u.IsValid() {
-		return 0, util.InvalidArgumentErr(nil, "user model is not valid")
+		return 0, merr.InvalidErr(nil, "user model is not valid")
 	}
 	var o orm.Ormer
 	if len(orms) == 0 {
@@ -21,7 +21,7 @@ func CreateUser(u models.User, orms ...orm.Ormer) (int64, error) {
 	}
 	uid, err := o.Insert(&u)
 	if err != nil {
-		return 0, util.InternalError(err, "insert user model to DB failed")
+		return 0, merr.InternalError(err, "insert user model to DB failed")
 	}
 	return uid, nil
 }
@@ -34,7 +34,7 @@ func CheckExistance(userName string, orms ...orm.Ormer) (bool, error) {
 		return false, err
 	}
 	if count > 1 {
-		return false, util.InternalError(nil, "count of user name %s should not more than 1 but it does. sql: %s", userName, sql)
+		return false, merr.InternalError(nil, "count of user name %s should not more than 1 but it does. sql: %s", userName, sql)
 	}
 	return count == 1, nil
 }
@@ -47,7 +47,7 @@ func AllUsers() ([]models.User, error) {
 	sql := fmt.Sprintf("select * from %s;", models.UserTable)
 	err = models.QueryBySQL(sql, &all, true)
 	if err != nil {
-		return nil, util.InternalError(err, "query by sql %s failed", sql)
+		return nil, merr.InternalError(err, "query by sql %s failed", sql)
 	}
 	return all, nil
 }
