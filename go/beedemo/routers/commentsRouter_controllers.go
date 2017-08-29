@@ -22,6 +22,13 @@ func init() {
 
 	beego.GlobalControllerRouter["practice/go/beedemo/controllers:UserController"] = append(beego.GlobalControllerRouter["practice/go/beedemo/controllers:UserController"],
 		beego.ControllerComments{
+			Method: "DeleteUser",
+			Router: `/:uid`,
+			AllowHTTPMethods: []string{"delete"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["practice/go/beedemo/controllers:UserController"] = append(beego.GlobalControllerRouter["practice/go/beedemo/controllers:UserController"],
+		beego.ControllerComments{
 			Method: "CheckExistence",
 			Router: `/:uname/existance`,
 			AllowHTTPMethods: []string{"get"},

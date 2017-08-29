@@ -20,7 +20,7 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 */
 type User struct {
-	ID         int       `orm:"column(id);auto;pk" json:"id"`
+	ID         uint64    `orm:"column(id);auto;pk" json:"id"`
 	Name       string    `orm:"column(name);size(100)" json:"name"`
 	Nickname   string    `orm:"column(nickname);size(100)" json:"nickname"`
 	Email      string    `orm:"column(email);size(100);null" json:"email"`

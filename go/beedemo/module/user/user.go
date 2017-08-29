@@ -26,6 +26,11 @@ func CreateUser(u models.User, orms ...orm.Ormer) (int64, error) {
 	return uid, nil
 }
 
+func DeleteUser(uid uint64, orms ...orm.Ormer) error {
+	sql := fmt.Sprintf("delete from %s where id=%d;", models.UserTable, uid)
+	return models.ExcueSQL(sql, orms...)
+}
+
 func CheckExistance(userName string, orms ...orm.Ormer) (bool, error) {
 	sql := fmt.Sprintf("select count(`id`) from %s where `name`=%q;", models.UserTable, userName)
 	var count int

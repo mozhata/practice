@@ -23,3 +23,17 @@ func QueryBySQL(sql string, container interface{}, multi bool, orms ...orm.Ormer
 	}
 	return nil
 }
+
+func ExcueSQL(sql string, orms ...orm.Ormer) error {
+	var o orm.Ormer
+	if len(orms) != 1 {
+		o = orm.NewOrm()
+	} else {
+		o = orms[0]
+	}
+	_, err := o.Raw(sql).Exec()
+	if err != nil {
+		return merr.InternalError(err, "excute sql %s failed", sql)
+	}
+	return nil
+}
