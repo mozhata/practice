@@ -114,7 +114,7 @@ func main() {
 	// tryUmarshal()
 	// tryFeildFunc()
 	// trySlice()
-	tryPem()
+	// tryPem()
 	// tryBreak()
 	// tryRenameType()
 	// tryDelv()
@@ -162,37 +162,12 @@ func main() {
 	// sibsub.CallInternalFunc()
 	// sibsub.CallInternalSubmodul()
 
-	// tenxCloudTest()
+	tenxCloudTest()
 	// trySearchInts()
 
 	// goruntine.BasicCtx()
 	// tryNilReceiver()
 }
-
-/*// not compliable, try reflect
-func (cl *ClusterModel) nonblankCols(ingoredCols []string) []string {
-	t := reflect.TypeOf(cl).Elem()
-	v := reflect.ValueOf(cl).Elem()
-	cols := make([]string, 0, t.NumField())
-	for i := 0; i < t.NumField(); i++ {
-
-		rawCol := t.Field(i).Tag.Get("orm")
-		parts := strings.Split(rawCol, "column")
-		if len(parts) == 2 {
-			col := strings.TrimFunc(parts[1], func(r rune) bool { return r == '(' || r == ')' })
-			// fmt.Println(col)
-			fmt.Printf("col %s is valid: \t%v, value:\t%v\n", col, (v.Field(i).Interface() == reflect.Zero(t.Field(i).Type)), v.Field(i))
-			// fmt.Printf("col %s is valid: \t%v, value:\t%v\n", col, reflect.DeepEqual(v.Field(i).Interface(), reflect.Zero(t.Field(i).Type)), v.Field(i))
-			// fmt.Printf("col %s is valid: \t%v, value:\t%v\n", col, reflect.DeepEqual(v.Field(i), reflect.Zero(t.Field(i).Type)), v.Field(i))
-			if !common.StringInSlice(col, ingoredCols) {
-				cols = append(cols, col)
-			}
-		}
-	}
-
-	return cols
-}
-*/
 
 func tryNilReceiver() {
 	var a = Person{Age: 9}
