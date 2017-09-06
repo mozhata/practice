@@ -22,7 +22,7 @@ const (
 // call chaoshen
 const (
 	novelNum = "3_3514" // jianzhuang
-	from     = 197
+	from     = 797
 )
 
 type chapterLink struct {

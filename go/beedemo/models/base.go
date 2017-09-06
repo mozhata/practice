@@ -11,7 +11,7 @@ const (
 
 func init() {
 	// DB settings
-	orm.RegisterDataBase("default", "mysql", "root:mysql@tcp(localhost:3306)/demo?charset=utf8", 30)
+	orm.RegisterDataBase("default", "mysql", "root:ddd@tcp(localhost:3306)/demo?charset=utf8", 30)
 
 	orm.RegisterModel(NewUserModel())
 }

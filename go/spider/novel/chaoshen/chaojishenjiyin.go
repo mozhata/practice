@@ -22,7 +22,7 @@ const (
 // call chaoshen
 const (
 	novelNum = "25877" // 超级神基因
-	from     = 1290
+	from     = 1352
 )
 
 type chapterLink struct {
