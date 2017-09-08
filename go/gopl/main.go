@@ -36,7 +36,8 @@ func main() {
 	// TryToposort()
 	// parseHtml()
 	// chap12.BasicRefect()
-	chap12.TryAny()
+	// chap12.TryAny()
+	chap12.TryDisplay()
 }
 
 /*
