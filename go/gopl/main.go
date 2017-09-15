@@ -37,7 +37,8 @@ func main() {
 	// parseHtml()
 	// chap12.BasicRefect()
 	// chap12.TryAny()
-	chap12.TryDisplay()
+	// chap12.TryDisplay()
+	chap12.TrySMarshal()
 }
 
 /*

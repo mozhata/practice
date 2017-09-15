@@ -12,101 +12,75 @@ import (
 
 var Logger = log.New(os.Stdout, "", log.Lshortfile)
 
-func BasicRefect() {
-	// t := reflect.TypeOf(3)
-	// fmt.Println(t.String())
-
-	// var w io.Writer = os.Stdout
-	// fmt.Println(reflect.TypeOf(w))
-	// fmt.Printf("%T\n", 3)
-
-	v := reflect.ValueOf(3)
-	fmt.Println(v)
-	fmt.Printf("value of 3: %v\n", v)
-	fmt.Println(v.String())
-	t := v.Type()
-	Logger.Printf("v.Type: %s", t)
-	sv := reflect.ValueOf("abc")
-	Logger.Printf("sv.Type: %s", sv.Type())
-
-	x := v.Interface()
-	i := x.(int)
-	fmt.Printf("v: %v, x %v i: %v, v-d: %d\n", v, x, i, i)
+type Person struct {
+	Name string
+}
+type Actor struct {
+	Person
+	Role string
+	hid  int
+}
+type Movie struct {
+	Title, Subtitle string
+	Year            int
+	Color           bool
+	Actor           map[string]string
+	Actors          []Actor
+	Oscars          []string
+	Sequel          *string
 }
 
-func TryAny() {
-	var x int = 9
-	var d time.Duration = time.Nanosecond * 1
-	type mint int
-	var m mint = 5
-	Logger.Println(Any(x))
-	Logger.Println(Any(d))
-	Logger.Println(Any(m))
+var sequel = "this is sequel"
+var strangelove = Movie{
+	Title:    "Dr. Strangelove",
+	Subtitle: "How I Learned to Stop Worrying and Love the Bomb",
+	Year:     1964,
+	Color:    false,
+	Actor: map[string]string{
+		"Dr. Strangelove":            "Peter Sellers",
+		"Grp. Capt. Lionel Mandrake": "Peter Sellers",
+		"Pres. Merkin Muffley":       "Peter Sellers",
+		"Gen. Buck Turgidson":        "George C. Scott",
+		"Brig. Gen. Jack D. Ripper":  "Sterling Hayden",
+		`Maj. T.J. "King" Kong`:      "Slim Pickens",
+	},
+	Actors: []Actor{
+		Actor{
+			Person: Person{
+				Name: "person a",
+			},
+			Role: "role of person a",
+		},
+		Actor{
+			Person: Person{
+				Name: "person b",
+			},
+			Role: "role of person b",
+			hid:  9,
+		},
+	},
+	Oscars: []string{
+		"Best Actor (Nomin.)",
+		"Best Adapted Screenplay (Nomin.)",
+		"Best Director (Nomin.)",
+		"Best Picture (Nomin.)",
+	},
+	Sequel: &sequel,
+}
 
-	Logger.Println(Any([]time.Duration{d}))
-	Logger.Println(Any([]mint{m}))
-	Logger.Println(Any([]int{x}))
+func TryChangeValue() {
 
-	Logger.Println(Any(func() {}))
-	Logger.Println(Any(time.Now()))
-	Logger.Println(Any(struct{}{}))
+}
+
+func TrySMarshal() {
+	b, err := Marshal(strangelove)
+	if err != nil {
+		panic(fmt.Sprintf("Marshal value to S code failed: %s", err.Error()))
+	}
+	Logger.Printf("S coded: \n%s\n", string(b))
 }
 
 func TryDisplay() {
-	type Person struct {
-		Name string
-	}
-	type Actor struct {
-		Person
-		Role string
-		hid  int
-	}
-	type Movie struct {
-		Title, Subtitle string
-		Year            int
-		Color           bool
-		Actor           map[string]string
-		Actors          []Actor
-		Oscars          []string
-		Sequel          *string
-	}
-	sequel := "this is sequel"
-	strangelove := Movie{
-		Title:    "Dr. Strangelove",
-		Subtitle: "How I Learned to Stop Worrying and Love the Bomb",
-		Year:     1964,
-		Color:    false,
-		Actor: map[string]string{
-			"Dr. Strangelove":            "Peter Sellers",
-			"Grp. Capt. Lionel Mandrake": "Peter Sellers",
-			"Pres. Merkin Muffley":       "Peter Sellers",
-			"Gen. Buck Turgidson":        "George C. Scott",
-			"Brig. Gen. Jack D. Ripper":  "Sterling Hayden",
-			`Maj. T.J. "King" Kong`:      "Slim Pickens",
-		},
-		Actors: []Actor{
-			Actor{
-				Person: Person{
-					Name: "person a",
-				},
-				Role: "role of person a",
-			},
-			Actor{
-				Person: Person{
-					Name: "person b",
-				},
-				Role: "role of person b",
-				hid:  9,
-			},
-		},
-		Oscars: []string{
-			"Best Actor (Nomin.)",
-			"Best Adapted Screenplay (Nomin.)",
-			"Best Director (Nomin.)",
-			"Best Picture (Nomin.)",
-		},
-		Sequel: &sequel,
-	}
 	Display("strangelove", strangelove)
 	// Display("os.Stderr", os.Stderr)
 	// Display("rV", reflect.ValueOf(os.Stderr))
@@ -138,7 +112,55 @@ func TryDisplay() {
 		c = Cycle{42, &c}
 		DisplayV2("c", c)
 	}()
+}
 
+func TryAny() {
+	var x int = 9
+	var d time.Duration = time.Nanosecond * 1
+	type mint int
+	var m mint = 5
+	Logger.Println(Any(x))
+	Logger.Println(Any(d))
+	Logger.Println(Any(m))
+
+	Logger.Println(Any([]time.Duration{d}))
+	Logger.Println(Any([]mint{m}))
+	Logger.Println(Any([]int{x}))
+
+	Logger.Println(Any(func() {}))
+	Logger.Println(Any(time.Now()))
+	Logger.Println(Any(struct{}{}))
+}
+
+func BasicRefect() {
+	// t := reflect.TypeOf(3)
+	// fmt.Println(t.String())
+
+	// var w io.Writer = os.Stdout
+	// fmt.Println(reflect.TypeOf(w))
+	// fmt.Printf("%T\n", 3)
+
+	v := reflect.ValueOf(3)
+	fmt.Println(v)
+	fmt.Printf("value of 3: %v\n", v)
+	fmt.Println(v.String())
+	t := v.Type()
+	Logger.Printf("v.Type: %s", t)
+	sv := reflect.ValueOf("abc")
+	Logger.Printf("sv.Type: %s", sv.Type())
+
+	x := v.Interface()
+	i := x.(int)
+	fmt.Printf("v: %v, x %v i: %v, v-d: %d\n", v, x, i, i)
+}
+
+func Marshal(v interface{}) ([]byte, error) {
+	buf := bytes.Buffer{}
+	err := encode(&buf, reflect.ValueOf(v))
+	if err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
 }
 
 func Display(name string, x interface{}) {
@@ -265,6 +287,8 @@ func encode(buf *bytes.Buffer, v reflect.Value) error {
 		fmt.Fprintf(buf, "%d", v.Uint())
 	case reflect.String:
 		fmt.Fprintf(buf, "%q", v.String())
+	case reflect.Bool:
+		fmt.Fprintf(buf, "%t", v.Bool())
 	case reflect.Ptr:
 		return encode(buf, v.Elem())
 	case reflect.Array, reflect.Slice:
