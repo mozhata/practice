@@ -24,3 +24,4 @@ go/spider/novel/logs/
 go/spider/novel/*.txt
 go/beedemo/beedemo
 go/beedemo/lastupdate.tmp
+go/spider/medical/logs

@@ -16,6 +16,7 @@ var novelMap = map[string]string{
 	"1_1280":   "zaohuazhiwang",
 	"0_444":    "xiuxiankuangtu",
 	"3_3271":   "haoren",
+	"78_78031": "yinianyongheng",
 }
 
 const (
@@ -38,9 +39,14 @@ const (
 // 	from     = 1200
 // )
 
+// const (
+// 	novelNum = "1_1280" // 造化之王
+// 	from     = 2095
+// )
+
 const (
-	novelNum = "1_1280" // 造化之王
-	from     = 2073
+	novelNum = "78_78031" // 造化之王
+	from     = 1000
 )
 
 type chapterLink struct {
