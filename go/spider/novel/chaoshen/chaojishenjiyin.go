@@ -12,6 +12,10 @@ import (
 
 var novelMap = map[string]string{
 	"25877": "chaojishenjiyin",
+	"746":   "feijianwendao",
+	"11355": "xiuzhenliaotianqun",
+	"3137":  "yuanzun",
+	"3952":  "woshizhizun",
 }
 
 const (
@@ -19,11 +23,29 @@ const (
 	size = 200
 )
 
-// call chaoshen
 const (
 	novelNum = "25877" // 超级神基因
-	from     = 1468
+	from     = 1668
 )
+
+// const (
+// 	novelNum = "746" // 飞剑问道
+// 	from     = 70
+// )
+
+// const (
+// 	novelNum = "11355" // 修真聊天群
+// 	from     = 145
+// )
+
+// const (
+// 	novelNum = "3137" // 元尊
+// 	from     = 0
+// )
+// const (
+// 	novelNum = "3952" // 我是至尊
+// 	from     = 0
+// )
 
 type chapterLink struct {
 	Href  string `json:"href"`

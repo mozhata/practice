@@ -39,15 +39,15 @@ const (
 // 	from     = 1200
 // )
 
-// const (
-// 	novelNum = "1_1280" // 造化之王
-// 	from     = 2095
-// )
-
 const (
-	novelNum = "78_78031" // 造化之王
-	from     = 1000
+	novelNum = "1_1280" // 造化之王
+	from     = 2103
 )
+
+// const (
+// 	novelNum = "78_78031" // yinianyongheng
+// 	from     = 1000
+// )
 
 type chapterLink struct {
 	Href  string `json:"href"`
@@ -64,6 +64,7 @@ func main() {
 	defer glog.Flush()
 	// common()
 	chaoshen.Chaoshen()
+	// zuiqiang.Tulong()
 	// jianzhuang.Jianzhuang()
 }
 

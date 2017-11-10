@@ -162,11 +162,48 @@ func main() {
 	// sibsub.CallInternalFunc()
 	// sibsub.CallInternalSubmodul()
 
-	tenxCloudTest()
+	// tenxCloudTest()
 	// trySearchInts()
 
 	// goruntine.BasicCtx()
 	// tryNilReceiver()
+	// tryIoCopy()
+	// tryBinaryOp()
+	// tryComplement()
+}
+
+func tryBinaryOp() {
+	var left int8 = 5
+	var right int8 = 2
+	var usgin uint8 = 5
+	printf("left: %b\tright: %b", left, right)
+	printf("%d ^ %d:\t%b, base 10 is %d", left, right, left^right, left^right)
+	printf("^%d is %b, base 10 is %d", left, ^left, ^left)
+	printf("^%d is %b, base 10 is %d", usgin, ^usgin, ^usgin)
+	printf("^%d is %b, base 10 is %d", right, ^right, ^right)
+	printf("%d & %d is %b base 10 is %d", left, right, left&right, left&right)
+	printf("%d &^%d is %b", left, right, left&^right)
+	printf("-5%%2 is %d, -5%%-2 is %d", -5%2, -5%-2)
+	printf("5/4 is %v, 5.0/4.0 is %v, 5.0/4 is %v", 5/4, 5.0/4.0, 5.0/4)
+	printf("^-1 is %b, base10 is %d", ^-1, ^-1)
+	printf("^1 is %b, base10 is %d", ^1, ^1)
+}
+
+func tryComplement() {
+	var uf int8 = 5
+	var sf uint8 = 5
+	printf("for int8, %b, ^%d is %b, base 10 is %d", uf, uf, ^uf, ^uf)
+	printf("for uint8, %b, ^%d is %b, base 10 is %d", uf, sf, ^sf, ^sf)
+}
+
+func tryIoCopy() {
+	dst := &bytes.Buffer{}
+	src := bytes.NewBufferString("there is some info...")
+	printf("before call Copy, dst: %q\nsrc: %q\n",
+		dst.String(), src.String())
+	n, err := io.Copy(dst, src)
+	printf("after call Copy, n: %d, err: %v\n dst: %s\n src: %s\n",
+		n, err, dst, src)
 }
 
 func tryNilReceiver() {
@@ -201,7 +238,6 @@ func trySearchInts() {
 
 func tenxCloudTest() {
 	fmt.Println(id.NewRole())
-	fmt.Println(id.NewPermissionRole())
 }
 
 func implement() {
@@ -1442,6 +1478,12 @@ func Check(err error) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func printf(format string, a ...interface{}) {
+	_, fileName, line, _ := runtime.Caller(1)
+	msg := fmt.Sprintf(format, a...)
+	fmt.Printf("%s:%d %s\n", fileName, line, msg)
 }
 
 /*
