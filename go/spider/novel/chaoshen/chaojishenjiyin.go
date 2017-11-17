@@ -23,20 +23,20 @@ const (
 	size = 200
 )
 
-const (
-	novelNum = "25877" // 超级神基因
-	from     = 1668
-)
+// const (
+// 	novelNum = "25877" // 超级神基因
+// 	from     = 1668
+// )
 
 // const (
 // 	novelNum = "746" // 飞剑问道
-// 	from     = 70
+// 	from     = 107
 // )
 
-// const (
-// 	novelNum = "11355" // 修真聊天群
-// 	from     = 145
-// )
+const (
+	novelNum = "11355" // 修真聊天群
+	from     = 545
+)
 
 // const (
 // 	novelNum = "3137" // 元尊
