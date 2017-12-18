@@ -1,6 +1,9 @@
 package def
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 func DeferCall() {
 	defer func() { fmt.Println("打印前") }()
@@ -14,6 +17,7 @@ func DeferCallV2() {
 	fmt.Println(doubleScore(0))    //0
 	fmt.Println(doubleScore(20.0)) //40
 	fmt.Println(doubleScore(50.0)) //50
+	fmt.Println(getErr())
 }
 
 /*函数的return value 不是原子操作.而是在编译器中分解为两部分：返回值赋值 和 return 。而defer刚好被插入到末尾的return前执行*/
@@ -39,4 +43,12 @@ func calc(index string, a, b int) int {
 	ret := a + b
 	fmt.Println(index, a, b, ret)
 	return ret
+}
+
+func getErr() error {
+	var err error
+	defer func() {
+		err = errors.New("defered err")
+	}()
+	return errors.New("this is an err")
 }

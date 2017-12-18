@@ -70,7 +70,7 @@ func init() {
 }
 
 func main() {
-	// osPath()
+	osPath()
 	// urlParse()
 	// sorttt()
 	// crawl()
@@ -170,6 +170,14 @@ func main() {
 	// tryIoCopy()
 	// tryBinaryOp()
 	// tryComplement()
+	// tryURLParse()
+	fmt.Printf("%v, %s", '\u0003', string('\ufffd'))
+}
+
+func tryURLParse() {
+	addr := "127.0.0.1:7130"
+	url, err := url.Parse(addr)
+	fmt.Printf("url: %#v\nerr: %v\n", url, err)
 }
 
 func tryBinaryOp() {
@@ -1457,6 +1465,8 @@ func osPath() {
 	P(path.Dir(dir1))
 	// /Users/mozhata/work/src/practice
 	P(path.Dir(dir2))
+	path3 := "/home/mozhata/go/src/git.meiqia.com/business_platform/app-center/cmd/sync.go"
+	P(path.Base(path3))
 }
 
 func buldCountySlug(slug string) string {
