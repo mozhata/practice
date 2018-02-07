@@ -3,7 +3,10 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"crypto/ecdsa"
+	"crypto/elliptic"
 	"crypto/md5"
+	"crypto/rand"
 	"crypto/tls"
 	"encoding/hex"
 	"encoding/json"
@@ -30,7 +33,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"api-server/modules/tenx/id"
+	"practice/mass/cryp"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/golang/glog"
@@ -70,7 +73,7 @@ func init() {
 }
 
 func main() {
-	osPath()
+	// osPath()
 	// urlParse()
 	// sorttt()
 	// crawl()
@@ -171,7 +174,57 @@ func main() {
 	// tryBinaryOp()
 	// tryComplement()
 	// tryURLParse()
-	fmt.Printf("%v, %s", '\u0003', string('\ufffd'))
+	// TryURLEscape()
+	// TryLenSliceNil()
+	// PEM()
+	// cryp.Try()
+	cryp.TryEncrypt()
+}
+
+func PEM() {
+	pubkeyCurve := elliptic.P256() //see http://golang.org/pkg/crypto/elliptic/#P256
+	privatekey := new(ecdsa.PrivateKey)
+	privatekey, err := ecdsa.GenerateKey(pubkeyCurve, rand.Reader) // this generates a public & private key pair
+
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	var pubkey ecdsa.PublicKey
+	pubkey = privatekey.PublicKey
+
+	fmt.Println("Private Key :")
+	fmt.Printf("%x \n", privatekey)
+
+	fmt.Println("Public Key :")
+	fmt.Printf("%x \n", pubkey)
+}
+func TryLenSliceNil() {
+	sl := []interface{}{nil, nil}
+	fmt.Printf("len: %d\n", len(sl))
+}
+
+func TryURLEscape() {
+	strList := []string{
+		"购销合同(信用通-杰翔)粉煤.pdf",
+		"xxx(1).png",
+		"的(中-文)b.jpg",
+		"%E7%9A%84%28%E4%B8%AD-%E6%96%87%29b.jpg",
+		"%25E7%259A%2584%2528%25E4%25B8%25AD-%25E6%2596%2587%2529b.jpg",
+		"%E7%9A%84(%E4%B8%AD-%E6%96%87)b.jpg",
+		"%25E7%259A%2584%28%25E4%25B8%25AD-%25E6%2596%2587%29b.jpg",
+	}
+	for _, src := range strList {
+		qesc := url.QueryEscape(src)
+		pesc := url.PathEscape(src)
+		fmt.Printf("src: %s\nqesc: %s \npesc: %s\n", src, qesc, pesc)
+		quesc, err := url.QueryUnescape(src)
+		Check(err)
+		puesc, err := url.PathUnescape(src)
+		Check(err)
+		fmt.Printf("quesc: %s \npuesc: %s\n", quesc, puesc)
+	}
 }
 
 func tryURLParse() {
@@ -242,10 +295,6 @@ func trySearchInts() {
 	fmt.Printf("index of %d in %v is %d, the indexed value is %d\n", n1, sorted, index1, sorted[index1])
 	fmt.Printf("index of %d in %v is %d, the indexed value is %d\n", n2, sorted, index2, sorted[index2])
 	fmt.Printf("index of %d in %v is %d, the indexed value is %d\n", n3, sorted, index3, sorted[index3])
-}
-
-func tenxCloudTest() {
-	fmt.Println(id.NewRole())
 }
 
 func implement() {

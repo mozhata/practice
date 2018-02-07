@@ -7,8 +7,8 @@ import (
 	"strings"
 )
 
-// BuildErrMsg used to format error message
-func BuildErrMsg(msgs ...interface{}) string {
+// buildErrMsg used to format error message
+func buildErrMsg(msgs ...interface{}) string {
 	if len(msgs) == 0 || msgs == nil {
 		return ""
 	}
@@ -32,8 +32,8 @@ func Debug(a ...interface{}) {
 	if index > 0 {
 		fileName = fileName[index+len("practice/"):]
 	}
-	msg := BuildErrMsg(a...)
-	fmt.Printf("\n%s:%d\n%s\n", fileName, line, msg)
+	msg := buildErrMsg(a...)
+	fmt.Printf("%s:%d\n%s\n", fileName, line, msg)
 }
 
 func MarshalJSONOrDie(v interface{}) string {

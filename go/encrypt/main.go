@@ -1,16 +1,46 @@
 package main
 
 import (
-	"practice/go/encrypt/symmetric"
-	"practice/go/util"
+	"flag"
+	"net/http"
+	"strconv"
+
+	"github.com/golang/glog"
+
+	"practice/go/encrypt/account"
+	"practice/go/encrypt/common"
+	"practice/go/encrypt/db"
+	"practice/go/encrypt/skeleton/route"
 )
 
 const (
-	key = "1234567890123456"
+	serverPort = "8888"
+	mysqlAddr  = "docker_mysql_1:3307"
 )
 
+var (
+	configPath = flag.String("conf", "conf/config.toml", "config file's path")
+)
+
+func init() {
+	flag.Set("logtostderr", "true")
+	flag.Parse()
+
+	common.InitConfig(*configPath)
+	db.InitMysql(&common.Config.MySQL)
+}
+
 func main() {
-	content := "this is content"
-	result, err := symmetric.Encrypt(key, content)
-	util.Debug("result: %s\nerr: %v", result, err)
+
+	regRoutes := account.NewRoute()
+
+	handler := route.BuildHandler(
+		regRoutes,
+	)
+
+	glog.Infof("start serving at %d", common.Config.Listen)
+	if err := http.ListenAndServe(":"+strconv.Itoa(common.Config.Listen), handler); err != nil {
+		panic(err)
+	}
+
 }

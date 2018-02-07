@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/axgle/mahonia"
 	"github.com/golang/glog"
 )
 
@@ -17,6 +18,7 @@ var novelMap = map[string]string{
 	"3137":  "yuanzun",
 	"3952":  "woshizhizun",
 	"34496": "hanxiang",
+	"27894": "sanguoyanye",
 }
 
 const (
@@ -26,31 +28,27 @@ const (
 
 // const (
 // 	novelNum = "25877" // 超级神基因
-// 	from     = 1808
+// 	from     = 2123
 // )
 
 // const (
 // 	novelNum = "746" // 飞剑问道
-// 	from     = 148
+// 	from     = 268
 // )
 
 // const (
 // 	novelNum = "34496" // 汉乡
-// 	from     = 100
+// 	from     = 420
 // )
 
 const (
 	novelNum = "11355" // 修真聊天群
-	from     = 1397
+	from     = 1746
 )
 
-// const (
-// 	novelNum = "3137" // 元尊
-// 	from     = 0
-// )
-// const (
-// 	novelNum = "3952" // 我是至尊
-// 	from     = 0
+// const ( // 顾道长生
+// 	novelNum = "10"
+// 	from     = 421
 // )
 
 type chapterLink struct {
@@ -58,15 +56,51 @@ type chapterLink struct {
 	Title string `json:"title"`
 }
 
+var decoder = mahonia.NewDecoder("gbk")
+
 func init() {
 	flag.Lookup("alsologtostderr").Value.Set("true")
 	flag.Lookup("log_dir").Value.Set("./logs")
 	flag.Parse()
 }
 
+func Gudaochangsheng() {
+	baseURL := "http://www.cangqionglongqi.com/gudaochangsheng/"
+	catalogURL := baseURL + "index.html"
+
+	links, err := getChaperList(from, size, catalogURL)
+	if err != nil {
+		glog.Fatalf("getChapterList failed: %v", err)
+	}
+	// download
+	for i, l := range links {
+		chapterURI := baseURL + l.Href
+		downloadFileDec(chapterURI, l.Href)
+		glog.Infof("\n\nthe %dst chap %s downloaded", i, l.Title)
+	}
+
+	novelFile := fmt.Sprintf("gudaochangshen_%d_%d.txt", from, size)
+	// parse
+	for i, l := range links {
+		glog.Infof("parsing the %dst chapter: %s", i, l.Title)
+		content, err := parseChapter(l.Href)
+		if err != nil {
+			glog.Errorf("ignore parseChapter err: %v, continue", err)
+			continue
+		}
+		prefixTrims := []string{}
+		content = modifyContent(content, l.Title, prefixTrims, []string{"聽"})
+		err = writeContentToFile(content, novelFile)
+		if err != nil {
+			glog.Errorf("ignore writeContentToFile failed: %v", err)
+			continue
+		}
+	}
+}
+
 func Chaoshen() {
 	catalogURL := fmt.Sprintf("%s/book/%s/", host, novelNum)
-	links, err := getChaperList(from, size, catalogURL)
+	links, err := getChaperListCS(from, size, catalogURL)
 	if err != nil {
 		glog.Fatalf("getChapterList failed: %v", err)
 	}
@@ -109,7 +143,14 @@ func Chaoshen() {
 					"免费小说app安卓，支持安卓，苹果，告别一切广告",
 					"请关注微信公众号在线看:",
 				}
-				suffixTrims := []string{}
+				suffixTrims := []string{
+					"本站官方手机最新阅读器APP上架了",
+					"泰国最胸女主播全新激_情视频曝光",
+					"关注微信公众",
+					"手机客户端",
+					"小说阅读手机软件",
+					"在线看",
+				}
 				content = modifyContent(content, l.Title, prefixTrims, suffixTrims)
 				err = writeContentToFile(content, novelFile)
 				if err != nil {
@@ -122,12 +163,17 @@ func Chaoshen() {
 }
 
 func modifyContent(content, title string, prefixTrims, suffixTrims []string) string {
-	// content = strings.TrimPrefixr(content, prefix)
 	for _, pre := range prefixTrims {
 		content = strings.Replace(content, pre, "", -1)
 	}
 	for _, suffix := range suffixTrims {
-		content = strings.Replace(content, suffix, "", -1)
+		if index := strings.LastIndex(content, suffix); index > -1 {
+			tail := content[index:]
+			if len([]rune(tail)) < 120 {
+				content = content[:index]
+			}
+		}
+		// content = strings.Replace(content, suffix, "", -1)
 	}
 	content = fmt.Sprintf("%s\n\n%s\n\n\n\n\n\n\n", title, content)
 	return content
@@ -169,6 +215,7 @@ func getChaperList(from, size int, catalogURL string) ([]chapterLink, error) {
 			break
 		}
 		title := chapList.Eq(i).Text()
+		title = decoder.ConvertString(title)
 		href, found := chapList.Eq(i).Attr("href")
 		if !found {
 			continue
@@ -178,6 +225,44 @@ func getChaperList(from, size int, catalogURL string) ([]chapterLink, error) {
 		// glog.Infof("the %dst item: %q href: %s", i, title, href)
 	}
 	return result, nil
+}
+
+func getChaperListCS(from, size int, catalogURL string) ([]chapterLink, error) {
+	doc, err := goquery.NewDocument(catalogURL)
+	if err != nil {
+		panic(fmt.Sprintf("failed to catalogURL. err: %s", err))
+	}
+
+	result := make([]chapterLink, 0, size)
+	chapList := doc.Find("#list >dl > dd > a")
+	for i := from; i < chapList.Length(); i++ {
+		if i > from+size {
+			break
+		}
+		title := chapList.Eq(i).Text()
+		href, found := chapList.Eq(i).Attr("href")
+		if !found {
+			continue
+		}
+		result = append(result, chapterLink{href, title})
+
+		// glog.Infof("the %dst item: %q href: %s", i, title, href)
+	}
+	return result, nil
+}
+
+func downloadFileDec(url, filename string) error {
+	doc, err := goquery.NewDocument(url)
+	if err != nil {
+		return err
+	}
+	str, err := doc.Html()
+	if err != nil {
+		panic(fmt.Sprintf("downloadFile: %v", err))
+	}
+	str = decoder.ConvertString(str)
+	savePage(str, filename)
+	return nil
 }
 
 func downloadFile(url, filename string) error {

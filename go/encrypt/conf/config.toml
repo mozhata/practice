@@ -1,0 +1,8 @@
+listen = 1803
+
+[mysql]
+dsn = "root:codies-pwd@tcp(127.0.0.1:3307)/codies?charset=utf8mb4,utf8&parseTime=True&loc=Local"
+maxIdle = 1
+maxOpen = 2
+
+[redis]
