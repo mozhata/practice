@@ -13,11 +13,6 @@ import (
 	"practice/go/encrypt/skeleton/route"
 )
 
-const (
-	serverPort = "8888"
-	mysqlAddr  = "docker_mysql_1:3307"
-)
-
 var (
 	configPath = flag.String("conf", "conf/config.toml", "config file's path")
 )

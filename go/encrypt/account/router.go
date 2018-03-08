@@ -31,6 +31,8 @@ func register(ctx *context.Context) reply.Replyer {
 		return reply.Err(err)
 	}
 
+	// TODO: 校验参数
+	// TODO: 校验邮箱/手机是否已经注册
 	user, err := regByEmail(p.User, p.Email, p.PWD)
 	if err != nil {
 		return reply.Err(err)
@@ -48,10 +50,14 @@ func login(ctx *context.Context) reply.Replyer {
 		return reply.Err(err)
 	}
 
+	// TODO: 校验参数
 	user, err := loginByEmail(p.Email, p.PWD)
 	if err != nil {
 		return reply.Err(err)
 	}
+	// TODO: token
+
+	// TODO: {code: xx, msg: xx, body: obj}
 	return reply.JSON(map[string]interface{}{
 		"user": user,
 	})

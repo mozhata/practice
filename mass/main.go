@@ -33,10 +33,9 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"practice/mass/cryp"
-
 	"github.com/PuerkitoBio/goquery"
 	"github.com/golang/glog"
+	jsoniter "github.com/json-iterator/go"
 	"github.com/pborman/uuid"
 	"github.com/prometheus/prometheus/promql"
 	"golang.org/x/crypto/bcrypt"
@@ -178,7 +177,27 @@ func main() {
 	// TryLenSliceNil()
 	// PEM()
 	// cryp.Try()
-	cryp.TryEncrypt()
+
+	// cryp.TryEncrypt()
+
+	// tryJSONIterator()
+	for i := 0; i < 10; i++ {
+		nowNano := time.Now().UnixNano()
+		fmt.Printf("now nano: %d, 36format: %s\n", nowNano, strconv.FormatInt(nowNano, 36))
+	}
+}
+
+func tryJSONIterator() {
+	foo := struct {
+		ABC string `json:"abc"`
+		DES string `json:"des,omitempty"`
+		EDS string `json:"eds"`
+	}{
+		ABC: "abs",
+	}
+	b, err := jsoniter.Marshal(foo)
+	Check(err)
+	fmt.Printf("foo: %s\n%s\n", string(b), b)
 }
 
 func PEM() {

@@ -28,3 +28,4 @@ go/spider/medical/logs
 go/file/file
 go/encrypt/encrypt
 go/encrypt/docker/volumes/
+.idea/

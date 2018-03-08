@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"practice/go/spider/novel/chaoshen"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
@@ -25,7 +26,7 @@ const (
 
 // const (
 // 	novelNum = "3_3271" // 郝仁
-// 	from     = 1741
+// 	from     = 1762
 // )
 
 // const (
@@ -40,7 +41,7 @@ const (
 
 const (
 	novelNum = "1_1280" // 造化之王
-	from     = 2121
+	from     = 2365
 )
 
 // const (
@@ -61,8 +62,8 @@ func init() {
 
 func main() {
 	defer glog.Flush()
-	common()
-	// chaoshen.Chaoshen()
+	// common()
+	chaoshen.Chaoshen()
 	// chaoshen.Gudaochangsheng()
 	// zuiqiang.Tulong()
 	// jianzhuang.Jianzhuang()
