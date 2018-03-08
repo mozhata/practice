@@ -1,7 +1,8 @@
 package account
 
 import (
-	"practice/go/encrypt/skeleton/context"
+	"net/http"
+	"practice/go/encrypt/skeleton/input"
 	"practice/go/encrypt/skeleton/reply"
 	"practice/go/encrypt/skeleton/route"
 )
@@ -11,23 +12,23 @@ func NewRoute() []*route.Route {
 		route.NewRoute(
 			"/reg",
 			"POST",
-			register,
+			reply.Wrap(register),
 		),
 		route.NewRoute(
 			"/login",
 			"POST",
-			login,
+			reply.Wrap(login),
 		),
 	}
 }
 
-func register(ctx *context.Context) reply.Replyer {
+func register(w http.ResponseWriter, r *http.Request) reply.Replyer {
 	p := struct {
 		Email string `json:"email"`
 		PWD   string `json:"pwd"`
 		User  string `json:"user"`
 	}{}
-	if err := ctx.Input.JSONBody(&p).Error(); err != nil {
+	if err := input.NewParam(r).JSONBody(&p).Error(); err != nil {
 		return reply.Err(err)
 	}
 
@@ -41,12 +42,12 @@ func register(ctx *context.Context) reply.Replyer {
 		"user": user,
 	})
 }
-func login(ctx *context.Context) reply.Replyer {
+func login(w http.ResponseWriter, r *http.Request) reply.Replyer {
 	p := struct {
 		Email string `json:"email"`
 		PWD   string `json:"pwd"`
 	}{}
-	if err := ctx.Input.JSONBody(&p).Error(); err != nil {
+	if err := input.NewParam(r).JSONBody(&p).Error(); err != nil {
 		return reply.Err(err)
 	}
 

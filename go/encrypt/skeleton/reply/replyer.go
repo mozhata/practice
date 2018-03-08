@@ -7,6 +7,13 @@ import (
 	"practice/go/encrypt/skeleton/common"
 )
 
+func Wrap(f func(w http.ResponseWriter, r *http.Request) Replyer) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		responser := f(w, r)
+		responser(w)
+	}
+}
+
 // Replyer write result to r
 type Replyer func(w http.ResponseWriter)
 
