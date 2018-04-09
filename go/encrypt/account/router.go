@@ -22,27 +22,42 @@ func NewRoute() []*route.Route {
 	}
 }
 
-func register(w http.ResponseWriter, r *http.Request) reply.Replyer {
+func register(w http.ResponseWriter, r *http.Request) http.HandlerFunc {
+	// TODO: 验证码校验
 	p := struct {
 		Email string `json:"email"`
+		Phone string `json:"phone"`
 		PWD   string `json:"pwd"`
-		User  string `json:"user"`
 	}{}
-	if err := input.NewParam(r).JSONBody(&p).Error(); err != nil {
-		return reply.Err(err)
-	}
-
-	// TODO: 校验参数
-	// TODO: 校验邮箱/手机是否已经注册
-	user, err := regByEmail(p.User, p.Email, p.PWD)
+	err := input.NewParam(r).JSONBody(&p).Error()
 	if err != nil {
 		return reply.Err(err)
 	}
-	return reply.JSON(map[string]interface{}{
-		"user": user,
+	if err = CheckPasswordStrength(p.PWD); err != nil {
+		return reply.Err(err)
+	}
+
+	// TODO: 校验邮箱/手机是否已经注册
+	// 邮箱注册
+	var uid string
+	if p.Email != "" {
+		uid, err = regByEmail(p.Email, p.PWD)
+		if err != nil {
+			return reply.Err(err)
+		}
+	}
+	// 手机注册
+	uid, err = regByPhone(p.Phone, p.PWD)
+	if err != nil {
+		return reply.Err(err)
+	}
+
+	// TODO: 注册成功自动登录
+	return reply.Success(map[string]interface{}{
+		"user": uid,
 	})
 }
-func login(w http.ResponseWriter, r *http.Request) reply.Replyer {
+func login(w http.ResponseWriter, r *http.Request) http.HandlerFunc {
 	p := struct {
 		Email string `json:"email"`
 		PWD   string `json:"pwd"`
@@ -59,7 +74,7 @@ func login(w http.ResponseWriter, r *http.Request) reply.Replyer {
 	// TODO: token
 
 	// TODO: {code: xx, msg: xx, body: obj}
-	return reply.JSON(map[string]interface{}{
+	return reply.Success(map[string]interface{}{
 		"user": user,
 	})
 }

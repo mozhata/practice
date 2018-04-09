@@ -3,7 +3,7 @@ package account
 import (
 	"database/sql"
 
-	"github.com/mozhata/merr"
+	"practice/go/encrypt/merr"
 )
 
 type User struct {

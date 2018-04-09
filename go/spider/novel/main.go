@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"practice/go/spider/novel/chaoshen"
+	"practice/go/spider/novel/jianzhuang"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
@@ -24,10 +24,10 @@ const (
 	size = 200
 )
 
-// const (
-// 	novelNum = "3_3271" // 郝仁
-// 	from     = 1762
-// )
+const (
+	novelNum = "3_3271" // 郝仁
+	from     = 1774
+)
 
 // const (
 // 	novelNum = "86_86745" // 圣墟
@@ -39,10 +39,10 @@ const (
 // 	from     = 1200
 // )
 
-const (
-	novelNum = "1_1280" // 造化之王
-	from     = 2365
-)
+// const (
+// 	novelNum = "1_1280" // 造化之王
+// 	from     = 2365
+// )
 
 // const (
 // 	novelNum = "78_78031" // yinianyongheng
@@ -63,10 +63,10 @@ func init() {
 func main() {
 	defer glog.Flush()
 	// common()
-	chaoshen.Chaoshen()
+	// chaoshen.Chaoshen()
 	// chaoshen.Gudaochangsheng()
 	// zuiqiang.Tulong()
-	// jianzhuang.Jianzhuang()
+	jianzhuang.Jianzhuang()
 }
 
 func common() {

@@ -26,7 +26,6 @@ func init() {
 }
 
 func main() {
-
 	regRoutes := account.NewRoute()
 
 	handler := route.BuildHandler(

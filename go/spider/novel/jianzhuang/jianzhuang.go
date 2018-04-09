@@ -11,7 +11,7 @@ import (
 )
 
 var novelMap = map[string]string{
-	"3_3514": "jianzhuang",
+	"79_79596": "qinli",
 }
 
 const (
@@ -19,10 +19,9 @@ const (
 	size = 200
 )
 
-// call chaoshen
 const (
-	novelNum = "3_3514" // jianzhuang
-	from     = 797
+	novelNum = "79_79596" // qinli
+	from     = 225
 )
 
 type chapterLink struct {

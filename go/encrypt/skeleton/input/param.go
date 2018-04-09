@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/beego/mux"
+	"practice/go/encrypt/merr"
 
-	"practice/go/encrypt/skeleton/common"
+	"github.com/beego/mux"
 )
 
 type Param struct {
@@ -34,7 +34,7 @@ func (p *Param) Error() error {
 	if len(p.errs) == 0 {
 		return nil
 	}
-	return common.InvalidArgumentErr(strings.Join(p.errs, "\n"))
+	return merr.InvalidErr(nil, "param err: %s", strings.Join(p.errs, "\n"))
 }
 
 func (p *Param) Var(key string, result *string) *Param {

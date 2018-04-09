@@ -1,6 +1,17 @@
 package token
 
-import "sync"
+import (
+	"bytes"
+	"crypto/md5"
+	"encoding/binary"
+	"errors"
+	"math/big"
+	"practice/go/util"
+	"sync"
+	"time"
+
+	"practice/go/encrypt/merr"
+)
 
 var count = counter
 
@@ -14,6 +25,16 @@ type Payload struct {
 	TTL         uint16 // 单位为分钟
 	AccountId   string // 长度不定
 	LoginSource string // 3B
+}
+
+// ttl: 分钟数
+func CreateToken(uid, source string, ttl int16) string {
+	pl := Payload{
+		IssueTime:   time.Now(),
+		TTL:         ttl,
+		AccountId:   uid,
+		LoginSource: source,
+	}
 }
 
 func TryEncrypt() {

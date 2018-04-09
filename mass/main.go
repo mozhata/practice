@@ -33,6 +33,8 @@ import (
 	"unicode"
 	"unicode/utf8"
 
+	"go.uber.org/zap"
+
 	"github.com/PuerkitoBio/goquery"
 	"github.com/golang/glog"
 	jsoniter "github.com/json-iterator/go"
@@ -181,10 +183,43 @@ func main() {
 	// cryp.TryEncrypt()
 
 	// tryJSONIterator()
-	for i := 0; i < 10; i++ {
-		nowNano := time.Now().UnixNano()
-		fmt.Printf("now nano: %d, 36format: %s\n", nowNano, strconv.FormatInt(nowNano, 36))
+	// tryZap()
+}
+
+func tryZap() {
+	rawJSON := []byte(`{
+		"level": "debug",
+		"encoding": "json",
+		"outputPaths": ["stdout", "/tmp/logs"],
+		"errorOutputPaths": ["stderr"],
+		"initialFields": {"foo": "bar"},
+		"encoderConfig": {
+		  "messageKey": "message",
+		  "levelKey": "level",
+		  "levelEncoder": "lowercase"
+		}
+	  }`)
+
+	var cfg zap.Config
+	if err := json.Unmarshal(rawJSON, &cfg); err != nil {
+		panic(err)
 	}
+	logger, err := cfg.Build()
+	if err != nil {
+		panic(err)
+	}
+	//   defer logger.Sync()
+
+	logger.Info("logger construction succeeded")
+
+	sugar := zap.NewExample().Sugar()
+	sugar.Infow("failed to fetch URL",
+		"url", "http://example.com",
+		"attempt", 3,
+		"backoff", time.Second,
+	)
+	// sugar.Printf("failed to fetch URL: %s", "http://example.com")
+	time.Sleep(time.Second * 20)
 }
 
 func tryJSONIterator() {

@@ -6,23 +6,18 @@ import (
 	"practice/go/encrypt/db"
 )
 
-func regByEmail(username, email, pwd string) (*User, error) {
-	// TODO: check wether email has registered
-	u := User{
-		UUID:  uuid.New(),
-		Name:  username,
-		Email: email,
+func regByEmail(email, pwd string) (string, error) {
+	uid := uuid.New()
+	if err := CreateLocalAuth(db.MySQL, uid, email, "", pwd); err != nil {
+		return "", err
 	}
+	return uid, nil
+}
 
-	err := CreateUser(db.MySQL, u)
-	if err != nil {
-		return nil, err
+func regByPhone(phone, pwd string) (string, error) {
+	uid := uuid.New()
+	if err := CreateLocalAuth(db.MySQL, uid, "", phone, pwd); err != nil {
+		return "", err
 	}
-
-	localAuth := NewLocalAuth(u.UUID, email, "", pwd)
-	err = CreateLocalAuth(db.MySQL, localAuth)
-	if err != nil {
-		return nil, err
-	}
-	return &u, nil
+	return uid, nil
 }

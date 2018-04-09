@@ -20,6 +20,7 @@ var novelMap = map[string]string{
 	"34496": "hanxiang",
 	"27894": "sanguoyanye",
 	"20551": "yuanshiren都惊呆了",
+	"17191": "放开那个女巫",
 }
 
 const (
@@ -29,28 +30,33 @@ const (
 
 // const (
 // 	novelNum = "25877" // 超级神基因
-// 	from     = 2282
+// 	from     = 2456
+// )
+
+// const (
+// 	novelNum = "17191" // 放开那个女巫
+// 	from     = 10112
 // )
 
 // const (
 // 	novelNum = "746" // 飞剑问道
-// 	from     = 323
+// 	from     = 377
 // )
 
-// const (
-// 	novelNum = "34496" // 汉乡
-// 	from     = 522
-// )
+const (
+	novelNum = "34496" // 汉乡
+	from     = 599
+)
 
 // const (
 // 	novelNum = "20551" // 原始人都惊呆了
 // 	from     = 600
 // )
 
-const (
-	novelNum = "11355" // 修真聊天群
-	from     = 1821
-)
+// const (
+// 	novelNum = "11355" // 修真聊天群
+// 	from     = 1891
+// )
 
 // const ( // 顾道长生
 // 	novelNum = "10"

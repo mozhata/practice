@@ -2,10 +2,11 @@ package account
 
 import (
 	"database/sql"
+	"fmt"
 	"practice/go/encrypt/db"
 	"practice/go/encrypt/skeleton/common"
 
-	"github.com/mozhata/merr"
+	"practice/go/encrypt/merr"
 )
 
 type LocalAuth struct {
@@ -30,13 +31,28 @@ func (l *LocalAuth) isValid() bool {
 		(l.Email != "" || l.Phone != "")
 }
 
-func CreateLocalAuth(db *sql.DB, auth *LocalAuth) error {
-	sql := "insert into local_auth (uuid, email, phone, password) value (?, ?, ?, ?)"
-	_, err := db.Exec(sql, auth.UUID, auth.Email, auth.Phone, auth.Password)
+func CreateLocalAuth(db *sql.DB, uid, email, phone, password string) error {
+	if email == "" && phone == "" {
+		return merr.InvalidErr(nil, "email and phone is empty")
+	}
+	var (
+		colName string
+		val     string
+	)
+	if email != "" {
+		colName = "email"
+		val = email
+	} else {
+		colName = "phone"
+		val = phone
+	}
+	sql := fmt.Sprintf("insert into local_auth (uuid, %s, password) value (?, ?, ?)", colName)
+	_, err := db.Exec(sql, uid, val, password)
 	if err != nil {
 		return merr.WrapErr(err)
 	}
 	return nil
+
 }
 
 func GetLocalAuthByEmail(db *sql.DB, email string) (*LocalAuth, error) {

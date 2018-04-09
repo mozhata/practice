@@ -6,7 +6,7 @@ import (
 
 	"practice/go/util"
 
-	"github.com/mozhata/merr"
+	"practice/go/encrypt/merr"
 )
 
 // key length must be 16

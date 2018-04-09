@@ -4,59 +4,59 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"practice/go/encrypt/skeleton/common"
+	"practice/go/encrypt/merr"
 )
 
-func Wrap(f func(w http.ResponseWriter, r *http.Request) Replyer) http.HandlerFunc {
+/*
+TODO:
+错误码-msg对照表
+中英文错误
+*/
+type Response struct {
+	Code int         `json:"code"`
+	Msg  string      `json:"msg,omitempty"`
+	Body interface{} `json:"body"`
+}
+
+func Wrap(f func(w http.ResponseWriter, r *http.Request) http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		responser := f(w, r)
-		responser(w)
+		responser(w, r)
 	}
 }
 
-// Replyer write result to r
-type Replyer func(w http.ResponseWriter)
+func Success(content interface{}) http.HandlerFunc {
+	return JSON(http.StatusOK, Response{
+		Code: merr.OK,
+		Body: content,
+	})
+}
 
-func serverJSON(v interface{}) Replyer {
-	return func(w http.ResponseWriter) {
+//TODO: 创建errorcode=> msg 中英文映射,
+func Err(err error) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		e, ok := err.(*merr.MErr)
+		if !ok {
+			e = merr.WrapErr(err)
+		}
+		rp := JSON(http.StatusBadRequest, Response{
+			Code: e.Code,
+		})
+		rp(w, r)
+	}
+}
+
+// func JSON(code, statusCode int, msg string, content interface{}) http.HandlerFunc {
+func JSON(statusCode int, resp Response) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		w.WriteHeader(http.StatusOK)
-		if err := json.NewEncoder(w).Encode(v); err != nil {
+		w.WriteHeader(statusCode)
+		if resp.Msg == "" {
+			// TODO: language
+			resp.Msg = merr.GetMsg(resp.Code, []string{})
+		}
+		if err := json.NewEncoder(w).Encode(resp); err != nil {
 			panic(err)
 		}
-	}
-}
-
-func JSON(v interface{}) Replyer {
-	return serverJSON(v)
-}
-
-func EmptyJSON() Replyer {
-	return serverJSON(nil)
-}
-
-func Err(err error) Replyer {
-	return func(w http.ResponseWriter) {
-		e, ok := err.(*common.BaseErr)
-		if !ok {
-			e = common.WrapeInternalError(err)
-		}
-		switch e.StatusCode {
-		case http.StatusInternalServerError:
-			http.Error(w, e.Message, http.StatusInternalServerError)
-		case http.StatusForbidden:
-			http.Error(w, "", http.StatusForbidden)
-		case http.StatusNotFound:
-			http.Error(w, e.Message, http.StatusNotFound)
-		case http.StatusBadRequest:
-			http.Error(w, e.Message, http.StatusBadRequest)
-		}
-	}
-}
-
-func BasicAuth() Replyer {
-	return func(w http.ResponseWriter) {
-		w.Header().Set("WWW-Authenticate", "Basic realm=Restricted")
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 	}
 }
