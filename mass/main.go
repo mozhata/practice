@@ -23,6 +23,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"practice/mass/goruntine"
 	"regexp"
 	"runtime"
 	"sort"
@@ -38,9 +39,8 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/golang/glog"
 	jsoniter "github.com/json-iterator/go"
-	"github.com/pborman/uuid"
 	"github.com/prometheus/prometheus/promql"
-	"golang.org/x/crypto/bcrypt"
+	// "golang.org/x/crypto/bcrypt"
 )
 
 var (
@@ -169,7 +169,7 @@ func main() {
 	// tenxCloudTest()
 	// trySearchInts()
 
-	// goruntine.BasicCtx()
+	goruntine.BasicCtx()
 	// tryNilReceiver()
 	// tryIoCopy()
 	// tryBinaryOp()
@@ -1103,6 +1103,7 @@ func tiny() {
 	P(m)
 }
 
+/*
 func tryCrypto() {
 	pwd := "pwd"
 	hash, err := bcrypt.GenerateFromPassword([]byte(pwd), bcrypt.DefaultCost)
@@ -1131,7 +1132,7 @@ func tryCrypto() {
 	P("time: ", unix, len(unixStr))
 
 }
-
+*/
 func tryPrintfV() {
 	testStruct := struct {
 		field1 string

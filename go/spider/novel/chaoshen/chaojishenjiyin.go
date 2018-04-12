@@ -21,6 +21,7 @@ var novelMap = map[string]string{
 	"27894": "sanguoyanye",
 	"20551": "yuanshiren都惊呆了",
 	"17191": "放开那个女巫",
+	"10":    "gudaochangsheng",
 }
 
 const (
@@ -30,7 +31,7 @@ const (
 
 // const (
 // 	novelNum = "25877" // 超级神基因
-// 	from     = 2456
+// 	from     = 2471
 // )
 
 // const (
@@ -43,10 +44,10 @@ const (
 // 	from     = 377
 // )
 
-const (
-	novelNum = "34496" // 汉乡
-	from     = 599
-)
+// const (
+// 	novelNum = "34496" // 汉乡
+// 	from     = 599
+// )
 
 // const (
 // 	novelNum = "20551" // 原始人都惊呆了
@@ -58,10 +59,10 @@ const (
 // 	from     = 1891
 // )
 
-// const ( // 顾道长生
-// 	novelNum = "10"
-// 	from     = 421
-// )
+const ( // 顾道长生
+	novelNum = "10"
+	from     = 500
+)
 
 type chapterLink struct {
 	Href  string `json:"href"`

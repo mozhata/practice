@@ -12,6 +12,7 @@ import (
 
 var novelMap = map[string]string{
 	"79_79596": "qinli",
+	"79_79877": "daxiaji",
 }
 
 const (
@@ -19,9 +20,14 @@ const (
 	size = 200
 )
 
+// const (
+// 	novelNum = "79_79596" // qinli
+// 	from     = 231
+// )
+
 const (
-	novelNum = "79_79596" // qinli
-	from     = 225
+	novelNum = "79_79877" // daxiaji
+	from     = 165
 )
 
 type chapterLink struct {

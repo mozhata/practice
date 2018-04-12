@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"practice/go/spider/novel/jianzhuang"
+	"practice/go/spider/novel/chaoshen"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
@@ -64,9 +64,9 @@ func main() {
 	defer glog.Flush()
 	// common()
 	// chaoshen.Chaoshen()
-	// chaoshen.Gudaochangsheng()
+	chaoshen.Gudaochangsheng()
 	// zuiqiang.Tulong()
-	jianzhuang.Jianzhuang()
+	// jianzhuang.Jianzhuang()
 }
 
 func common() {
