@@ -22,6 +22,7 @@ var novelMap = map[string]string{
 	"20551": "yuanshiren都惊呆了",
 	"17191": "放开那个女巫",
 	"10":    "gudaochangsheng",
+	"38531": "dawangraoming",
 }
 
 const (
@@ -30,8 +31,13 @@ const (
 )
 
 // const (
+// 	novelNum = "38531" // 大王饶命
+// 	from     = 826
+// )
+
+// const (
 // 	novelNum = "25877" // 超级神基因
-// 	from     = 2471
+// 	from     = 2595
 // )
 
 // const (
@@ -41,12 +47,12 @@ const (
 
 // const (
 // 	novelNum = "746" // 飞剑问道
-// 	from     = 377
+// 	from     = 410
 // )
 
 // const (
 // 	novelNum = "34496" // 汉乡
-// 	from     = 599
+// 	from     = 668
 // )
 
 // const (
@@ -56,12 +62,12 @@ const (
 
 // const (
 // 	novelNum = "11355" // 修真聊天群
-// 	from     = 1891
+// 	from     = 1950
 // )
 
-const ( // 顾道长生
+const ( // 顾道长生 to test
 	novelNum = "10"
-	from     = 500
+	from     = 561
 )
 
 type chapterLink struct {

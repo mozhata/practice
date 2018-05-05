@@ -28,6 +28,7 @@ func init() {
 func main() {
 	regRoutes := account.NewRoute()
 
+	// TODO: global middle, sub middle
 	handler := route.BuildHandler(
 		regRoutes,
 	)

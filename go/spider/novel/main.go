@@ -62,10 +62,12 @@ func init() {
 
 func main() {
 	defer glog.Flush()
+	// depracted
 	// common()
+	// zuiqiang.Tulong()
+
 	// chaoshen.Chaoshen()
 	chaoshen.Gudaochangsheng()
-	// zuiqiang.Tulong()
 	// jianzhuang.Jianzhuang()
 }
 
