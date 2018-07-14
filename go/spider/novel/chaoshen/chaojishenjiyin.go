@@ -30,30 +30,30 @@ const (
 	size = 200
 )
 
-// const (
-// 	novelNum = "38531" // 大王饶命
-// 	from     = 826
-// )
+const (
+//	novelNum = "38531" // 大王饶命
+//	from     = 1216
+)
 
-// const (
-// 	novelNum = "25877" // 超级神基因
-// 	from     = 2595
-// )
+const (
+//	novelNum = "25877" // 超级神基因
+//	from     = 3088
+)
 
 // const (
 // 	novelNum = "17191" // 放开那个女巫
 // 	from     = 10112
 // )
 
-// const (
-// 	novelNum = "746" // 飞剑问道
-// 	from     = 410
-// )
+const (
+//	novelNum = "746" // 飞剑问道
+//	from     = 572
+)
 
-// const (
-// 	novelNum = "34496" // 汉乡
-// 	from     = 668
-// )
+const (
+//	novelNum = "34496" // 汉乡
+//	from     = 949
+)
 
 // const (
 // 	novelNum = "20551" // 原始人都惊呆了
@@ -61,14 +61,14 @@ const (
 // )
 
 // const (
-// 	novelNum = "11355" // 修真聊天群
-// 	from     = 1950
-// )
+//	novelNum = "11355" // 修真聊天群
+//	from     = 2263
+//)
 
-const ( // 顾道长生 to test
-	novelNum = "10"
-	from     = 561
-)
+// const ( // 顾道长生 to test
+// 	novelNum = "10"
+// 	from     = 572
+// )
 
 type chapterLink struct {
 	Href  string `json:"href"`
@@ -107,8 +107,8 @@ func Gudaochangsheng() {
 			glog.Errorf("ignore parseChapter err: %v, continue", err)
 			continue
 		}
-		prefixTrims := []string{}
-		content = modifyContent(content, l.Title, prefixTrims, []string{"聽"})
+		prefixTrims := []string{"聽"}
+		content = modifyContent(content, l.Title, prefixTrims, nil)
 		err = writeContentToFile(content, novelFile)
 		if err != nil {
 			glog.Errorf("ignore writeContentToFile failed: %v", err)

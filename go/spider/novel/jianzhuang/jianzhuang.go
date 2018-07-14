@@ -22,12 +22,12 @@ const (
 
 // const (
 // 	novelNum = "79_79596" // qinli
-// 	from     = 284
+// 	from     = 306
 // )
 
 const (
 	novelNum = "79_79877" // daxiaji
-	from     = 265
+	from     = 317
 )
 
 type chapterLink struct {

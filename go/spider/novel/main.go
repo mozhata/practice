@@ -66,8 +66,8 @@ func main() {
 	// common()
 	// zuiqiang.Tulong()
 
-	// chaoshen.Chaoshen()
-	chaoshen.Gudaochangsheng()
+	chaoshen.Chaoshen()
+	// chaoshen.Gudaochangsheng()
 	// jianzhuang.Jianzhuang()
 }
 
