@@ -12,7 +12,7 @@ import (
 	"log"
 	"net"
 	"net/http"
-	"practice/go/gopl/chap12"
+	bit "practice/go/gopl/byte"
 	"sort"
 	"strings"
 	"time"
@@ -36,9 +36,11 @@ func main() {
 	// TryToposort()
 	// parseHtml()
 	// chap12.BasicRefect()
-	chap12.TryAny()
+	// chap12.TryAny()
 	// chap12.TryDisplay()
 	// chap12.TrySMarshal()
+	// bit.TryBit()
+	bit.TryBitmap()
 }
 
 /*

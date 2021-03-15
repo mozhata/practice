@@ -23,7 +23,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"practice/mass/goruntine"
 	"regexp"
 	"runtime"
 	"sort"
@@ -169,7 +168,7 @@ func main() {
 	// tenxCloudTest()
 	// trySearchInts()
 
-	goruntine.BasicCtx()
+	// goruntine.BasicCtx()
 	// tryNilReceiver()
 	// tryIoCopy()
 	// tryBinaryOp()
@@ -184,6 +183,14 @@ func main() {
 
 	// tryJSONIterator()
 	// tryZap()
+
+	tryStringSplit()
+}
+
+func tryStringSplit() {
+	str := ""
+	sl := strings.Split(str, ",")
+	fmt.Printf("sl: %+v, len: %d\n", sl, len(sl))
 }
 
 func tryZap() {
@@ -852,7 +859,7 @@ func tryUmarshal() {
 		Specs []ruleSpec `json:"specs"`
 	}
 	comm := ruleCommon{
-		User: "admin",
+		User:                  "admin",
 		DisableNotifyInterval: "25m",
 		Enable:                1,
 		ClusterID:             "CID-fe23111d77cb",
