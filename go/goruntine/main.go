@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"html/template"
@@ -27,7 +28,6 @@ import (
 	"golang.org/x/net/html"
 
 	"github.com/golang/glog"
-	"github.com/zykzhang/handy"
 )
 
 var P func(...interface{}) (int, error) = fmt.Println
@@ -49,7 +49,37 @@ func main() {
 	// chapTwo()
 	// chapThree()
 	// chapfour()
-	chapFive()
+	// chapFive()
+	// chapEight()
+}
+
+func chapEight() {
+	// trySelect()
+	trySelectDefault()
+}
+func trySelectDefault() {
+	ch := make(chan int, 1)
+	for i := 0; i < 10; i++ {
+		if i == 8 {
+			ch <- i
+		}
+		select {
+		case v := <-ch:
+			fmt.Println("this is ", v)
+		default:
+			fmt.Println(i)
+		}
+	}
+}
+
+func trySelect() {
+	tick := time.Tick(time.Second)
+	select {
+	case t := <-tick:
+		fmt.Printf("time is %s\n", t)
+	default:
+		fmt.Println("do nothing")
+	}
 }
 
 func chapFive() {
@@ -156,7 +186,7 @@ func issuesReportHTML() {
 </table>
 `))
 	result, err := githublib.SearchIssues(os.Args[1:])
-	glog.Infoln(handy.MarshalJSONOrDie(result))
+	glog.Infoln(MarshalJSONOrDie(result))
 	if err != nil {
 		glog.Fatal(err)
 	}
@@ -183,7 +213,7 @@ Age:    {{.CreateAt | daysAgo}} days
 		glog.Fatal(err)
 	}
 	result, err := githublib.SearchIssues(os.Args[1:])
-	glog.Infoln(handy.MarshalJSONOrDie(result))
+	glog.Infoln(MarshalJSONOrDie(result))
 	if err != nil {
 		glog.Fatal(err)
 	}
@@ -707,7 +737,9 @@ func blockWithout() {
 	var ch chan int
 	P("step one")
 	go func() {
+		P("sending")
 		ch <- 1
+		P("sended")
 	}()
 	P("step two")
 	// 到此阻塞
@@ -719,7 +751,9 @@ func notBlockWithInit() {
 	ch := make(chan int)
 	P("step one")
 	go func() {
+		P("sending")
 		ch <- 1
+		P("sended")
 	}()
 	P("step two")
 	// 成功执行
@@ -792,4 +826,12 @@ func Count(lock *sync.Mutex) {
 func Count2(ch chan int) {
 	fmt.Println("Count2ing")
 	ch <- 1
+}
+
+func MarshalJSONOrDie(i interface{}) []byte {
+	bs, err := json.Marshal(i)
+	if err != nil {
+		panic(err)
+	}
+	return bs
 }

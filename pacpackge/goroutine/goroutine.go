@@ -12,9 +12,35 @@ var P func(...interface{}) (int, error) = fmt.Println
 func main() {
 	// basic()
 	// Timeout()
-	classicalMod()
+	// classicalMod()
 	// classicalMod2()
+	trySelect()
 }
+
+func trySelect() {
+	c := make(chan int)
+	quit := make(chan bool)
+	go func() {
+		for i := 0; i < 3; i++ {
+			c <- i
+			fmt.Printf("sed %d\n", i)
+		}
+		close(quit)
+		fmt.Println("sed quit")
+	}()
+	for {
+		select {
+		case v := <-c:
+			fmt.Printf("got %d, sleeping...\n", v)
+			time.Sleep(time.Second * 2)
+			fmt.Printf("sleep for %d done\n", v)
+		case <-quit:
+			fmt.Println("got exit sig, quit")
+			return
+		}
+	}
+}
+
 func basic() {
 	chs := make([]chan int, 4)
 	for i := 0; i < 4; i++ {
