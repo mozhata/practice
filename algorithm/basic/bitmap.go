@@ -6,9 +6,9 @@ import (
 )
 
 func TryIntSet() {
-	set := IntSet{}
+	set := &IntSet{}
 	set.AddAll(1, 2, 3)
-	fmt.Printf("set: %v\n", set)
+	fmt.Printf("set: %s\n", set)
 }
 
 type IntSet struct {
@@ -42,6 +42,7 @@ func (s *IntSet) Remove(x int) {
 	s.words[idx] &^= 1 << bit
 }
 
+// 并集
 func (s *IntSet) UnionWith(t IntSet) {
 	for idx, word := range t.words {
 		if idx < len(s.words) {
@@ -51,14 +52,41 @@ func (s *IntSet) UnionWith(t IntSet) {
 		}
 	}
 }
-func (s *IntSet) DiffWith(t IntSet) {
+
+// 交集
+func (s *IntSet) IntersectionWith(t IntSet) {
+	tlen := len(t.words)
+	if tlen < len(s.words) {
+		s.words = s.words[0:tlen]
+	}
 	for idx, word := range t.words {
-		if idx < len(s.words) {
-			s.words[idx] ^= word
+		if idx >= len(s.words) {
+			break
+		}
+		s.words[idx] &= word
+	}
+}
+
+// 排除包含在目标集合内的元素
+func (s *IntSet) DifferenceWith(t IntSet) {
+	for i, w := range t.words {
+		if i >= len(s.words) {
+			break
+		}
+		s.words[i] &^= w
+	}
+}
+
+// 排除与目标集合重复的元素, 其余元素组成新集合
+func (s *IntSet) SymmetricDiffWith(t IntSet) {
+	for i, w := range t.words {
+		if i >= len(s.words) {
+			s.words = append(s.words, w)
+		} else {
+			s.words[i] ^= w
 		}
 	}
 }
-func (s *IntSet) SymmetricDiffWith(t IntSet) {}
 func popCount(x uint64) int {
 	var count int
 	for x != 0 {
@@ -93,15 +121,15 @@ func (s *IntSet) Elems() []uint64 {
 	}
 	return result
 }
-func (s *IntSet) String() string {
+func (s IntSet) String() string {
 	var buf bytes.Buffer
 	buf.WriteByte('{')
 	elms := s.Elems()
 	if len(elms) > 0 {
-		if buf.Len() > len("{") {
-			buf.WriteByte(' ')
-		}
 		for _, e := range elms {
+			if buf.Len() > len("{") {
+				buf.WriteByte(' ')
+			}
 			fmt.Fprintf(&buf, "%d", e)
 		}
 	}
