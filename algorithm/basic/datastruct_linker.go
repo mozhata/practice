@@ -48,3 +48,17 @@ func deDuplicate(list *ListNode) *ListNode {
 	}
 	return list
 }
+
+func DelDuplicateElem(head *ListNode) *ListNode {
+	dumpy := ListNode{Next: head}
+	pre := dumpy
+	head = head
+	var watchedRemove bool
+	for head != nil {
+		if head.Next != nil && head.Next.Val == head.Val {
+			head = head.Next.Next
+			watchedRemove = true
+		}
+	}
+	return nil
+}
