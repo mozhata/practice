@@ -5,6 +5,7 @@ package middleware
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"net/http"
 	"net/http/httputil"
 	"practice/go/encrypt/merr"
@@ -13,8 +14,6 @@ import (
 
 	"github.com/go-chi/chi/middleware"
 	"github.com/golang/glog"
-
-	"git.meiqia.com/triones/compass/json"
 )
 
 const (

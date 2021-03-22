@@ -1,7 +1,3 @@
-/*
-TODO: chapter 7
-*/
-
 package main
 
 import (
@@ -12,7 +8,6 @@ import (
 	"log"
 	"net"
 	"net/http"
-	bit "practice/go/gopl/byte"
 	"sort"
 	"strings"
 	"time"
@@ -35,12 +30,12 @@ func main() {
 	// echoConn()
 	// TryToposort()
 	// parseHtml()
-	// chap12.BasicRefect()
+	chap12.BasicRefect()
 	// chap12.TryAny()
 	// chap12.TryDisplay()
 	// chap12.TrySMarshal()
 	// bit.TryBit()
-	bit.TryBitmap()
+	// bit.TryBitmap()
 }
 
 /*

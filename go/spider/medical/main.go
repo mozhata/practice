@@ -9,8 +9,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/zykzhang/handy"
-
 	"github.com/mozhata/merr"
 
 	"github.com/PuerkitoBio/goquery"
@@ -44,7 +42,6 @@ func main() {
 	defer glog.Flush()
 	// download list page
 	pageLists := downloadListPage()
-	glog.Infof("pageLists: %s", handy.MarshalJSONOrDie(pageLists))
 
 	// parse list page to get detail page entrypoint
 	companyEntries := getCompanyEntries(pageLists)
@@ -128,7 +125,6 @@ func parseDetailContent(filename string) map[string]string {
 			break
 		}
 	}
-	glog.Infof("result: %s", handy.MarshalJSONOrDie(result))
 
 	return result
 }

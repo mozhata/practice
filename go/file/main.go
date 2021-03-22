@@ -8,8 +8,6 @@ import (
 	"practice/go/file/image"
 	"practice/go/util"
 	"syscall"
-
-	"github.com/mozhata/merr"
 )
 
 const (

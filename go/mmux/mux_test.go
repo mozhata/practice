@@ -1,6 +1,7 @@
 package mmux_test
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -8,7 +9,6 @@ import (
 	"practice/go/mmux"
 	"testing"
 
-	"github.com/mozhata/handy"
 	"github.com/smartystreets/goconvey/convey"
 )
 
@@ -20,8 +20,8 @@ var (
 func TestMux(t *testing.T) {
 
 	mhandler := func(w http.ResponseWriter, r *http.Request, params mmux.PathVars) {
-		fmt.Printf("!!the URL.Path: %q, params: %s\n", r.URL.Path, handy.MarshalJSONOrDie(params))
-		fmt.Fprintf(w, "!!!!the URL.Path: %q, params: %s\n", r.URL.Path, handy.MarshalJSONOrDie(params))
+		fmt.Printf("!!the URL.Path: %q, params: %s\n", r.URL.Path, MarshalJSONOrDie(params))
+		fmt.Fprintf(w, "!!!!the URL.Path: %q, params: %s\n", r.URL.Path, MarshalJSONOrDie(params))
 	}
 	convey.Convey("testMux", t, func() {
 		mMux := mmux.New()
@@ -185,4 +185,12 @@ func unifyPath(path string) string {
 		path += "/"
 	}
 	return path
+}
+
+func MarshalJSONOrDie(val interface{}) []byte {
+	bs, err := json.Marshal(val)
+	if err != nil {
+		panic(err)
+	}
+	return bs
 }
