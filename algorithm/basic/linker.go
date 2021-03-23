@@ -49,16 +49,34 @@ func deDuplicate(list *ListNode) *ListNode {
 	return list
 }
 
+/*
+TODO: 需要二刷的
+
+https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/
+nil
+1 -> 2 -> 2 -> 3
+1 -> 1 -> 1 -> 3
+1 -> 2 -> 3 -> 3
+*/
 func DelDuplicateElem(head *ListNode) *ListNode {
-	dumpy := ListNode{Next: head}
-	pre := dumpy
-	head = head
-	var watchedRemove bool
-	for head != nil {
-		if head.Next != nil && head.Next.Val == head.Val {
-			head = head.Next.Next
-			watchedRemove = true
+	// 这部分下面的逻辑包含了
+	// if head == nil || head.Next == nil {
+	// 	return head
+	// }
+	dumpy := &ListNode{Next: head}
+	head = dumpy
+	// head 作为游标
+	for head.Next != nil && head.Next.Next != nil {
+		if head.Next.Val == head.Next.Next.Val {
+			rmVal := head.Next.Val
+			// 从next开始, 删掉所有包含此值的节点
+			for head.Next != nil && head.Next.Val == rmVal {
+				head.Next = head.Next.Next
+			}
+		} else {
+			// 游标下移
+			head = head.Next
 		}
 	}
-	return nil
+	return dumpy.Next
 }

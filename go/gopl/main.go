@@ -8,6 +8,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"practice/go/gopl/chap12"
 	"sort"
 	"strings"
 	"time"
@@ -30,8 +31,9 @@ func main() {
 	// echoConn()
 	// TryToposort()
 	// parseHtml()
-	chap12.BasicRefect()
-	// chap12.TryAny()
+	// ch
+	// ap12.BasicRefect()
+	chap12.TryAny()
 	// chap12.TryDisplay()
 	// chap12.TrySMarshal()
 	// bit.TryBit()
