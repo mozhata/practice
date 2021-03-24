@@ -8,6 +8,7 @@ import (
 
 /*
 给定一个排序链表，删除所有重复的元素，使得每个元素只出现一次。
+https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/
 */
 func TryDeDuplicate() {
 	list := &ListNode{
@@ -33,6 +34,39 @@ func TryDeDuplicate() {
 type ListNode struct {
 	Val  int
 	Next *ListNode
+}
+
+func (l *ListNode) PushItem(val int) {
+	head := l
+	for head.Next != nil {
+		head = head.Next
+	}
+	head.Next = &ListNode{Val: val}
+}
+
+func BuildList(arr []int) *ListNode {
+	dumpy := &ListNode{}
+	for _, i := range arr {
+		dumpy.PushItem(i)
+	}
+	return dumpy.Next
+}
+
+/*
+// TODO: 还需要重新刷一遍
+给定一个排序链表，删除所有重复的元素，使得每个元素只出现一次。
+https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/
+*/
+func Deduplicate(head *ListNode) *ListNode {
+	cur := head
+	for cur != nil {
+		if cur.Next != nil && cur.Val == cur.Next.Val {
+			cur.Next = cur.Next.Next
+			continue
+		}
+		cur = cur.Next
+	}
+	return head
 }
 
 func deDuplicate(list *ListNode) *ListNode {
@@ -79,4 +113,18 @@ func DelDuplicateElem(head *ListNode) *ListNode {
 		}
 	}
 	return dumpy.Next
+}
+
+/*
+https://leetcode-cn.com/problems/reverse-linked-list/
+*/
+func ReverseLink(head *ListNode) *ListNode {
+	var new *ListNode
+	for head != nil {
+		tmp := head.Next
+		head.Next = new
+		new = head
+		head = tmp
+	}
+	return new
 }
