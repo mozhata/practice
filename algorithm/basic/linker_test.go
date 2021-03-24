@@ -8,91 +8,31 @@ import (
 )
 
 func TestDelDuplicateElem(t *testing.T) {
+	rawTable := []struct {
+		input  []int
+		expect []int
+	}{
+		{nil, nil},
+		{[]int{1, 2, 2, 3}, []int{1, 3}},
+		{[]int{1, 1, 1, 3}, []int{3}},
+		{[]int{1, 2, 3, 4}, []int{1, 2}},
+	}
 	tables := []struct {
 		Input  *basic.ListNode
 		Expect *basic.ListNode
-	}{
-		{
-			Input:  nil,
-			Expect: nil,
-		},
-		{
-			Input: &basic.ListNode{
-				Val: 1,
-				Next: &basic.ListNode{
-					Val: 2,
-					Next: &basic.ListNode{
-						Val: 2,
-						Next: &basic.ListNode{
-							Val: 3,
-						},
-					},
-				},
-			},
-			Expect: &basic.ListNode{
-				Val: 1,
-				Next: &basic.ListNode{
-					Val: 3,
-				},
-			},
-		},
-		{
-			Input: &basic.ListNode{
-				Val: 1,
-				Next: &basic.ListNode{
-					Val: 1,
-					Next: &basic.ListNode{
-						Val: 1,
-						Next: &basic.ListNode{
-							Val: 3,
-						},
-					},
-				},
-			},
-			Expect: &basic.ListNode{
-				Val: 3,
-			},
-		},
-		{
-			Input: &basic.ListNode{
-				Val: 1,
-				Next: &basic.ListNode{
-					Val: 2,
-					Next: &basic.ListNode{
-						Val: 3,
-						Next: &basic.ListNode{
-							Val: 3,
-						},
-					},
-				},
-			},
-			Expect: &basic.ListNode{
-				Val: 1,
-				Next: &basic.ListNode{
-					Val: 2,
-				},
-			},
-		},
+	}{}
+	inh := basic.ListNode{}
+	exh := basic.ListNode{}
+	for _, ra := range rawTable {
+		for _, i := range ra.input {
+			inh.Next = &basic.ListNode{Val: i}
+		}
+		for _, j := range ra.expect {
+			exh.Next = &basic.ListNode{Val: j}
+		}
 	}
 	for _, i := range tables {
 		o := basic.DelDuplicateElem(i.Input)
 		Announce(t, o, assertions.ShouldResemble, i.Expect)
 	}
 }
-
-/*
-
-func TestSetLen(t *testing.T) {
-	s := basic.IntSet{}
-	Announce(t, s.Len(), assertions.ShouldEqual, 0)
-	s.Add(0)
-	Announce(t, s.Len(), assertions.ShouldEqual, 1)
-	s.Add(2)
-	Announce(t, s.Len(), assertions.ShouldEqual, 2)
-	s.Add(3)
-	Announce(t, s.Len(), assertions.ShouldEqual, 3)
-	s.AddAll(4, 5)
-	Announce(t, s.Len(), assertions.ShouldEqual, 5)
-
-}
-*/
