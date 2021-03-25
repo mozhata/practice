@@ -1,3 +1,5 @@
+参考: https://greyireland.gitbook.io/algorithm-pattern/
+
 ## 问题收集
 golang调度模型
 

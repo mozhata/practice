@@ -1,7 +1,12 @@
 package basic
 
-// 前序递归遍历
-// TODO:
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+// 前序递归遍历: 略
 
 // 前序非递归遍历
 // TODO

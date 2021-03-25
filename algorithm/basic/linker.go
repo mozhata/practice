@@ -128,3 +128,27 @@ func ReverseLink(head *ListNode) *ListNode {
 	}
 	return new
 }
+
+// TODO: 不会, 先跳过
+func ReverseBetween(head *ListNode, mIdx, nIdx int) *ListNode {
+	// 假设m, count 超过限制会panic
+	if head == nil {
+		return nil
+	}
+	cur := head
+	idx := 0
+	for cur != nil {
+		if idx == mIdx {
+			// 开始反转
+
+		}
+		if idx == nIdx {
+			// 反转完成, 收尾
+		}
+
+		// 指针下移
+		cur = cur.Next
+		idx++
+	}
+	return head
+}
