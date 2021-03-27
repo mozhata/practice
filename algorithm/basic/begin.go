@@ -1,19 +1,40 @@
 package basic
 
 /*
-strStr <E>
-给定一个 haystack 字符串和一个 needle 字符串，在 haystack 字符串中找出 needle 字符串出现的第一个位置 (从0开始)。如果不存在，则返回  -1。
-
-示例 1:
-
-输入: haystack = "hello", needle = "ll"
-输出: 2
-示例 2:
-
-输入: haystack = "aaaaa", needle = "bba"
-输出: -1
+28. 实现 strStr()
+https://leetcode-cn.com/problems/implement-strstr/
 */
-// TODO
+func IndexOfSubStr(haystack, needle string) int {
+	subLen := len(needle)
+	if subLen == 0 {
+		return 0
+	}
+	haysLen := len(haystack)
+	var (
+		i, j int
+	)
+	for i = 0; i < haysLen-subLen+1; i++ {
+		if haystack[i] != needle[0] {
+			continue
+		}
+		for j = 0; j < subLen; j++ {
+			if haystack[i+j] != needle[j] {
+				break
+			}
+		}
+		if j == subLen {
+			return i
+		}
+	}
+	return -1
+}
+
+func TryForI(n int) int {
+	var i int
+	for i = 0; i < n; i++ {
+	}
+	return i
+}
 
 /*
 subsets: <M>
