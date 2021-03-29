@@ -1,5 +1,7 @@
 package basic
 
+import "strconv"
+
 /*
 28. 实现 strStr()
 https://leetcode-cn.com/problems/implement-strstr/
@@ -34,6 +36,37 @@ func TryForI(n int) int {
 	for i = 0; i < n; i++ {
 	}
 	return i
+}
+
+/*
+逆波兰表达式求值
+https://leetcode-cn.com/problems/evaluate-reverse-polish-notation/
+// 取出元素, 入栈, 直到遇到非数, 出栈两个元素, 计算后在入栈
+*/
+func EvalRPN(tokens []string) int {
+	stack := make([]int, 0)
+	for i := 0; i < len(tokens); i++ {
+		val, err := strconv.Atoi(tokens[i])
+		if err != nil {
+			b, a := stack[len(stack)-1], stack[len(stack)-2]
+			stack = stack[:len(stack)-2]
+			var tmp int
+			switch tokens[i] {
+			case "+":
+				tmp = a + b
+			case "-":
+				tmp = a - b
+			case "*":
+				tmp = a * b
+			case "/":
+				tmp = a / b
+			}
+			stack = append(stack, tmp)
+		} else {
+			stack = append(stack, val)
+		}
+	}
+	return stack[0]
 }
 
 /*
