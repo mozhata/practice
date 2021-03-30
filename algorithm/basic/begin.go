@@ -1,6 +1,8 @@
 package basic
 
-import "strconv"
+import (
+	"strconv"
+)
 
 /*
 28. 实现 strStr()
@@ -67,6 +69,83 @@ func EvalRPN(tokens []string) int {
 		}
 	}
 	return stack[0]
+}
+
+/*
+1,2,3    7,4,1
+4,5,6 => 8,5,2
+7,8,9    9,6,3
+
+1: 对角线对折翻转互换, 2,4 互换 (x,y) => (y,x)
+2: 中线对折互换 1,7 互换 (x,y) => (x, n-y-1)
+https://leetcode-cn.com/problems/rotate-matrix-lcci/
+
+*/
+func Rotate(matrix [][]int) {
+	n := len(matrix)
+	if n == 0 {
+		return
+	}
+	// 对角线互换
+	for i := 0; i < n; i++ {
+		for j := i; j < n; j++ {
+			matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+		}
+	}
+	// 中线互换
+	for j := 0; j < n; j++ {
+		for i := 0; i < n/2; i++ {
+			matrix[j][i], matrix[j][n-i-1] = matrix[j][n-i-1], matrix[j][i]
+		}
+	}
+}
+
+/*
+字符串解码
+输入：s = "3[a]2[bc]"
+输出："aaabcbc"
+https://leetcode-cn.com/problems/decode-string/
+*/
+func DecodeStr(s string) string {
+	stack := make([]byte, 0)
+	for i := range s {
+		if s[i] != ']' {
+			stack = append(stack, s[i])
+			continue
+		}
+		// 是 ']', 把"[]"内的字符找出来,
+		tmp := make([]byte, 0)
+		var b byte
+		for {
+			// pop 掉 '['
+			b = stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			if b == '[' {
+				break
+			}
+			tmp = append(tmp, b)
+		}
+		// 找到数字部分
+		var idx = 1
+		for len(stack) >= idx {
+			if stack[len(stack)-idx] >= '0' && stack[len(stack)-idx] <= '9' {
+				idx++
+				continue
+			}
+			break
+		}
+		nums := stack[len(stack)-idx+1:]
+		stack = stack[:len(stack)-idx+1]
+		num, _ := strconv.Atoi(string(nums))
+		// 完成翻译
+		// 压辉栈内
+		for ii := 0; ii < num; ii++ {
+			for j := 0; len(tmp)-j > 0; j++ {
+				stack = append(stack, tmp[len(tmp)-j-1])
+			}
+		}
+	}
+	return string(stack)
 }
 
 /*
