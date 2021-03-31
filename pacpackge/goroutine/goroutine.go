@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 )
@@ -14,7 +15,41 @@ func main() {
 	// Timeout()
 	// classicalMod()
 	// classicalMod2()
-	trySelect()
+	// trySelect()
+	tryGMP()
+}
+
+/*
+设置max=3, 开4个go runtime
+使用ps 查看有几个进程
+*/
+func tryGMP() {
+	runtime.GOMAXPROCS(3)
+	go func() {
+		for i := 0; i < 1000; i++ {
+			fmt.Println(i)
+			time.Sleep(time.Second)
+		}
+	}()
+	go func() {
+		for i := 1000; i < 2000; i++ {
+			fmt.Println(i)
+			time.Sleep(time.Second)
+		}
+	}()
+	go func() {
+		for i := 2000; i < 3000; i++ {
+			fmt.Println(i)
+			time.Sleep(time.Second)
+		}
+	}()
+	go func() {
+		for i := 3000; i < 4000; i++ {
+			fmt.Println(i)
+			time.Sleep(time.Second)
+		}
+	}()
+	time.Sleep(1000 * time.Second)
 }
 
 func trySelect() {
