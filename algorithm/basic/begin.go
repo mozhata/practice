@@ -4,6 +4,20 @@ import (
 	"strconv"
 )
 
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+func min(a, b int) int {
+	if a > b {
+		return b
+	}
+	return a
+}
+
 /*
 28. 实现 strStr()
 https://leetcode-cn.com/problems/implement-strstr/
@@ -173,3 +187,65 @@ subsets: <M>
 
 // 二进制法
 // TODO
+
+/*
+三角形最小路径和
+https://leetcode-cn.com/problems/triangle/
+*/
+func MinimumTotal(triangle [][]int) int {
+	n := len(triangle)
+	if n == 0 {
+		return 0
+	}
+	// f[i][j] 表示从顶部走到(i,j)位置的最小路径和
+	f := make([][]int, n)
+	// 初始化
+	for i := 0; i < n; i++ {
+		f[i] = make([]int, i+1)
+	}
+	f[0][0] = triangle[0][0]
+	// 计算
+	for i := 1; i < n; i++ {
+		// 左边(j=0)
+		f[i][0] = f[i-1][0] + triangle[i][0]
+		// 右边(j=i)
+		f[i][i] = f[i-1][i-1] + triangle[i][i]
+		// 中间部分
+		for j := 1; j < i; j++ {
+			f[i][j] = min(f[i-1][j], f[i-1][j-1]) + triangle[i][j]
+		}
+	}
+
+	// 在f[n-1][0]到f[n-1][n-1] 中找最小值
+	ans := f[n-1][0]
+	for i := 1; i < n; i++ {
+		ans = min(ans, f[n-1][i])
+	}
+	return ans
+}
+
+/*
+不同路径
+https://leetcode-cn.com/problems/unique-paths/
+*/
+func UniquePaths(m int, n int) int {
+	if m < 2 || n < 2 {
+		return 1
+	}
+	// f[i][j] 表示走到(i,j)的路径数, f[i][j] = f[i-1,j] + f[i][j-1]
+	// 初始化
+	f := make([][]int, m)
+	for i := 0; i < m; i++ {
+		f[i] = make([]int, n)
+		f[i][0] = 1
+	}
+	for j := 0; j < n; j++ {
+		f[0][j] = 1
+	}
+	for i := 1; i < m; i++ {
+		for j := 1; j < n; j++ {
+			f[i][j] = f[i][j-1] + f[i-1][j]
+		}
+	}
+	return f[m-1][n-1]
+}

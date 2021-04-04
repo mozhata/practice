@@ -157,10 +157,3 @@ func LargestRetangleAreaForce(heights []int) int {
 	}
 	return result
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
