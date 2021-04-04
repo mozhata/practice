@@ -5,10 +5,14 @@ import (
 	"fmt"
 )
 
-func TryIntSet() {
-	set := &IntSet{}
-	set.AddAll(1, 2, 3)
-	fmt.Printf("set: %s\n", set)
+func TryByteOp() {
+	// 除2等同于右移一位, 除4 除8 等同; 但是只有正数运算的时候才成立
+	tables := []int{-2, -4, -5, -8, -32, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 15, 16, 32}
+	for _, v := range tables {
+		fmt.Printf("val: %d, %d >> 1: %d, %d/2: %d\n", v, v, v>>1, v, v/2)
+		fmt.Printf("val: %d, %d >> 2: %d, %d/4: %d\n", v, v, v>>2, v, v/4)
+		fmt.Printf("val: %d, %d >> 3: %d, %d/8: %d\n", v, v, v>>2, v, v/4)
+	}
 }
 
 type IntSet struct {
