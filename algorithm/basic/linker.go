@@ -152,3 +152,29 @@ func ReverseBetween(head *ListNode, mIdx, nIdx int) *ListNode {
 	}
 	return head
 }
+
+func swapPairs(head *ListNode) *ListNode {
+	// solution1: 递归
+
+	// if head == nil || head.Next == nil {
+	// 	return head
+	// }
+	// next := head.Next
+	// head.Next = swapPairs(next.Next)
+	// next.Next = head
+	// return next
+
+	// solution2: 非递归
+	pre := &ListNode{}
+	pre.Next = head
+	tmp := pre
+	for tmp.Next != nil && tmp.Next.Next != nil {
+		a, b := tmp.Next, tmp.Next.Next
+		tmp.Next = b
+		ttmp := b.Next
+		b.Next = a
+		a.Next = ttmp
+		tmp = a
+	}
+	return pre.Next
+}

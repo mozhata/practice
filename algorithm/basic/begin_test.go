@@ -53,6 +53,22 @@ func TestIndexOfSubStr(t *testing.T) {
 		Announce(t, idx, assertions.ShouldEqual, cs.expect)
 	}
 }
+
+func TestMinWindowV1(t *testing.T) {
+	tables := []struct {
+		input  []string
+		expect string
+	}{
+		{
+			[]string{"ADOBECODEBANC", "ABC"},
+			"BANC",
+		},
+	}
+	for _, cs := range tables {
+		out := basic.MinWindowV1(cs.input[0], cs.input[1])
+		Announce(t, out, assertions.ShouldEqual, cs.expect)
+	}
+}
 func TestDecodeStr(t *testing.T) {
 	tables := []struct {
 		input  string

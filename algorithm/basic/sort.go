@@ -51,18 +51,15 @@ func quickSort(arr []int) {
 	}
 }
 
-// 设定一个基准值P, 通过一次排序使左变的元素都小于P, 右边的元素都大于P
-func partition(arr []int, left, right int) int {
-	p := arr[right]                 // 取最末元素为基准值
-	i := left                       // 用于交换, 保证第i个值小于P
-	for j := left; j < right; j++ { // 最有一个元素不需要判断
-		if arr[j] < p {
-			arr[i], arr[j] = arr[j], arr[i] // 保证第i个元素比P小
-			i++
-			// arr[i], a
-		}
+/*
+数组中的第K个最大元素
+https://leetcode-cn.com/problems/kth-largest-element-in-an-array/
+*/
+func FindKthLargest(nums []int, k int) int {
+	n := len(nums)
+	if n < 1 || k < 0 || k > n {
+		return -1
 	}
-	// 最后一次i累加之后并没有交换到比P小的值, 需要和最后的P位置做一下交换
-	arr[i], arr[right] = arr[right], arr[i]
-	return i
+	quickSort(nums)
+	return nums[n-k]
 }

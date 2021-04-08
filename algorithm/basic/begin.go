@@ -249,3 +249,66 @@ func UniquePaths(m int, n int) int {
 	}
 	return f[m-1][n-1]
 }
+
+/*
+最小覆盖子串
+https://leetcode-cn.com/problems/minimum-window-substring/
+*/
+// 超出时间限制了, 下次再来
+func MinWindowV1(s string, t string) string {
+	if s == "" || t == "" {
+		return ""
+	}
+	var (
+		mt         = make(map[byte]int)
+		lenT, lenS int
+
+		bestL, bestR int // 最小窗口的左右indx
+		start, end   int // 临时窗口的左右indx
+		matchNum     int
+	)
+	for i := range t {
+		mt[t[i]] += 1
+		lenT++
+	}
+
+	lenS = len(s)
+	bestR = lenS // 初始化为一个较大值
+	if lenS < lenT {
+		return ""
+	}
+	shouldMatchNum := len(mt)
+	min := lenS + 1
+	win := make(map[byte]int)
+	for end < lenS {
+		c := s[end]
+		end++
+		if mt[c] > 0 {
+			win[c] += 1
+			if win[c] == mt[c] {
+				matchNum++
+			}
+		}
+		// win 里面内满的时候
+		for matchNum == shouldMatchNum {
+			if end-start < min {
+				min = end - start
+				bestL, bestR = start, end
+			}
+			c := s[start]
+			start++
+			if win[c] > 0 {
+				if win[c] == mt[c] {
+					matchNum--
+				}
+				win[c]--
+			}
+		}
+
+	}
+
+	if min > lenS {
+		return ""
+	}
+	return s[bestL:bestR]
+}
