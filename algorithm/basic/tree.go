@@ -1,5 +1,9 @@
 package basic
 
+import (
+	"math"
+)
+
 type TreeNode struct {
 	Val   int
 	Left  *TreeNode
@@ -156,4 +160,33 @@ func LargestRetangleAreaForce(heights []int) int {
 		result = max(result, (right-left+1)*v)
 	}
 	return result
+}
+
+/*
+验证二叉搜索树
+https://leetcode-cn.com/problems/validate-binary-search-tree/
+// 使用中序遍历
+*/
+func IsValidBST(root *TreeNode) bool {
+	if root == nil {
+		return true
+	}
+	stack := make([]*TreeNode, 0, 8)
+	preVal := math.MinInt64
+
+	for root != nil || len(stack) > 0 {
+		for root != nil {
+			stack = append(stack, root)
+			root = root.Left
+		}
+		root = stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		if root.Val <= preVal {
+			return false
+		}
+		preVal = root.Val
+		root = root.Right
+	}
+
+	return true
 }

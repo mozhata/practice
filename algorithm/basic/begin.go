@@ -312,3 +312,31 @@ func MinWindowV1(s string, t string) string {
 	}
 	return s[bestL:bestR]
 }
+
+/*
+无重复字符的最长子串
+https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/
+*/
+func LengthOfLongestSubstring(s string) int {
+	lenS := len(s)
+	if lenS == 0 {
+		return 0
+	}
+	var (
+		left, right int
+		win         = make(map[byte]int)
+		maxLen      int
+	)
+	for right < lenS {
+		c := s[right]
+		right++
+		win[c]++
+		for win[c] > 1 {
+			d := s[left]
+			win[d]--
+			left++
+		}
+		maxLen = max(maxLen, right-left)
+	}
+	return maxLen
+}

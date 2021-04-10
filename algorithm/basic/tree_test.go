@@ -51,3 +51,55 @@ func TestTravleTree(t *testing.T) {
 		Announce(t, out, assertions.ShouldResemble, cs.expect)
 	}
 }
+
+func TestIsValidBST(t *testing.T) {
+	tables := []struct {
+		input  *basic.TreeNode
+		expect bool
+	}{
+		{
+			nil,
+			true,
+		},
+		{
+			&basic.TreeNode{Val: 1},
+			true,
+		},
+		{
+			&basic.TreeNode{Val: 2,
+				Left:  &basic.TreeNode{Val: 1},
+				Right: &basic.TreeNode{Val: 3},
+			},
+			true,
+		},
+		{
+			&basic.TreeNode{Val: 1,
+				Left: &basic.TreeNode{Val: 2,
+					Left:  &basic.TreeNode{Val: 4},
+					Right: &basic.TreeNode{Val: 5},
+				},
+				Right: &basic.TreeNode{Val: 3,
+					Left:  &basic.TreeNode{Val: 6},
+					Right: &basic.TreeNode{Val: 7},
+				},
+			},
+			false,
+		},
+		{
+			&basic.TreeNode{Val: 1,
+				Left: &basic.TreeNode{Val: 2,
+					Left:  &basic.TreeNode{Val: 4},
+					Right: &basic.TreeNode{Val: 5},
+				},
+				Right: &basic.TreeNode{Val: 3,
+					Right: &basic.TreeNode{Val: 7},
+				},
+			},
+			false,
+		},
+	}
+	for _, cs := range tables {
+		out := basic.IsValidBST(cs.input)
+		Announce(t, out, assertions.ShouldEqual, cs.expect)
+	}
+}
