@@ -63,3 +63,37 @@ func FindKthLargest(nums []int, k int) int {
 	quickSort(nums)
 	return nums[n-k]
 }
+
+func HeapSort(nums []int) []int {
+	n := len(nums) - 1
+	// 构造堆
+	for k := n / 2; k >= 1; k-- {
+		sink(nums, k, n)
+	}
+	// 排序
+	for n > 1 {
+		nums[1], nums[n] = nums[n], nums[1]
+		n--
+		sink(nums, 1, n)
+	}
+	return nums
+}
+
+// 下沉, 小个的放下面
+func sink(nums []int, k, n int) {
+	for {
+		i := 2 * k
+		if i > n {
+			break
+		}
+		// 选择较大的子节点
+		if i < n && nums[i] < nums[i+1] {
+			i++
+		}
+		if nums[k] >= nums[i] {
+			break
+		}
+		nums[k], nums[i] = nums[i], nums[k]
+		k = i
+	}
+}

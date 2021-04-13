@@ -21,5 +21,7 @@ func TestSort(t *testing.T) {
 	for _, cs := range tables {
 		out := basic.BubbleSort(cs.input)
 		Announce(t, out, assertions.ShouldResemble, cs.expect)
+		out = basic.HeapSort(cs.input)
+		Announce(t, out, assertions.ShouldResemble, cs.expect)
 	}
 }
