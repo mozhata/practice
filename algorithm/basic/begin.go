@@ -18,6 +18,13 @@ func min(a, b int) int {
 	return a
 }
 
+func abs(x int) int {
+	if x < 0 {
+		return x * -1
+	}
+	return x
+}
+
 /*
 28. 实现 strStr()
 https://leetcode-cn.com/problems/implement-strstr/

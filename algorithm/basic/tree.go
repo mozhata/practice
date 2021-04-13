@@ -190,3 +190,68 @@ func IsValidBST(root *TreeNode) bool {
 
 	return true
 }
+
+/*
+二叉搜索树中的插入操作
+https://leetcode-cn.com/problems/insert-into-a-binary-search-tree/
+*/
+func insertIntoBSTV1(root *TreeNode, val int) *TreeNode {
+	if root == nil {
+		return &TreeNode{Val: val}
+	}
+	if root.Val > val {
+		root.Left = insertIntoBSTV1(root.Left, val)
+	} else {
+		root.Right = insertIntoBSTV1(root.Right, val)
+	}
+	return root
+}
+
+func insertIntoBSTV2(root *TreeNode, val int) *TreeNode {
+	if root == nil {
+		return &TreeNode{Val: val}
+	}
+	p := root
+	for p != nil {
+		if p.Val > val {
+			if p.Left == nil {
+				p.Left = &TreeNode{Val: val}
+				break
+			}
+			p = p.Left
+		} else {
+			if p.Right == nil {
+				p.Right = &TreeNode{Val: val}
+				break
+			}
+			p = p.Right
+		}
+	}
+	return root
+}
+
+/*
+给定一个二叉树，判断它是否是高度平衡的二叉树
+一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1 。
+https://leetcode-cn.com/problems/balanced-binary-tree/
+*/
+func isBalanced(root *TreeNode) bool {
+	return calHeithOrAbort(root) != -1
+}
+func calHeithOrAbort(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	left := calHeithOrAbort(root.Left)
+	if left == -1 {
+		return -1
+	}
+	right := calHeithOrAbort(root.Right)
+	if right == -1 {
+		return -1
+	}
+	if abs(left-right) > 1 {
+		return -1
+	}
+	return max(right, left) + 1
+}
