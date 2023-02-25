@@ -32,5 +32,5 @@ require (
 	github.com/urfave/negroni v1.0.0
 	go.uber.org/zap v1.16.0
 	goji.io v2.0.2+incompatible
-	golang.org/x/net v0.0.0-20210316092652-d523dce5a7f4
+	golang.org/x/net v0.7.0
 )
